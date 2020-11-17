@@ -52,6 +52,17 @@ public class User implements UserDetails {
     this.active = active;
   }
 
+  public User(
+      @Size(min = 3, max = 15) String username,
+      @Size(min = 4, max = 25) String password,
+      @Email String email, boolean active, Set<Role> roles) {
+    this.username = username;
+    this.password = password;
+    this.email = email;
+    this.active = active;
+    this.roles = roles;
+  }
+
   public User() {
   }
 

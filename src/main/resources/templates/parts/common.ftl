@@ -6,6 +6,8 @@
     <title>Connection</title>
   </head>
   <body>
+  <a href="/main">Main page</a>
+  <hr>
   <#nested>
   </body>
   </html>

@@ -18,6 +18,8 @@ public class RegistrationController {
 
   @GetMapping("/registration")
   public String registration() {
+    repository.save(new User("Name", "12345", "somemail@gmail.com", true,
+        Collections.singleton(Role.ADMIN)));
     return "registration";
   }
 

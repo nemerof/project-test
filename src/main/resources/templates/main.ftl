@@ -3,7 +3,8 @@
 
 <@c.page>
   <div>
-      <@l.logout />
+    <@l.logout/>
+    <span><a href="/user">User list</a></span>
   </div>
   <div>
     <form method="post">
@@ -15,9 +16,9 @@
     </form>
   </div>
   <div>Список сообщений</div>
-  <form method="get" action="/filter">
+  <form method="get" action="/main">
     <label>
-      <input type="text" name="filter">
+      <input type="text" name="filter" value="${filter}">
     </label>
     <button type="submit">Найти</button>
   </form>
@@ -26,6 +27,9 @@
         <b>${message.id}</b>
         <span>${message.text}</span>
         <strong>${message.user.username}</strong>
+        <form method="get" action="/delete/${message.id}">
+          <button type="submit">Удалить</button>
+        </form>
       </div>
     <#else>
       No message
