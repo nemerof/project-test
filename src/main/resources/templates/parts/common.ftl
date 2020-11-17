@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Connection</title>
+    <link rel="stylesheet" href="/static/style.css">
   </head>
   <body>
   <a href="/main">Main page</a>

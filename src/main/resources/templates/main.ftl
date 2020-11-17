@@ -7,9 +7,10 @@
     <span><a href="/user">User list</a></span>
   </div>
   <div>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
       <label>
         <input type="text" name="text" placeholder="Сообщение" />
+        <input type="file" name="file">
       </label>
       <input type="hidden" name="_csrf" value="${_csrf.token}" />
       <button type="submit">Добавить</button>
@@ -18,7 +19,7 @@
   <div>Список сообщений</div>
   <form method="get" action="/main">
     <label>
-      <input type="text" name="filter" value="${filter}">
+      <input type="text" name="filter" value="${filter!}">
     </label>
     <button type="submit">Найти</button>
   </form>
@@ -27,6 +28,11 @@
         <b>${message.id}</b>
         <span>${message.text}</span>
         <strong>${message.user.username}</strong>
+        <div>
+            <#if message.filename??>
+              <img src="/img/${message.filename}" alt="No picture :(">
+            </#if>
+        </div>
         <form method="get" action="/delete/${message.id}">
           <button type="submit">Удалить</button>
         </form>
