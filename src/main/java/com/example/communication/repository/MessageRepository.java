@@ -8,4 +8,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
   Message findByText(String text);
 
   Iterable<Message> findByTextContains(String text);
+
+  Iterable<Message> findByUserId(Long id);
 }

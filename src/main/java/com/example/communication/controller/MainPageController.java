@@ -41,7 +41,7 @@ public class MainPageController {
     return "users";
   }
 
-  @GetMapping("/main")
+  @GetMapping("/")
   public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
     Iterable<Message> messages;
     if (filter != null && !filter.isEmpty()) {
@@ -54,7 +54,7 @@ public class MainPageController {
     return "main";
   }
 
-  @PostMapping("/main")
+  @PostMapping("/")
   public String add(
       @RequestParam(required = false, defaultValue = "") String filter,
       @AuthenticationPrincipal User user,
@@ -91,6 +91,6 @@ public class MainPageController {
     messageRepository.deleteById(id);
     model.addAttribute("messages", messageRepository.findAll());
     model.addAttribute("filter", "");
-    return "redirect:/main";
+    return "redirect:/";
   }
 }
