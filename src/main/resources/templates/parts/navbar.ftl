@@ -28,8 +28,11 @@
             </li>
         </#if>
     </ul>
-
-    <div class="navbar-text mr-3">${name}</div>
+    <#if isAuthorized>
+    <div class="navbar-text mr-3">
+      <a href="/profile/${userId}">${name}</a>
+    </div>
+    </#if>
       <@l.logout />
   </div>
 </nav>

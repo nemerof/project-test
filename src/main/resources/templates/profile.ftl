@@ -2,7 +2,7 @@
 
 <@c.page>
     <#list messages as message>
-      <div class="card w-50 mb-3">
+      <div class="card w-50 mb-3 mx-auto">
         <h5 class="card-title">${message.user.username}</h5>
         <p class="card-text"><span>${message.text}</span></p>
           <#if message.filename??>
