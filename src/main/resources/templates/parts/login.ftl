@@ -1,12 +1,20 @@
 <#include "security.ftl">
 
 <#macro login path isRegisterForm>
+  <style>
+    span {
+      color: red;
+    }
+  </style>
   <form action="${path}" method="post">
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">User Name :</label>
       <div class="col-sm-6">
         <label>
           <input type="text" name="username" class="form-control" placeholder="User name" />
+          <#if usernameError??>
+            <span>${usernameError}</span>
+          </#if>
         </label>
       </div>
     </div>
@@ -15,6 +23,20 @@
       <div class="col-sm-6">
         <label>
           <input type="password" name="password" class="form-control" placeholder="Password" />
+          <#if passwordError??>
+            <span>${passwordError}</span>
+          </#if>
+        </label>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label">E-Mail:</label>
+      <div class="col-sm-6">
+        <label>
+          <input type="email" name="email" class="form-control" placeholder="E-Mail" />
+          <#if emailError??>
+            <span>${emailError}</span>
+          </#if>
         </label>
       </div>
     </div>
