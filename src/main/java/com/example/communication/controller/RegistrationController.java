@@ -27,7 +27,7 @@ public class RegistrationController {
   }
 
   @PostMapping("/registration")
-  public String addUser(@Valid User user, BindingResult bindingResult, Model model) throws InterruptedException {
+  public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
     model.addAttribute("user", user);
     if (bindingResult.hasErrors()) {
       model.mergeAttributes(getErrors(bindingResult));
@@ -47,7 +47,7 @@ public class RegistrationController {
     return "redirect:/login";
   }
 
-  static Map<String, String> getErrors(BindingResult bindingResult) throws InterruptedException {
+  static Map<String, String> getErrors(BindingResult bindingResult) {
     Map<String, String> errors = new HashMap<>();
 
     for (FieldError fieldError : bindingResult.getFieldErrors()) {
