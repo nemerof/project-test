@@ -2,7 +2,7 @@
 
 <#macro login path isRegisterForm>
   <style>
-    span {
+    p {
       color: red;
     }
   </style>
@@ -12,10 +12,10 @@
       <div class="col-sm-6">
         <label>
           <input type="text" name="username" class="form-control" placeholder="User name" />
-          <#if usernameError??>
-            <span>${usernameError}</span>
-          </#if>
         </label>
+        <#if usernameError??>
+          <p>${usernameError}</p>
+        </#if>
       </div>
     </div>
     <div class="form-group row">
@@ -23,10 +23,10 @@
       <div class="col-sm-6">
         <label>
           <input type="password" name="password" class="form-control" placeholder="Password" />
-          <#if passwordError??>
-            <span>${passwordError}</span>
-          </#if>
         </label>
+        <#if passwordError??>
+          <p>${passwordError}</p>
+        </#if>
       </div>
     </div>
     <div class="form-group row">
@@ -34,10 +34,10 @@
       <div class="col-sm-6">
         <label>
           <input type="email" name="email" class="form-control" placeholder="E-Mail" />
-          <#if emailError??>
-            <span>${emailError}</span>
-          </#if>
         </label>
+        <#if emailError??>
+          <p>${emailError}</p>
+        </#if>
       </div>
     </div>
     <input type="hidden" name="_csrf" value="${_csrf.token}" />

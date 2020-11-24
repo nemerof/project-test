@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.Collections;
-import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Controller
 public class RegistrationController {
@@ -24,13 +21,13 @@ public class RegistrationController {
 
   @GetMapping("/registration")
   public String registration() {
-    repository.save(new User("Name", "12345", "somemail@gmail.com", true,
+    repository.save(new User("Name", "123456", "somemail@gmail.com", true,
         Collections.singleton(Role.ADMIN)));
     return "registration";
   }
 
   @PostMapping("/registration")
-  public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
+  public String addUser(@Valid User user, BindingResult bindingResult, Model model) throws InterruptedException {
     model.addAttribute("user", user);
     if (bindingResult.hasErrors()) {
       model.mergeAttributes(getErrors(bindingResult));
@@ -50,11 +47,20 @@ public class RegistrationController {
     return "redirect:/login";
   }
 
-  static Map<String, String> getErrors(BindingResult bindingResult) {
-    Collector<FieldError, ?, Map<String, String>> collector = Collectors.toMap(
-            fieldError -> fieldError.getField() + "Error",
-            FieldError::getDefaultMessage
-    );
-    return bindingResult.getFieldErrors().stream().collect(collector);
+  static Map<String, String> getErrors(BindingResult bindingResult) throws InterruptedException {
+    Map<String, String> errors = new HashMap<>();
+
+    for (FieldError fieldError : bindingResult.getFieldErrors()) {
+      String name = fieldError.getField() + "Error";
+      String message = fieldError.getDefaultMessage();
+      if (!errors.containsKey(name)) {
+        errors.put(name, message);
+      }
+      if (errors.containsKey(name) && errors.get(name).contains("should") && message != null && message.contains("cannot")) {
+        errors.replace(name, message);
+      }
+    }
+
+    return errors;
   }
 }

@@ -31,12 +31,14 @@ public class User implements UserDetails {
   private Long id;
 
   @NotEmpty(message = "Username cannot be empty")
+  @Size(min = 3, max = 16, message = "Username should be in range from 3 to 16 symbols")
   private String username;
 
   @NotEmpty(message = "Password cannot be empty")
+  @Size(min = 6, max = 16, message = "Password should be in range from 6 to 16 symbols")
   private String password;
 
-  @Email
+  @NotEmpty(message = "Email cannot be empty")
   private String email;
 
   private boolean active;
@@ -54,8 +56,8 @@ public class User implements UserDetails {
   }
 
   public User(
-      @Size(min = 3, max = 15) String username,
-      @Size(min = 4, max = 25) String password,
+      @Size(min = 6, max = 16) String username,
+      @Size(min = 6, max = 16) String password,
       @Email String email, boolean active, Set<Role> roles) {
     this.username = username;
     this.password = password;
