@@ -2,17 +2,7 @@ package com.example.communication.model;
 
 import java.util.Collection;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -30,6 +20,7 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+  @Column(unique = true)
   @NotEmpty(message = "Username cannot be empty")
   @Size(min = 3, max = 16, message = "Username should be in range from 3 to 16 symbols")
   private String username;
@@ -38,6 +29,7 @@ public class User implements UserDetails {
   @Size(min = 6, max = 16, message = "Password should be in range from 6 to 16 symbols")
   private String password;
 
+  @Column(unique = true)
   @NotEmpty(message = "Email cannot be empty")
   private String email;
 

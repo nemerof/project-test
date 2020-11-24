@@ -38,8 +38,15 @@
         <#if emailError??>
           <p>${emailError}</p>
         </#if>
+        <#if emailExists??>
+          <p>${emailExists}</p>
+        </#if>
+        <#if usernameExists??>
+          <p>${usernameExists}</p>
+        </#if>
       </div>
     </div>
+
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
       <#if !isRegisterForm><a href="/registration">Add new user</a></#if>
     <button class="btn btn-primary" type="submit"><#if isRegisterForm>Create<#else>Sign In</#if></button>

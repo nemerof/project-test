@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.management.MBeanRegistration;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -21,25 +22,41 @@ public class RegistrationController {
 
   @GetMapping("/registration")
   public String registration() {
-    repository.save(new User("Name", "123456", "somemail@gmail.com", true,
-        Collections.singleton(Role.ADMIN)));
+    //repository.save(new User("Name", "123456", "somemail@gmail.com", true,
+    //    Collections.singleton(Role.ADMIN)));
     return "registration";
   }
 
   @PostMapping("/registration")
-  public String addUser(@Valid User user, BindingResult bindingResult, Model model) throws InterruptedException {
+  public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
     model.addAttribute("user", user);
     if (bindingResult.hasErrors()) {
       model.mergeAttributes(getErrors(bindingResult));
       return "registration";
     }
 
+    boolean emailExist = false;
+    List<User> users = repository.findAll();
+
+    for (User user1 : users) {
+      if (user1.getEmail().equals(user.getEmail())) {
+        emailExist = true;
+        break;
+      }
+    }
+
+    if (emailExist) {
+      model.addAttribute("emailExists", "User with such email exists!");
+      return "registration";
+    }
+
     User userFromDb = repository.findByUsername(user.getUsername());
 
     if (userFromDb != null) {
-      model.addAttribute("message", "User exists!");
+      model.addAttribute("usernameExists", "User with such username exists!");
       return "registration";
     }
+
     user.setActive(true);
     user.setRoles(Collections.singleton(Role.USER));
     repository.save(user);
@@ -47,7 +64,7 @@ public class RegistrationController {
     return "redirect:/login";
   }
 
-  static Map<String, String> getErrors(BindingResult bindingResult) throws InterruptedException {
+  static Map<String, String> getErrors(BindingResult bindingResult) {
     Map<String, String> errors = new HashMap<>();
 
     for (FieldError fieldError : bindingResult.getFieldErrors()) {
