@@ -2,18 +2,9 @@ package com.example.communication.model;
 
 import java.util.Collection;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,13 +20,17 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @Size(min = 3, max = 15)
+  @Column(unique = true)
+  @NotEmpty(message = "Username cannot be empty")
+  @Size(min = 3, max = 16, message = "Username should be in range from 3 to 16 symbols")
   private String username;
 
-  @Size(min = 4, max = 25)
+  @NotEmpty(message = "Password cannot be empty")
+  @Size(min = 6, max = 16, message = "Password should be in range from 6 to 16 symbols")
   private String password;
 
-  @Email
+  @Column(unique = true)
+  @NotEmpty(message = "Email cannot be empty")
   private String email;
 
   private boolean active;
@@ -53,8 +48,8 @@ public class User implements UserDetails {
   }
 
   public User(
-      @Size(min = 3, max = 15) String username,
-      @Size(min = 4, max = 25) String password,
+      @Size(min = 6, max = 16) String username,
+      @Size(min = 6, max = 16) String password,
       @Email String email, boolean active, Set<Role> roles) {
     this.username = username;
     this.password = password;
@@ -98,5 +93,49 @@ public class User implements UserDetails {
   //Bad
   public boolean isAuthorized() {
     return !roles.isEmpty();
+  }
+
+
+
+  @Override
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  @Override
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
+  public Set<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
   }
 }
