@@ -97,8 +97,6 @@ public class User implements UserDetails {
     return !roles.isEmpty();
   }
 
-
-
   @Override
   public String getUsername() {
     return username;
