@@ -28,7 +28,8 @@ public class RegistrationController {
   }
 
   @PostMapping("/registration")
-  public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
+  public String addUser
+      (@Valid User user, BindingResult bindingResult, Model model) {
     model.addAttribute("user", user);
     if (bindingResult.hasErrors()) {
       model.mergeAttributes(getErrors(bindingResult));
@@ -53,7 +54,7 @@ public class RegistrationController {
     User userFromDb = repository.findByUsername(user.getUsername());
 
     if (userFromDb != null) {
-      model.addAttribute("usernameExists", "User with such username exists!");
+      model.addAttribute("usernameExists", "User exists!");
       return "registration";
     }
 

@@ -3,6 +3,7 @@ package com.example.communication.controller;
 import com.example.communication.model.Message;
 import com.example.communication.model.User;
 import com.example.communication.repository.MessageRepository;
+import com.example.communication.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -26,9 +27,13 @@ public class ProfileController {
   @Autowired
   private MessageRepository messageRepository;
 
+  @Autowired
+  private UserRepository userRepository;
+
   @GetMapping("/profile/{id}")
   public String profile(@PathVariable(value="id") Long id, Model model){
     Iterable<Message> userMessages = messageRepository.findByUserId(id);
+    model.addAttribute("profileName", userRepository.findById(id).get().getUsername());
     model.addAttribute("messages", userMessages);
     return "profile";
   }
