@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.management.MBeanRegistration;
 import javax.validation.Valid;
@@ -22,8 +24,6 @@ public class RegistrationController {
 
   @GetMapping("/registration")
   public String registration() {
-    //repository.save(new User("Name", "123456", "somemail@gmail.com", true,
-    //    Collections.singleton(Role.ADMIN)));
     return "registration";
   }
 

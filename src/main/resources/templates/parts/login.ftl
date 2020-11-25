@@ -29,26 +29,27 @@
         </#if>
       </div>
     </div>
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label">E-Mail:</label>
-      <div class="col-sm-6">
-        <label>
-          <input type="email" name="email" class="form-control" placeholder="E-Mail" />
-        </label>
-        <#if emailError??>
-          <p>${emailError}</p>
-        </#if>
-        <#if emailExists??>
-          <p>${emailExists}</p>
-        </#if>
-        <#if usernameExists??>
-          <p>${usernameExists}</p>
-        </#if>
+    <#if isRegisterForm>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">E-Mail:</label>
+        <div class="col-sm-6">
+          <label>
+            <input type="email" name="email" class="form-control" placeholder="E-Mail"/>
+          </label>
+          <#if emailError??>
+            <p>${emailError}</p>
+          </#if>
+          <#if emailExists??>
+            <p>${emailExists}</p>
+          </#if>
+          <#if usernameExists??>
+            <p>${usernameExists}</p>
+          </#if>
+        </div>
       </div>
-    </div>
-
+    </#if>
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
-      <#if !isRegisterForm><a href="/registration">Add new user</a></#if>
+    <#if !isRegisterForm><a href="/registration">Add new user</a></#if>
     <button class="btn btn-primary" type="submit"><#if isRegisterForm>Create<#else>Sign In</#if></button>
   </form>
 </#macro>
@@ -56,7 +57,7 @@
 <#macro logout>
   <form action="/logout" method="post">
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
-    <button class="btn btn-primary" type="submit">
+    <button class="btn btn-primary ml-3" type="submit">
       <#if isAuthorized>
         Sign Out
       <#else>

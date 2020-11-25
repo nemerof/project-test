@@ -29,9 +29,11 @@
         </#if>
     </ul>
     <#if isAuthorized>
-    <div class="navbar-text mr-3">
+    <div class="navbar-text">
       <a href="/profile/${userId}">${name}</a>
     </div>
+    <#else>
+      LogIn first
     </#if>
       <@l.logout />
   </div>
