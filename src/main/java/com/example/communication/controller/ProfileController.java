@@ -6,20 +6,22 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import com.example.communication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("/profile")
 public class ProfileController {
 
   @Value("${upload.path}")
@@ -34,7 +36,7 @@ public class ProfileController {
   @Autowired
   private UserService userService;
 
-  @GetMapping("/{id}")
+  @GetMapping("profile/{id}")
   public String profile(
           @AuthenticationPrincipal User currentUser,
           @PathVariable(value="id") Long id,
@@ -53,7 +55,7 @@ public class ProfileController {
   }
 
   //Надо что-то сделать
-  @PostMapping("/{id}")
+  @PostMapping("/profile/{id}")
   public String add(
       @PathVariable(value="id") Long id,
       @RequestParam(required = false, defaultValue = "") String filter,
@@ -84,7 +86,29 @@ public class ProfileController {
     return "redirect:/profile/"+id;
   }
 
-  @GetMapping("/subscribers/{id}")
+  @GetMapping("/edit")
+  public String edit(
+      @AuthenticationPrincipal User user, Model model
+  ) {
+    model.addAttribute("username", user.getUsername());
+//    model.addAttribute("password", user.getPassword());
+//    model.addAttribute("profilePic", user.getProfilePic());
+    return "editUser";
+  }
+
+  @PostMapping("/edit")
+  public String edit(
+      @AuthenticationPrincipal User user,
+      @RequestParam String username
+//      @RequestParam(required = false, defaultValue = "/static/images/default-profile-icon.png") String profilePic,
+  ) {
+    user.setUsername(username);
+    userRepository.save(user);
+//    user.setProfilePic(profilePic);
+    return "redirect:/edit";
+  }
+
+  @GetMapping("profile/subscribers/{id}")
   public String getSubscribers(@PathVariable(value = "id") Long id,
                                Model model) {
     User user = userRepository.findById(id).get();
@@ -92,7 +116,7 @@ public class ProfileController {
     return "subscribers";
   }
 
-  @GetMapping("/subscriptions/{id}")
+  @GetMapping("profile/subscriptions/{id}")
   public String getSubscriptions(@PathVariable(value = "id") Long id,
                                Model model) {
     User user = userRepository.findById(id).get();
@@ -100,7 +124,7 @@ public class ProfileController {
     return "subscriptions";
   }
 
-  @GetMapping("/subscribe/{id}")
+  @GetMapping("profile/subscribe/{id}")
   public String subscribe(@PathVariable(value = "id") Long id,
                           @AuthenticationPrincipal User currentUser) {
     User user = userRepository.findById(id).get();
@@ -108,7 +132,7 @@ public class ProfileController {
     return "redirect:/profile/"+id;
   }
 
-  @GetMapping("/unsubscribe/{id}")
+  @GetMapping("profile/unsubscribe/{id}")
   public String unsubscribe(@PathVariable(value = "id") Long id,
                             @AuthenticationPrincipal User currentUser) {
     User user = userRepository.findById(id).get();

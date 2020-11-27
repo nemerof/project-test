@@ -7,7 +7,11 @@
       <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
-      <h5 class="card-title">${profileName}</h5>
+      <h5 class="card-title">${profileName}
+          <#if userId == profileId>
+            <a href="/edit">Edit</a>
+          </#if>
+      </h5>
       <div class="container">
         <div class="row">
           <div class="col">
@@ -28,8 +32,15 @@
           </div>
         </div>
       </div>
+      <h5 class="card-title">${profileName}
+        <#if userId == profileId>
+            <a href="/edit">Edit</a>
+        </#if>
+      </h5>
     </div>
   </div>
+
+  <#if userId == profileId>
   <div class="row">
 
     <form class="ml-5" style="width: 202px; ">
@@ -61,6 +72,8 @@
       </div>
     </div>
   </div>
+  </#if>
+
 <#if !isCurrentUser>
     <#if !isSubscriber>
       <a class="btn btn-primary" href="/profile/subscribe/${profileId}">Subscribe</a>
