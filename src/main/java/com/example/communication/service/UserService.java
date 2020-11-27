@@ -1,5 +1,6 @@
 package com.example.communication.service;
 
+import com.example.communication.model.User;
 import com.example.communication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,5 +17,17 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
     return repository.findByUsername(s);
+  }
+
+  public void subscribe(User currentUser, User user) {
+    user.getSubscribers().add(currentUser);
+
+    repository.save(user);
+  }
+
+  public void unsubscribe(User currentUser, User user) {
+    user.getSubscribers().remove(currentUser);
+
+    repository.save(user);
   }
 }

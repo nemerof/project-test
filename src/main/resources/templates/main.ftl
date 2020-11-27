@@ -29,15 +29,14 @@
   </div>
 <#--  </div>-->
     <#list messages as message>
-      <div class="card mt-3 mb-3 mx-auto" style="width: 600px">
-        <h5 class="card-title">
-            <a href="/profile/${message.user.id}">${message.user.username}</a>
-        </h5>
-        <p class="card-text"><span>${message.text}</span></p>
-            <#if message.filename??>
-              <img src="/img/${message.filename}" class="rounded" alt="No pic :(" width="540" height="260">
-            </#if>
-        </div>
+      <div class="card m-auto" style="width: 600px">
+        <h5 class="card-title mx-4 my-3"><a href="/profile/${message.user.id}">${message.user.username}</a></h5>
+        <p class="card-text mx-4 my-3"><span>${message.text}</span></p>
+          <#if message.filename??>
+            <img src="/img/${message.filename}" class="rounded mx-auto my-3" alt="No pic :(" width="540" height="260">
+          </#if>
+      </div>
+      <br>
 <#--        <form method="get" action="/delete/${message.id}">-->
 <#--          <button type="submit">Удалить</button>-->
 <#--        </form>-->

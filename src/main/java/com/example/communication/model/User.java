@@ -1,6 +1,7 @@
 package com.example.communication.model;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -41,6 +42,22 @@ public class User implements UserDetails {
   @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
   @Enumerated(EnumType.STRING)
   private Set<Role> roles;
+
+  @ManyToMany
+  @JoinTable(
+          name = "user_subscriptions",
+          joinColumns = { @JoinColumn(name = "channel_id") },
+          inverseJoinColumns = { @JoinColumn(name = "subscriber_id") }
+  )
+  private Set<User> subscribers = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+          name = "user_subscriptions",
+          joinColumns = { @JoinColumn(name = "subscriber_id") },
+          inverseJoinColumns = { @JoinColumn(name = "channel_id") }
+  )
+  private Set<User> subscriptions = new HashSet<>();
 
   public User(String username, String password, String email, boolean active) {
     this.username = username;
