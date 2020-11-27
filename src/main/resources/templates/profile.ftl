@@ -8,15 +8,37 @@
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
       <h5 class="card-title">${profileName}</h5>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <div class="card">
+              <div class="card-body" style="background-color: lightblue">
+                <div class="card-title">Subscribers</div>
+                <h4 class="card-text"><a href="/profile/subscribers/${profileId}">${subscribers}</a></h4>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card">
+              <div class="card-body" style="background-color: lightblue">
+                <div class="card-title">Subscriptions</div>
+                <h4 class="card-text"><a href="/profile/subscriptions/${profileId}">${subscriptions}</a></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
+
     <form class="ml-5" style="width: 202px; ">
       <div class="custom-file">
         <input type="file" class="custom-file-input" id="customFile">
         <label class="custom-file-label mt-3" for="customFile">Change picture</label>
       </div>
     </form>
+
     <div class="card border-0" style="height: 200px; width: 600px; margin-left: 21px;">
         <#--<div class="card w-50 mb-3 mx-auto border-0">-->
       <div class="form-group mt-3">
@@ -39,6 +61,13 @@
       </div>
     </div>
   </div>
+<#if !isCurrentUser>
+    <#if !isSubscriber>
+      <a class="btn btn-primary" href="/profile/subscribe/${profileId}">Subscribe</a>
+    <#else>
+      <a class="btn btn-primary" href="/profile/unsubscribe/${profileId}">Unsubscribe</a>
+    </#if>
+</#if>
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
     <#list messages as message>
       <div class="card mt-5 mb-3 mx-auto" style="width: 600px">

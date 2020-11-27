@@ -6,8 +6,6 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,15 +31,6 @@ public class MainPageController {
 
   @Autowired
   private MessageRepository messageRepository;
-
-  @GetMapping("/users")
-  public String mainPage(Model model){
-    User user1 = new User("Name1", "123456", "somemail@gmail.com", true);
-    User user2 = new User("Name2", "654321", "somemail2@gmail.com", true);
-    userRepository.saveAll(Arrays.asList(user1, user2));
-    model.addAttribute("users", userRepository.findAll());
-    return "users";
-  }
 
   @GetMapping("/")
   public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {

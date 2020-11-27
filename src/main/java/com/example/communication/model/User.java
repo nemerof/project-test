@@ -1,17 +1,22 @@
 package com.example.communication.model;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import lombok.Data;
+
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
+@ToString
 @Entity
 @Table(name = "usr")
 public class User implements UserDetails {
@@ -42,6 +47,22 @@ public class User implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Set<Role> roles;
 
+  @ManyToMany
+  @JoinTable(
+          name = "user_subscriptions",
+          joinColumns = { @JoinColumn(name = "channel_id") },
+          inverseJoinColumns = { @JoinColumn(name = "subscriber_id") }
+  )
+  private Set<User> subscribers = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+          name = "user_subscriptions",
+          joinColumns = { @JoinColumn(name = "subscriber_id") },
+          inverseJoinColumns = { @JoinColumn(name = "channel_id") }
+  )
+  private Set<User> subscriptions = new HashSet<>();
+
   public User(String username, String password, String email, boolean active) {
     this.username = username;
     this.password = password;
@@ -58,9 +79,6 @@ public class User implements UserDetails {
     this.email = email;
     this.active = active;
     this.roles = roles;
-  }
-
-  public User() {
   }
 
   @Override
@@ -95,5 +113,18 @@ public class User implements UserDetails {
   //Bad
   public boolean isAuthorized() {
     return !roles.isEmpty();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    User user = (User) o;
+    return Objects.equals(id, user.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }
