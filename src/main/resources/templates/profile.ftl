@@ -61,13 +61,13 @@
       </div>
     </div>
   </div>
-<#--  <#if !isCurrentUser>-->
+<#if !isCurrentUser>
     <#if !isSubscriber>
       <a class="btn btn-primary" href="/profile/subscribe/${profileId}">Subscribe</a>
     <#else>
       <a class="btn btn-primary" href="/profile/unsubscribe/${profileId}">Unsubscribe</a>
     </#if>
-<#--  </#if>-->
+</#if>
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
     <#list messages as message>
       <div class="card mt-5 mb-3 mx-auto" style="width: 600px">
