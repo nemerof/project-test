@@ -1,10 +1,10 @@
 <#import "parts/common.ftl" as c>
 
 <@c.page>
-  List of Subscribers
+  List of Subscribers:
 
   <#list subscribers as user>
-    ${user.username}
+    <p>${user.username}</p>
   </#list>
 
 </@c.page>
