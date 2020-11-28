@@ -68,26 +68,28 @@ public class ProfileController {
     return "redirect:/profile/"+id;
   }
 
-  @GetMapping("/edit")
-  public String edit(
-          @AuthenticationPrincipal User user, Model model
-  ) {
+  @GetMapping("/profile/edit/{id}")
+  public String edit(@PathVariable(value = "id") Long id, Model model) {
+    User user = userRepository.findById(id).get();
     model.addAttribute("username", user.getUsername());
+    model.addAttribute("userId", user.getId());
 //    model.addAttribute("password", user.getPassword());
 //    model.addAttribute("profilePic", user.getProfilePic());
     return "editUser";
   }
 
-  @PostMapping("/edit")
-  public String edit(
-          @AuthenticationPrincipal User user,
-          @RequestParam String username
+  @PostMapping("/profile/edit/{id}")
+  public String edit(@AuthenticationPrincipal User currentUser,
+                     @PathVariable(value = "id") Long id,
+                     @RequestParam String username
 //      @RequestParam(required = false, defaultValue = "/static/images/default-profile-icon.png") String profilePic,
   ) {
+    User user = userRepository.findById(id).get();
     user.setUsername(username);
+    currentUser.setUsername(username);
     userRepository.save(user);
 //    user.setProfilePic(profilePic);
-    return "redirect:/edit";
+    return "redirect:/profile/"+id;
   }
 
   @GetMapping("profile/subscribers/{id}")

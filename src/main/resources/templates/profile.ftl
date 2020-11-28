@@ -1,5 +1,6 @@
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
+<#assign name = profileName>
 
 <@c.page>
   <div class="row">
@@ -9,7 +10,7 @@
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
       <h5 class="card-title">${profileName}
           <#if userId == profileId>
-            <a href="/edit">Edit</a>
+            <a href="/profile/edit/${profileId}">Edit</a>
           </#if>
       </h5>
       <div class="container">
@@ -71,8 +72,14 @@
   <script type="text/javascript">
       $(document).on('change', '.custom-file-input', function (event) {
           $(this).next('.custom-file-label').html(event.target.files[0].name);
-
       });
+  </script>
+  <script>
+      var fmrVar = "${profileName}";
+
+      function updateNavbarUsername() {
+          document.getElementById("navbarUsername").innerHTML = fmrVar;
+      }
   </script>
 <#if !isCurrentUser>
     <#if !isSubscriber>
