@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@ToString
 @Entity
 @Table(name = "usr")
 public class User implements UserDetails {
@@ -126,5 +125,18 @@ public class User implements UserDetails {
   @Override
   public int hashCode() {
     return Objects.hash(id);
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+        "id=" + id +
+        ", username='" + username + '\'' +
+        ", password='" + password + '\'' +
+        ", email='" + email + '\'' +
+        ", active=" + active +
+        ", profilePic='" + profilePic + '\'' +
+        ", roles=" + roles +
+        '}';
   }
 }

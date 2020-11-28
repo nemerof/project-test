@@ -30,7 +30,9 @@
     </ul>
     <#if isAuthorized>
     <div class="navbar-text">
-      <a href="/profile/${userId}" id="navbarUsername">${name}</a>
+      <a href="/profile/${userId}" id="navbarUsername">
+          <#if username??>${username}<#else>missing</#if>
+      </a>
     </div>
     <#else>
       LogIn first
