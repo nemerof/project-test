@@ -1,5 +1,6 @@
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
+<#assign name = profileName>
 
 <@c.page>
   <div class="row">
@@ -9,7 +10,7 @@
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
       <h5 class="card-title">${profileName}
           <#if userId == profileId>
-            <a href="/edit">Edit</a>
+            <a href="/profile/edit/${profileId}">Edit</a>
           </#if>
       </h5>
       <div class="container">
@@ -71,8 +72,14 @@
   <script type="text/javascript">
       $(document).on('change', '.custom-file-input', function (event) {
           $(this).next('.custom-file-label').html(event.target.files[0].name);
-
       });
+  </script>
+  <script>
+      var fmrVar = "${profileName}";
+
+      function updateNavbarUsername() {
+          document.getElementById("navbarUsername").innerHTML = fmrVar;
+      }
   </script>
 <#if !isCurrentUser>
     <#if !isSubscriber>
@@ -83,15 +90,15 @@
 </#if>
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
     <#list messages as message>
-      <div class="card mt-5 mb-3 mx-auto" style="width: 600px">
-        <h5 class="card-title">${message.user.username}</h5>
-        <p class="card-text"><span>${message.text}</span></p>
+      <div class="card m-auto" style="width: 600px">
+        <h5 class="card-title mx-4 my-3"><a href="/profile/${message.user.id}">${message.user.username}</a></h5>
+        <p class="card-text mx-4 my-3"><span>${message.text}</span></p>
           <#if message.filename??>
-            <img src="/img/${message.filename}" class="rounded" alt="No pic :(" width="540" height="260">
+            <img src="/img/${message.filename}" class="rounded mx-auto my-3" alt="No pic :(" width="540" height="260">
           </#if>
       </div>
-  </div>
-      <form method="get" action="/profile/delete/${message.id}">
+      <br>
+      <form method="get" action="/delete/${message.id}">
         <button type="submit">Удалить</button>
       </form>
     </#list>

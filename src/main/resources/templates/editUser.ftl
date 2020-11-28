@@ -2,7 +2,7 @@
 
 <@c.page>
   <div class="form-group mt-3">
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" action="/profile/edit/${userId}">
       <div class="form-group">
         <label>
           Username:
