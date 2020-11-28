@@ -90,9 +90,9 @@
             <img src="/img/${message.filename}" class="rounded" alt="No pic :(" width="540" height="260">
           </#if>
       </div>
-<#--  </div>-->
-<#--      <form method="get" action="/delete/${message.id}">-->
-<#--        <button type="submit">Удалить</button>-->
-<#--      </form>-->
+  </div>
+      <form method="get" action="/profile/delete/${message.id}">
+        <button type="submit">Удалить</button>
+      </form>
     </#list>
 </@c.page>

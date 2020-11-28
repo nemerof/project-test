@@ -67,23 +67,8 @@ public class MainPageController {
       @RequestParam("file") MultipartFile file
   ) throws IOException {
     Message message = new Message(text, user);
+    ControllerUtils.savePhoto(file, message);
 
-    if (file != null && !file.getOriginalFilename().isEmpty()) {
-      File uploadDir = new File(uploadPath);
-
-      if (!uploadDir.exists()) {
-        uploadDir.mkdir();
-      }
-
-      String uuidFile = UUID.randomUUID().toString();
-      String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-      file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-      message.setFilename(resultFilename);
-    }
-
-    messageRepository.save(message);
     model.addAttribute("messages", messageRepository.findAll());
     model.addAttribute("filter", "");
     return "main";
@@ -93,7 +78,7 @@ public class MainPageController {
   public String delete(
       @PathVariable(value="id") Long id, Model model
   ) {
-    messageRepository.deleteById(id);
+    ControllerUtils.deleteMessage(id);
     model.addAttribute("messages", messageRepository.findAll());
     model.addAttribute("filter", "");
     return "redirect:/";

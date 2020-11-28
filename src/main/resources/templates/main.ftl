@@ -43,8 +43,8 @@
           </#if>
       </div>
       <br>
-<#--        <form method="get" action="/delete/${message.id}">-->
-<#--          <button type="submit">Удалить</button>-->
-<#--        </form>-->
+        <form method="get" action="/delete/${message.id}">
+          <button type="submit">Удалить</button>
+        </form>
     </#list>
 </@c.page>
