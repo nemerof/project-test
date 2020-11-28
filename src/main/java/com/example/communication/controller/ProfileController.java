@@ -36,7 +36,7 @@ public class ProfileController {
   @Autowired
   private UserService userService;
 
-  @GetMapping("profile/{id}")
+  @GetMapping("/profile/{id}")
   public String profile(
           @AuthenticationPrincipal User currentUser,
           @PathVariable(value="id") Long id,
@@ -57,11 +57,11 @@ public class ProfileController {
   //Надо что-то сделать
   @PostMapping("/profile/{id}")
   public String add(
-      @PathVariable(value="id") Long id,
-      @RequestParam(required = false, defaultValue = "") String filter,
-      @AuthenticationPrincipal User user,
-      @RequestParam String text, Model model,
-      @RequestParam("file") MultipartFile file
+          @RequestParam("file") MultipartFile file,
+          @PathVariable(value="id") Long id,
+          @RequestParam(required = false, defaultValue = "") String filter,
+          @AuthenticationPrincipal User user,
+          @RequestParam String text, Model model
   ) throws IOException {
     Message message = new Message(text, user);
 
@@ -88,7 +88,7 @@ public class ProfileController {
 
   @GetMapping("/edit")
   public String edit(
-      @AuthenticationPrincipal User user, Model model
+          @AuthenticationPrincipal User user, Model model
   ) {
     model.addAttribute("username", user.getUsername());
 //    model.addAttribute("password", user.getPassword());
@@ -98,8 +98,8 @@ public class ProfileController {
 
   @PostMapping("/edit")
   public String edit(
-      @AuthenticationPrincipal User user,
-      @RequestParam String username
+          @AuthenticationPrincipal User user,
+          @RequestParam String username
 //      @RequestParam(required = false, defaultValue = "/static/images/default-profile-icon.png") String profilePic,
   ) {
     user.setUsername(username);
@@ -118,7 +118,7 @@ public class ProfileController {
 
   @GetMapping("profile/subscriptions/{id}")
   public String getSubscriptions(@PathVariable(value = "id") Long id,
-                               Model model) {
+                                 Model model) {
     User user = userRepository.findById(id).get();
     model.addAttribute("subscriptions", user.getSubscriptions());
     return "subscriptions";

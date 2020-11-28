@@ -27,6 +27,12 @@
       </form>
     </div>
   </div>
+  <script type="text/javascript">
+      $(document).on('change', '.custom-file-input', function (event) {
+          $(this).next('.custom-file-label').html(event.target.files[0].name);
+
+      });
+  </script>
 <#--  </div>-->
     <#list messages as message>
       <div class="card m-auto" style="width: 600px">
