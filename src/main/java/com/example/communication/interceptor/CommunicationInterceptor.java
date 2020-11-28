@@ -22,7 +22,11 @@ public class CommunicationInterceptor extends HandlerInterceptorAdapter {
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
     if (modelAndView != null && !modelAndView.isEmpty()) {
-      User user= (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      Object o = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      User user = null;
+      if (!o.toString().equals("anonymousUser")) {
+        user = (User) o;
+      }
       if (user != null) {
         user = userRepository.findById(user.getId()).get();
         modelAndView.getModelMap().addAttribute("username", user.getUsername());
