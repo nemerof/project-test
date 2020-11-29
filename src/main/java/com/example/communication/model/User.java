@@ -4,20 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -44,7 +31,7 @@ public class User implements UserDetails {
   private String username;
 
   @NotEmpty(message = "Password cannot be empty")
-  @Size(min = 6, max = 16, message = "Password should be in range from 6 to 16 symbols")
+  @Size(min = 6, max = 60, message = "Password must be at least 8 characters")
   private String password;
 
   @Column(unique = true)
