@@ -5,12 +5,16 @@
 <@c.page>
   <div class="row">
     <div class="card ml-5" style="width: 202px;">
-      <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
+        <#if profilePic??>
+          <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="200" height="200">
+        <#else>
+          <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
+        </#if>
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
       <h5 class="card-title">${profileName}
           <#if userId == profileId>
-            <a href="/profile/edit/${profileId}">Edit</a>
+            <a href="/edit">Edit</a>
           </#if>
       </h5>
       <div class="container">

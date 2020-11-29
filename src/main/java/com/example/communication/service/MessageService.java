@@ -1,16 +1,13 @@
 package com.example.communication.service;
 
-import com.example.communication.model.Message;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.repository.MessageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {

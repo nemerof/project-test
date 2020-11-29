@@ -5,26 +5,21 @@ import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.UUID;
-
 import com.example.communication.service.MessageService;
 import com.example.communication.service.UserService;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class ProfileController {
-
-  @Value("${upload.path}")
-  private String uploadPath;
 
   @Autowired
   private MessageRepository messageRepository;
@@ -47,6 +42,7 @@ public class ProfileController {
     Iterable<MessageDTO> userMessages =
             messageRepository.findByUserId(currentUser, user);
     model.addAttribute("profileName", user.getUsername());
+    model.addAttribute("profilePic", user.getProfilePic());
     model.addAttribute("messages", userMessages);
     model.addAttribute("subscribers", user.getSubscribers().size());
     model.addAttribute("subscriptions", user.getSubscriptions().size());
@@ -68,28 +64,6 @@ public class ProfileController {
     ControllerUtils.savePhoto(file, message);
 
     model.addAttribute("filter", "");
-    return "redirect:/profile/"+id;
-  }
-
-  @GetMapping("/profile/edit/{id}")
-  public String edit(@PathVariable(value = "id") Long id, Model model) {
-    User user = userRepository.findById(id).get();
-    model.addAttribute("username", user.getUsername());
-    model.addAttribute("userId", user.getId());
-//    model.addAttribute("password", user.getPassword());
-//    model.addAttribute("profilePic", user.getProfilePic());
-    return "editUser";
-  }
-
-  @PostMapping("/profile/edit/{id}")
-  public String edit(@PathVariable(value = "id") Long id,
-                     @RequestParam String username
-//      @RequestParam(required = false, defaultValue = "/static/images/default-profile-icon.png") String profilePic,
-  ) {
-    User user = userRepository.findById(id).get();
-    user.setUsername(username);
-    userRepository.save(user);
-//    user.setProfilePic(profilePic);
     return "redirect:/profile/"+id;
   }
 
