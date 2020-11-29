@@ -46,5 +46,13 @@
         <form method="get" action="/delete/${message.id}">
           <button type="submit">Удалить</button>
         </form>
+      <a href="/messages/${message.id}/like">
+          <#if message.meLiked>
+            <i class="fas fa-heart"></i>
+          <#else>
+            <i class="far fa-heart"></i>
+          </#if>
+      </a>
+        ${message.likes}
     </#list>
 </@c.page>
