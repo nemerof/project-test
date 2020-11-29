@@ -79,14 +79,12 @@ public class ProfileController {
   }
 
   @PostMapping("/profile/edit/{id}")
-  public String edit(@AuthenticationPrincipal User currentUser,
-                     @PathVariable(value = "id") Long id,
+  public String edit(@PathVariable(value = "id") Long id,
                      @RequestParam String username
 //      @RequestParam(required = false, defaultValue = "/static/images/default-profile-icon.png") String profilePic,
   ) {
     User user = userRepository.findById(id).get();
     user.setUsername(username);
-    currentUser.setUsername(username);
     userRepository.save(user);
 //    user.setProfilePic(profilePic);
     return "redirect:/profile/"+id;

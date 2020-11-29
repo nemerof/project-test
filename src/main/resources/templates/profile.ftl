@@ -48,7 +48,7 @@
 
     <div class="card border-0 my-3" style="height: 242px; width: 600px; margin-left: 21px;">
         <#--<div class="card w-50 mb-3 mx-auto border-0">-->
-      <div class="form-group">
+      <div class="form-group mt-3">
         <form enctype="multipart/form-data" method="post" action="/profile/${userId}">
           <div class="form-group">
             <label for="comment">Comment:</label>
@@ -69,6 +69,11 @@
     </div>
   </div>
   </#if>
+  <script type="text/javascript">
+      $(document).on('change', '.custom-file-input', function (event) {
+          $(this).next('.custom-file-label').html(event.target.files[0].name);
+      });
+  </script>
 <#if !isCurrentUser>
     <#if !isSubscriber>
       <a class="btn btn-primary" href="/profile/subscribe/${profileId}">Subscribe</a>

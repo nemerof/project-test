@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -82,5 +79,16 @@ public class MainPageController {
     model.addAttribute("messages", messageRepository.findAll());
     model.addAttribute("filter", "");
     return "redirect:/";
+  }
+
+  @GetMapping("/login")
+  public void loginPage(@RequestParam(required = false, name = "error") String error, Model model) {
+    if (error != null)
+      model.addAttribute("errorUsernamePassword", "Username or password is incorrect!");
+  }
+
+  @PostMapping("/login")
+  public String loginIn() {
+    return "login";
   }
 }
