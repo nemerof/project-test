@@ -4,7 +4,7 @@
   <div class="form-group mt-3">
     <div class="card ml-5" style="width: 202px;">
       <#if profilePic??>
-        <img src=${profilePic} class="rounded" alt="No pic :(" width="200" height="200">
+        <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="200" height="200">
       <#else>
         <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
       </#if>

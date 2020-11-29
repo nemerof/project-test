@@ -31,7 +31,14 @@
     <#if isAuthorized>
     <div class="navbar-text">
       <a href="/profile/${userId}" id="navbarUsername">
-          <#if username??>${username}<#else>missing</#if>
+          <#if username??>
+              ${username}
+              <#if profilePic??>
+                <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="30" height="30">
+              <#else>
+                <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
+              </#if>
+          <#else>missing</#if>
       </a>
     </div>
     <#else>

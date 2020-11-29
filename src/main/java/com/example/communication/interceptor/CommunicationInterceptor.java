@@ -30,6 +30,7 @@ public class CommunicationInterceptor extends HandlerInterceptorAdapter {
       }
       if (user != null) {
         user = userRepository.findById(user.getId()).get();
+        modelAndView.getModelMap().addAttribute("profilePic", user.getProfilePic());
         modelAndView.getModelMap().addAttribute("username", user.getUsername());
       }
     }

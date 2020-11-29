@@ -42,7 +42,6 @@ public class ProfileController {
     Iterable<MessageDTO> userMessages =
             messageRepository.findByUserId(currentUser, user);
     model.addAttribute("profileName", user.getUsername());
-    model.addAttribute("profilePic", user.getProfilePic());
     model.addAttribute("messages", userMessages);
     model.addAttribute("subscribers", user.getSubscribers().size());
     model.addAttribute("subscriptions", user.getSubscriptions().size());

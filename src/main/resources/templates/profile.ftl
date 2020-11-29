@@ -88,7 +88,14 @@
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
     <#list messages as message>
       <div class="card m-auto" style="width: 600px">
-        <h5 class="card-title mx-4 my-3"><a href="/profile/${message.user.id}">${message.user.username}</a></h5>
+        <h5 class="card-title mx-4 my-3">
+            <#if profilePic??>
+              <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="50" height="50">
+            <#else>
+              <img src="/static/images/default-profile-icon.png" class="rounded-circle" alt="No pic :(" width="50" height="50">
+            </#if>
+          <a href="/profile/${message.user.id}">${message.user.username}</a>
+        </h5>
         <p class="card-text mx-4 my-3"><span>${message.text}</span></p>
           <#if message.filename??>
             <img src="/img/${message.filename}" class="rounded mx-auto my-3" alt="No pic :(" width="540" height="260">
