@@ -17,7 +17,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
           "   sum(case when ml = :user then 1 else 0 end) > 0" +
           ") " +
           "from Message m left join m.likes ml " +
-          "where m.text = :filter " +
+          "where m.text like %:filter% " +
           "group by m")
   Iterable<MessageDTO> findByTextContains(@Param("filter") String filter, @Param("user") User user);
 
@@ -27,8 +27,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
           "   sum(case when ml = :user then 1 else 0 end) > 0" +
           ") " +
           "from Message m left join m.likes ml " +
+          "where m.user = :author " +
           "group by m")
-  Iterable<MessageDTO> findByUserId(@Param("user") User user);
+  Iterable<MessageDTO> findByUserId(@Param("user") User user, @Param("author") User author);
 
   @Query("select new com.example.communication.model.dto.MessageDTO(" +
           "   m, " +

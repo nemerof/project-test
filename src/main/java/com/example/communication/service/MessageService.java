@@ -7,6 +7,7 @@ import com.example.communication.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +17,9 @@ public class MessageService {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private EntityManager em;
 
     public List<MessageDTO> getAllMessages(String filter, User user) {
         List<MessageDTO> messages;

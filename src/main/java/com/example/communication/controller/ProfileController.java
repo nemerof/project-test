@@ -45,7 +45,7 @@ public class ProfileController {
           Model model){
     User user = userRepository.findById(id).get();
     Iterable<MessageDTO> userMessages =
-            messageRepository.findByUserId(user);
+            messageRepository.findByUserId(currentUser, user);
     model.addAttribute("profileName", user.getUsername());
     model.addAttribute("messages", userMessages);
     model.addAttribute("subscribers", user.getSubscribers().size());
@@ -61,14 +61,12 @@ public class ProfileController {
   public String add(
           @RequestParam("file") MultipartFile file,
           @PathVariable(value="id") Long id,
-          @RequestParam(required = false, defaultValue = "") String filter,
           @AuthenticationPrincipal User user,
           @RequestParam String text, Model model
   ) throws IOException {
     Message message = new Message(text, user);
     ControllerUtils.savePhoto(file, message);
 
-    model.addAttribute("messages", messageService.getAllMessages(filter, user));
     model.addAttribute("filter", "");
     return "redirect:/profile/"+id;
   }
