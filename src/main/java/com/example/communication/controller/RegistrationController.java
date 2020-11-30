@@ -3,12 +3,14 @@ package com.example.communication.controller;
 import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.repository.UserRepository;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class RegistrationController {
@@ -25,13 +29,20 @@ public class RegistrationController {
   @Autowired
   private PasswordEncoder encoder;
 
+  @Value("${upload.path}")
+  private String uploadPath;
+
   @GetMapping("/registration")
   public String registration() {
     return "registration";
   }
 
   @PostMapping("/registration")
-  public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
+  public String addUser(
+      @Valid User user,
+      @RequestParam("profilePicture") MultipartFile file,
+      BindingResult bindingResult, Model model) throws IOException {
+
     model.addAttribute("user", user);
     if (bindingResult.hasErrors()) {
       model.mergeAttributes(getErrors(bindingResult));
@@ -63,7 +74,7 @@ public class RegistrationController {
     user.setActive(true);
     user.setRoles(Collections.singleton(Role.USER));
     user.setPassword(encoder.encode(user.getPassword()));
-    repository.save(user);
+    ControllerUtils.savePhoto(file, user);
 
     return "redirect:/login";
   }

@@ -30,7 +30,8 @@
     </ul>
     <#if isAuthorized>
     <div class="dropdown">
-      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #e3f2fd;">
           <#if isAuthorized>
           <div class="navbar-text">
             <a href="/profile/${userId}" id="navbarUsername">
@@ -39,8 +40,8 @@
                     <#if profilePic??>
                       <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="30" height="30">
                     <#else>
-                      <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200"
-                           height="200">
+                      <img src="/static/images/default-profile-icon.png" class="rounded-circle" alt="No pic :(" width="30"
+                           height="30">
                     </#if>
                 <#else>missing</#if>
             </a>

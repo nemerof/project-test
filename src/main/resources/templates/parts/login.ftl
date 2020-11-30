@@ -6,7 +6,7 @@
       color: red;
     }
   </style>
-  <form action="${path}" method="post">
+  <form action="${path}" enctype="multipart/form-data"  method="post">
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">User Name :</label>
       <div class="col-sm-6">
@@ -30,6 +30,12 @@
       </div>
     </div>
     <#if isRegisterForm>
+      <div class="form-group ">
+        <div class="custom-file">
+          <input type="file" name="profilePicture" id="customFile">
+          <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+      </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">E-Mail:</label>
         <div class="col-sm-6">
