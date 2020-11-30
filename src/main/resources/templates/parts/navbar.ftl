@@ -29,21 +29,50 @@
         </#if>
     </ul>
     <#if isAuthorized>
-    <div class="navbar-text">
-      <a href="/profile/${userId}" id="navbarUsername">
-          <#if username??>
-              ${username}
-              <#if profilePic??>
-                <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="30" height="30">
-              <#else>
-                <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
-              </#if>
-          <#else>missing</#if>
-      </a>
+    <div class="dropdown">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <#if isAuthorized>
+          <div class="navbar-text">
+            <a href="/profile/${userId}" id="navbarUsername">
+                <#if username??>
+                    ${username}
+                    <#if profilePic??>
+                      <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="30" height="30">
+                    <#else>
+                      <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200"
+                           height="200">
+                    </#if>
+                <#else>missing</#if>
+            </a>
+          </div>
+          <#else>
+            LogIn first
+          </#if>
+      </button>
+      <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" href="/profile/${userId}">
+              <#if username??>
+                  ${username}
+                  <#if profilePic??>
+                    <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="30" height="30">
+                  <#else>
+                    <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200"
+                         height="200">
+                  </#if>
+              <#else>missing</#if>
+        </a>
+        <a class="dropdown-item" href="/edit">
+          Edit profile
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item justify-content-center">
+            <@l.logout />
+        </a>
+      </div>
     </div>
-    <#else>
-      LogIn first
+        <#else>
+          LogIn first
+            <@l.logout />
     </#if>
-      <@l.logout />
   </div>
 </nav>
