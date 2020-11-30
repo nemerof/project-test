@@ -87,31 +87,42 @@
 </#if>
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
     <#list messages as message>
-      <div class="card m-auto" style="width: 600px">
-        <h5 class="card-title mx-4 my-3">
-            <#if profilePic??>
-              <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="50" height="50">
-            <#else>
-              <img src="/static/images/default-profile-icon.png" class="rounded-circle" alt="No pic :(" width="50" height="50">
+      <div class="container">
+        <div class="card m-auto" style="width: 600px">
+          <div class="row mx-4 my-3">
+            <div class="col-11">
+              <h5 class="card-title">
+                    <#if profilePic??>
+                      <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="50" height="50">
+                    <#else>
+                      <img src="/static/images/default-profile-icon.png" class="rounded-circle" alt="No pic :("
+                           width="50"
+                           height="50">
+                    </#if>
+                <a href="/profile/${message.user.id}">${message.user.username}</a>
+              </h5>
+            </div>
+            <div class="col-1" style="width:500px; float:right; text-align:left">
+                <a href="/delete/${message.id}" style="text-decoration: none; font-size: 30px"><i class="fas fa-trash" ></i></a>
+            </div>
+          </div>
+          <div class="row mr-4 ml-5 mt-1 md-4"><p class="card-text"><span>${message.text}</span></p></div>
+            <#if message.filename??>
+              <img src="/img/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540" height="260">
             </#if>
-          <a href="/profile/${message.user.id}">${message.user.username}</a>
-        </h5>
-        <p class="card-text mx-4 my-3"><span>${message.text}</span></p>
-          <#if message.filename??>
-            <img src="/img/${message.filename}" class="rounded mx-auto my-3" alt="No pic :(" width="540" height="260">
-          </#if>
+
+          <div class="mx-3 my-1" style="font-size: 20px"><a href="/messages/${message.id}/like" style="text-decoration: none;">
+                  <#if message.meLiked>
+                    <i class="fas fa-heart"></i>
+                  <#else>
+                    <i class="far fa-heart"></i>
+                  </#if>
+                  ${message.likes}
+            </a>
+          </div>
+          
+        </div>
       </div>
-      <br>
-      <form method="get" action="/delete/${message.id}">
-        <button type="submit">Удалить</button>
-      </form>
-      <a href="/messages/${message.id}/like" style="text-decoration: none;">
-          <#if message.meLiked>
-          <i class="fas fa-heart"></i>
-          <#else>
-            <i class="far fa-heart"></i>
-          </#if>
-      </a>
-        ${message.likes}
+      
     </#list>
 </@c.page>
