@@ -6,7 +6,7 @@
 <@c.page>
   <div class="row">
     <div class="card ml-5" style="width: 202px;">
-        <@p.profilePicture curProfPic 200 200/>
+        <@p.profilePicture profilePic 200 200/>
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
       <h5 class="card-title">${profileName}
@@ -75,13 +75,15 @@
           $(this).next('.custom-file-label').html(event.target.files[0].name);
       });
   </script>
-<#if !isCurrentUser>
-    <#if !isSubscriber>
-      <a class="btn btn-primary" href="/profile/subscribe/${profileId}">Subscribe</a>
-    <#else>
-      <a class="btn btn-primary" href="/profile/unsubscribe/${profileId}">Unsubscribe</a>
-    </#if>
-</#if>
+  <div class="ml-6 mt-2" style="margin-left: 50px">
+      <#if !isCurrentUser>
+          <#if !isSubscriber>
+            <a class="btn btn-primary" href="/profile/subscribe/${profileId}">Subscribe</a>
+          <#else>
+            <a class="btn btn-primary" href="/profile/unsubscribe/${profileId}">Unsubscribe</a>
+          </#if>
+      </#if>
+  </div>
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
     <#list messages as message>
       <div class="container">
@@ -89,7 +91,7 @@
           <div class="row mx-4 my-3">
             <div class="col-11">
               <h5 class="card-title">
-                  <@p.profilePicture curProfPic 50 50/>
+                  <@p.profilePicture profilePic 50 50/>
                 <a href="/profile/${message.user.id}">${message.user.username}</a>
               </h5>
             </div>
@@ -111,9 +113,9 @@
                   ${message.likes}
             </a>
           </div>
-          
+
         </div>
       </div>
-      
+
     </#list>
 </@c.page>
