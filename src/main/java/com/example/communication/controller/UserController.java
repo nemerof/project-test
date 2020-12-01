@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,13 +20,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/user")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
-  @Autowired
-  private UserRepository repository;
+
+  private final UserRepository repository;
+
+  public UserController(UserRepository repository) {
+    this.repository = repository;
+  }
 
   @GetMapping
   public String userList(Model model) {
     model.addAttribute("users", repository.findAll());
-
     return "userList";
   }
 
@@ -35,7 +37,6 @@ public class UserController {
   public String userEditForm(@PathVariable User user, Model model) {
     model.addAttribute("user", user);
     model.addAttribute("roles", Role.values());
-
     return "userEdit";
   }
 
@@ -60,7 +61,6 @@ public class UserController {
     }
 
     repository.save(user);
-
     return "redirect:/user";
   }
 }

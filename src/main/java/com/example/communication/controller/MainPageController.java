@@ -3,14 +3,10 @@ package com.example.communication.controller;
 import com.example.communication.model.Message;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
-import com.example.communication.repository.UserRepository;
 import com.example.communication.service.MessageService;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,30 +23,24 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Controller
 public class MainPageController {
 
-  @Value("${upload.path}")
-  private String uploadPath;
+  private final MessageService messageService;
 
-  @Autowired
-  private UserRepository userRepository;
-
-  @Autowired
-  private MessageService messageService;
+  public MainPageController(MessageService messageService) {
+    this.messageService = messageService;
+  }
 
   @GetMapping("/users")
   public String mainPage(Model model){
-    User user1 = new User("Name1", "123456", "somemail@gmail.com", true);
-    User user2 = new User("Name2", "654321", "somemail2@gmail.com", true);
-    userRepository.saveAll(Arrays.asList(user1, user2));
-    model.addAttribute("users", userRepository.findAll());
     return "users";
   }
 
   @GetMapping("/")
-  public String main(@AuthenticationPrincipal User user,
-                     @RequestParam(required = false, defaultValue = "") String filter,
-                     Model model) {
+  public String main(
+      @AuthenticationPrincipal User user,
+      @RequestParam(required = false, defaultValue = "") String filter,
+      Model model
+  ) {
     List<MessageDTO> messages = messageService.getAllMessages(filter, user);
-
     model.addAttribute("messages", messages);
     model.addAttribute("filter", "");
     return "main";
@@ -65,7 +55,6 @@ public class MainPageController {
   ) throws IOException {
     Message message = new Message(text, user);
     ControllerUtils.savePhoto(file, message);
-
     model.addAttribute("messages", messageService.getAllMessages(filter, user));
     model.addAttribute("filter", "");
     return "main";
@@ -73,10 +62,9 @@ public class MainPageController {
 
   @GetMapping("/delete/{id}")
   public String delete(
-      @PathVariable(value="id") Long id, Model model
+      @PathVariable(value="id") Long id
   ) {
     ControllerUtils.deleteMessage(id);
-
     return "redirect:/";
   }
 
@@ -98,8 +86,7 @@ public class MainPageController {
     UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
 
     components.getQueryParams()
-            .entrySet()
-            .forEach(pair -> redirectAttributes.addAttribute(pair.getKey(), pair.getValue()));
+        .forEach(redirectAttributes::addAttribute);
 
     return "redirect:" + components.getPath();
   }

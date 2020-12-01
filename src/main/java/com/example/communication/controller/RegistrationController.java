@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,14 +21,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class RegistrationController {
-  @Autowired
-  private UserRepository repository;
 
-  @Autowired
-  private PasswordEncoder encoder;
+  private final UserRepository repository;
 
-  @Value("${upload.path}")
-  private String uploadPath;
+  private final PasswordEncoder encoder;
+
+  public RegistrationController(UserRepository repository,
+      PasswordEncoder encoder) {
+    this.repository = repository;
+    this.encoder = encoder;
+  }
 
   @GetMapping("/registration")
   public String registration() {
@@ -49,19 +49,13 @@ public class RegistrationController {
       return "registration";
     }
 
-    boolean emailExist = false;
     List<User> users = repository.findAll();
 
     for (User user1 : users) {
       if (user1.getEmail().equals(user.getEmail())) {
-        emailExist = true;
-        break;
+        model.addAttribute("emailExists", "User with such email exists!");
+        return "registration";
       }
-    }
-
-    if (emailExist) {
-      model.addAttribute("emailExists", "User with such email exists!");
-      return "registration";
     }
 
     User userFromDb = repository.findByUsername(user.getUsername());
@@ -70,12 +64,10 @@ public class RegistrationController {
       model.addAttribute("usernameExists", "User exists!");
       return "registration";
     }
-
     user.setActive(true);
     user.setRoles(Collections.singleton(Role.USER));
     user.setPassword(encoder.encode(user.getPassword()));
     ControllerUtils.savePhoto(file, user);
-
     return "redirect:/login";
   }
 
@@ -92,7 +84,6 @@ public class RegistrationController {
         errors.replace(name, message);
       }
     }
-
     return errors;
   }
 }

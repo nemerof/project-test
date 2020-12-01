@@ -6,6 +6,7 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ControllerUtils {
-    @Value("${upload.path}")
-    private String getUploadPath;
 
     private static String uploadPathStatic;
 
@@ -40,12 +39,11 @@ public class ControllerUtils {
     public static void deleteMessage(Long id) {
         Message message = messageRepository.getOne(id);
         messageRepository.deleteById(id);
-        File file = new File(uploadPathStatic + "/" + message.getFilename());
-        file.delete();
+        new File(uploadPathStatic + "/" + message.getFilename()).delete();
     }
 
     public static void savePhoto(MultipartFile file, Message message) throws IOException {
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
+        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             File uploadDir = new File(uploadPathStatic);
 
             if (!uploadDir.exists()) {
@@ -65,7 +63,7 @@ public class ControllerUtils {
 
     //Do something
     public static void savePhoto(MultipartFile file, User user) throws IOException {
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
+        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             File uploadDir = new File(uploadPathStatic);
 
             if (!uploadDir.exists()) {

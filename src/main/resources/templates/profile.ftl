@@ -6,7 +6,7 @@
 <@c.page>
   <div class="row">
     <div class="card ml-5" style="width: 202px;">
-        <@p.profilePicture profilePic 200 200/>
+        <@p.profilePicture curProfPic 200 200/>
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
       <h5 class="card-title">${profileName}
@@ -89,7 +89,7 @@
           <div class="row mx-4 my-3">
             <div class="col-11">
               <h5 class="card-title">
-                  <@p.profilePicture profilePic 50 50/>
+                  <@p.profilePicture curProfPic 50 50/>
                 <a href="/profile/${message.user.id}">${message.user.username}</a>
               </h5>
             </div>

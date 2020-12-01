@@ -6,17 +6,20 @@ import com.example.communication.repository.MessageRepository;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
 
-    @Autowired
-    private MessageRepository messageRepository;
+    private final MessageRepository messageRepository;
 
-    @Autowired
-    private EntityManager em;
+    private final EntityManager em;
+
+    public MessageService(MessageRepository messageRepository,
+        EntityManager em) {
+        this.messageRepository = messageRepository;
+        this.em = em;
+    }
 
     public List<MessageDTO> getAllMessages(String filter, User user) {
         List<MessageDTO> messages;

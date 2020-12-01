@@ -1,7 +1,6 @@
 package com.example.communication.configuration;
 
 import com.example.communication.interceptor.CommunicationInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,8 +13,12 @@ public class MvcConfig implements WebMvcConfigurer {
   @Value("${upload.path}")
   private String uploadPath;
 
-  @Autowired
-  private CommunicationInterceptor interceptor;
+  private final CommunicationInterceptor interceptor;
+
+  public MvcConfig(
+      CommunicationInterceptor interceptor) {
+    this.interceptor = interceptor;
+  }
 
   public void addViewControllers(ViewControllerRegistry registry) {
     registry.addViewController("/login").setViewName("login");
