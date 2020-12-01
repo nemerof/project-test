@@ -7,7 +7,7 @@
           <div class="row mx-4 my-3">
             <div class="col-11">
               <h5 class="card-title">
-                  <@p.profilePicture profilePic 50 50/>
+                  <@p.profilePicture message.user.profilePic 50 50/>
                 <a href="/profile/${message.user.id}">${message.user.username}</a>
               </h5>
             </div>

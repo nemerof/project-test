@@ -34,5 +34,5 @@
 
       });
   </script>
-    <@m.mess />
+    <@m.mess/>
 </@c.page>
