@@ -1,6 +1,6 @@
 <#import "parts/common.ftl" as c>
 <#import "parts/login.ftl" as l>
-<#import "parts/profilePicture.ftl" as p>
+<#import "parts/messageView.ftl" as m>
 
 <@c.page>
 <#--  <a class="btn btn-primary mb-3 mx-auto" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
@@ -34,29 +34,5 @@
 
       });
   </script>
-<#--  </div>-->
-    <#list messages as message>
-      <div class="card m-auto" style="width: 600px">
-        <h5 class="card-title mx-4 my-3">
-            <@p.profilePicture message.user.profilePic 50 50/>
-          <a href="/profile/${message.user.id}">${message.user.username}</a>
-        </h5>
-        <p class="card-text mx-4 my-3"><span>${message.text}</span></p>
-          <#if message.filename??>
-            <img src="/img/${message.filename}" class="rounded mx-auto my-3" alt="No pic :(" width="540" height="260">
-          </#if>
-      </div>
-      <br>
-        <form method="get" action="/delete/${message.id}">
-          <button type="submit">Удалить</button>
-        </form>
-      <a href="/messages/${message.id}/like" style="text-decoration: none;">
-          <#if message.meLiked>
-            <i class="fas fa-heart"></i>
-          <#else>
-            <i class="far fa-heart"></i>
-          </#if>
-      </a>
-        ${message.likes}
-    </#list>
+    <@m.mess />
 </@c.page>

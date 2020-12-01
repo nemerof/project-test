@@ -1,7 +1,7 @@
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
 <#import "parts/profilePicture.ftl" as p>
-<#assign name = profileName>
+<#import "parts/messageView.ftl" as m>
 
 <@c.page>
   <div class="row">
@@ -9,16 +9,13 @@
         <@p.profilePicture profilePic 200 200/>
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
-      <h5 class="card-title">${profileName}
-          <#if userId == profileId>
-            <a href="/edit">Edit</a>
-          </#if>
-      </h5>
-      <div class="container">
+      <h5 class="card-title ml-3 mt-2">${profileName}</h5>
+      <hr/>
+      <div class="container" style="height: 100px">
         <div class="row">
           <div class="col">
             <div class="card">
-              <div class="card-body" style="background-color: lightblue">
+              <div class="card-body" style="background-color: lightblue;">
                 <div class="card-title">Subscribers</div>
                 <h4 class="card-text"><a href="/profile/subscribers/${profileId}">${subscribers}</a></h4>
               </div>
@@ -75,45 +72,15 @@
           $(this).next('.custom-file-label').html(event.target.files[0].name);
       });
   </script>
-<#if !isCurrentUser>
-    <#if !isSubscriber>
-      <a class="btn btn-primary" href="/profile/subscribe/${profileId}">Subscribe</a>
-    <#else>
-      <a class="btn btn-primary" href="/profile/unsubscribe/${profileId}">Unsubscribe</a>
-    </#if>
-</#if>
+  <div class="ml-6 mt-2" style="margin-left: 50px">
+      <#if !isCurrentUser>
+          <#if !isSubscriber>
+            <a class="btn btn-primary" href="/profile/subscribe/${profileId}">Subscribe</a>
+          <#else>
+            <a class="btn btn-primary" href="/profile/unsubscribe/${profileId}">Unsubscribe</a>
+          </#if>
+      </#if>
+  </div>
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
-    <#list messages as message>
-      <div class="container">
-        <div class="card m-auto" style="width: 600px">
-          <div class="row mx-4 my-3">
-            <div class="col-11">
-              <h5 class="card-title">
-                  <@p.profilePicture profilePic 50 50/>
-                <a href="/profile/${message.user.id}">${message.user.username}</a>
-              </h5>
-            </div>
-            <div class="col-1" style="width:500px; float:right; text-align:left">
-                <a href="/delete/${message.id}" style="text-decoration: none; font-size: 30px"><i class="fas fa-trash" ></i></a>
-            </div>
-          </div>
-          <div class="row mr-4 ml-5 mt-1 md-4"><p class="card-text"><span>${message.text}</span></p></div>
-            <#if message.filename??>
-              <img src="/img/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540" height="260">
-            </#if>
-
-          <div class="mx-3 my-1" style="font-size: 20px"><a href="/messages/${message.id}/like" style="text-decoration: none;">
-                  <#if message.meLiked>
-                    <i class="fas fa-heart"></i>
-                  <#else>
-                    <i class="far fa-heart"></i>
-                  </#if>
-                  ${message.likes}
-            </a>
-          </div>
-          
-        </div>
-      </div>
-      
-    </#list>
+    <@m.mess/>
 </@c.page>
