@@ -1,5 +1,6 @@
 <#include "security.ftl">
 <#import "login.ftl" as l>
+<#import "profilePicture.ftl" as p>
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
   <a class="navbar-brand" href="/">Sweater</a>
@@ -37,13 +38,7 @@
             <a href="/profile/${userId}" id="navbarUsername">
                 <#if username??>
                     ${username}
-                    <#if profilePic??>
-                        <#if !(profilePic == "default-profile-icon.png")>
-                          <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="30" height="30">
-                        <#else>
-                          <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="30" height="30">
-                        </#if>
-                    </#if>
+                    <@p.profilePicture profilePic 30 30/>
                 <#else>missing</#if>
             </a>
           </div>
@@ -56,11 +51,7 @@
               <#if username??>
                   ${username}
                   <#if profilePic??>
-                      <#if !(profilePic == "default-profile-icon.png")>
-                        <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="30" height="30">
-                      <#else>
-                        <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="30" height="30">
-                      </#if>
+                      <@p.profilePicture profilePic 30 30/>
                   </#if>
               <#else>missing</#if>
         </a>

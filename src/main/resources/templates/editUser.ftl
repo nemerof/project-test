@@ -1,15 +1,10 @@
 <#import "parts/common.ftl" as c>
+<#import "parts/profilePicture.ftl" as p>
 
 <@c.page>
   <div class="form-group mt-3">
     <div class="card ml-5" style="width: 202px;">
-      <#if profilePic??>
-          <#if !(profilePic == "default-profile-icon.png")>
-            <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="200" height="200">
-          <#else>
-            <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
-          </#if>
-      </#if>
+        <@p.profilePicture profilePic 200 200/>
     </div>
     <form method="post" enctype="multipart/form-data" action="/edit">
       <div class="form-group">

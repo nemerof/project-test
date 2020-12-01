@@ -1,15 +1,12 @@
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
+<#import "parts/profilePicture.ftl" as p>
 <#assign name = profileName>
 
 <@c.page>
   <div class="row">
     <div class="card ml-5" style="width: 202px;">
-        <#if !(profilePic == "default-profile-icon.png")>
-          <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="200" height="200">
-        <#else>
-          <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
-        </#if>
+        <@p.profilePicture profilePic 200 200/>
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
       <h5 class="card-title">${profileName}
@@ -92,13 +89,7 @@
           <div class="row mx-4 my-3">
             <div class="col-11">
               <h5 class="card-title">
-                    <#if profilePic??>
-                        <#if !(profilePic == "default-profile-icon.png")>
-                          <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="50" height="50">
-                        <#else>
-                          <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="50" height="50">
-                        </#if>
-                    </#if>
+                  <@p.profilePicture profilePic 50 50/>
                 <a href="/profile/${message.user.id}">${message.user.username}</a>
               </h5>
             </div>

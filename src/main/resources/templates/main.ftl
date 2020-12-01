@@ -1,5 +1,6 @@
 <#import "parts/common.ftl" as c>
 <#import "parts/login.ftl" as l>
+<#import "parts/profilePicture.ftl" as p>
 
 <@c.page>
 <#--  <a class="btn btn-primary mb-3 mx-auto" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
@@ -37,13 +38,7 @@
     <#list messages as message>
       <div class="card m-auto" style="width: 600px">
         <h5 class="card-title mx-4 my-3">
-            <#if profilePic??>
-                <#if !(profilePic == "default-profile-icon.png")>
-                  <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="50" height="50">
-                <#else>
-                  <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="50" height="50">
-                </#if>
-            </#if>
+            <@p.profilePicture message.user.profilePic 50 50/>
           <a href="/profile/${message.user.id}">${message.user.username}</a>
         </h5>
         <p class="card-text mx-4 my-3"><span>${message.text}</span></p>
