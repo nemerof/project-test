@@ -78,6 +78,8 @@ public class ControllerUtils {
             file.transferTo(new File(uploadPathStatic + "/" + resultFilename));
 
             user.setProfilePic(resultFilename);
+        } else {
+            user.setProfilePic("default-profile-icon.png");
         }
 
         userRepository.save(user);

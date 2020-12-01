@@ -4,9 +4,11 @@
   <div class="form-group mt-3">
     <div class="card ml-5" style="width: 202px;">
       <#if profilePic??>
-        <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="200" height="200">
-      <#else>
-        <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
+          <#if !(profilePic == "default-profile-icon.png")>
+            <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="200" height="200">
+          <#else>
+            <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
+          </#if>
       </#if>
     </div>
     <form method="post" enctype="multipart/form-data" action="/edit">

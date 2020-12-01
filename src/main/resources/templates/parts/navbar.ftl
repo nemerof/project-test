@@ -38,10 +38,11 @@
                 <#if username??>
                     ${username}
                     <#if profilePic??>
-                      <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="30" height="30">
-                    <#else>
-                      <img src="/static/images/default-profile-icon.png" class="rounded-circle" alt="No pic :(" width="30"
-                           height="30">
+                        <#if !(profilePic == "default-profile-icon.png")>
+                          <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="30" height="30">
+                        <#else>
+                          <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="30" height="30">
+                        </#if>
                     </#if>
                 <#else>missing</#if>
             </a>
@@ -55,10 +56,11 @@
               <#if username??>
                   ${username}
                   <#if profilePic??>
-                    <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="30" height="30">
-                  <#else>
-                    <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200"
-                         height="200">
+                      <#if !(profilePic == "default-profile-icon.png")>
+                        <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="30" height="30">
+                      <#else>
+                        <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="30" height="30">
+                      </#if>
                   </#if>
               <#else>missing</#if>
         </a>
