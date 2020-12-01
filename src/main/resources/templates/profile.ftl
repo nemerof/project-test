@@ -5,7 +5,11 @@
 <@c.page>
   <div class="row">
     <div class="card ml-5" style="width: 202px;">
-      <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="200" height="200">
+        <#if !(profilePic == "default-profile-icon.png")>
+          <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="200" height="200">
+        <#else>
+          <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="200" height="200">
+        </#if>
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
       <h5 class="card-title">${profileName}
@@ -89,11 +93,11 @@
             <div class="col-11">
               <h5 class="card-title">
                     <#if profilePic??>
-                      <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="50" height="50">
-                    <#else>
-                      <img src="/static/images/default-profile-icon.png" class="rounded-circle" alt="No pic :("
-                           width="50"
-                           height="50">
+                        <#if !(profilePic == "default-profile-icon.png")>
+                          <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="50" height="50">
+                        <#else>
+                          <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="50" height="50">
+                        </#if>
                     </#if>
                 <a href="/profile/${message.user.id}">${message.user.username}</a>
               </h5>

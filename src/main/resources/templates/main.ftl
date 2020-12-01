@@ -38,9 +38,11 @@
       <div class="card m-auto" style="width: 600px">
         <h5 class="card-title mx-4 my-3">
             <#if profilePic??>
-              <img src="/img/${profilePic}" class="rounded-circle" alt="No pic :(" width="50" height="50">
-            <#else>
-              <img src="/static/images/default-profile-icon.png" class="rounded-circle" alt="No pic :(" width="50" height="50">
+                <#if !(profilePic == "default-profile-icon.png")>
+                  <img src="/img/${profilePic}" class="rounded" alt="No pic :(" width="50" height="50">
+                <#else>
+                  <img src="/static/images/default-profile-icon.png" class="rounded" alt="No pic :(" width="50" height="50">
+                </#if>
             </#if>
           <a href="/profile/${message.user.id}">${message.user.username}</a>
         </h5>
