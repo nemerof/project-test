@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,16 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class RegistrationController {
+  @Autowired
+  private UserRepository repository;
 
-  private final UserRepository repository;
-
-  private final PasswordEncoder encoder;
-
-  public RegistrationController(UserRepository repository,
-      PasswordEncoder encoder) {
-    this.repository = repository;
-    this.encoder = encoder;
-  }
+  @Autowired
+  private PasswordEncoder encoder;
 
   @GetMapping("/registration")
   public String registration() {
@@ -49,13 +45,19 @@ public class RegistrationController {
       return "registration";
     }
 
+    boolean emailExist = false;
     List<User> users = repository.findAll();
 
     for (User user1 : users) {
       if (user1.getEmail().equals(user.getEmail())) {
-        model.addAttribute("emailExists", "User with such email exists!");
-        return "registration";
+        emailExist = true;
+        break;
       }
+    }
+
+    if (emailExist) {
+      model.addAttribute("emailExists", "User with such email exists!");
+      return "registration";
     }
 
     User userFromDb = repository.findByUsername(user.getUsername());
