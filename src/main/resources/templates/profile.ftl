@@ -1,7 +1,7 @@
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
 <#import "parts/profilePicture.ftl" as p>
-<#assign name = profileName>
+<#import "parts/messageView.ftl" as m>
 
 <@c.page>
   <div class="row">
@@ -9,7 +9,7 @@
         <@p.profilePicture curProfPic 200 200/>
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
-      <h5 class="card-title">${profileName}
+      <h5 class="card-title mx-3 my-2">${profileName}
           <#if userId == profileId>
             <a href="/edit">Edit</a>
           </#if>
@@ -85,37 +85,5 @@
       </#if>
   </div>
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
-    <#list messages as message>
-      <div class="container">
-        <div class="card m-auto" style="width: 600px">
-          <div class="row mx-4 my-3">
-            <div class="col-11">
-              <h5 class="card-title">
-                  <@p.profilePicture curProfPic 50 50/>
-                <a href="/profile/${message.user.id}">${message.user.username}</a>
-              </h5>
-            </div>
-            <div class="col-1" style="width:500px; float:right; text-align:left">
-                <a href="/delete/${message.id}" style="text-decoration: none; font-size: 30px"><i class="fas fa-trash" ></i></a>
-            </div>
-          </div>
-          <div class="row mr-4 ml-5 mt-1 md-4"><p class="card-text"><span>${message.text}</span></p></div>
-            <#if message.filename??>
-              <img src="/img/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540" height="260">
-            </#if>
-
-          <div class="mx-3 my-1" style="font-size: 20px"><a href="/messages/${message.id}/like" style="text-decoration: none;">
-                  <#if message.meLiked>
-                    <i class="fas fa-heart"></i>
-                  <#else>
-                    <i class="far fa-heart"></i>
-                  </#if>
-                  ${message.likes}
-            </a>
-          </div>
-
-        </div>
-      </div>
-
-    </#list>
+    <@m.mess userId isAdmin/>
 </@c.page>
