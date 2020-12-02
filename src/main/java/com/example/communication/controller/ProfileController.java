@@ -1,6 +1,7 @@
 package com.example.communication.controller;
 
 import com.example.communication.model.Message;
+import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.repository.MessageRepository;
@@ -48,6 +49,7 @@ public class ProfileController {
     model.addAttribute("curProfPic", user.getProfilePic());
     model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser));
     model.addAttribute("isCurrentUser", currentUser.equals(user));
+    model.addAttribute("isAdmin", user.getRoles().contains(Role.ADMIN));
     return "profile";
   }
 

@@ -86,5 +86,5 @@
       </#if>
   </div>
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
-    <@m.mess userId/>
+    <@m.mess userId isAdmin/>
 </@c.page>

@@ -34,5 +34,5 @@
 
       });
   </script>
-    <@m.mess loginUserId/>
+    <@m.mess loginUserId isAdmin/>
 </@c.page>

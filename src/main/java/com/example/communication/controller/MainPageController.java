@@ -1,6 +1,7 @@
 package com.example.communication.controller;
 
 import com.example.communication.model.Message;
+import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.service.MessageService;
@@ -42,6 +43,7 @@ public class MainPageController {
   ) {
     List<MessageDTO> messages = messageService.getAllMessages(filter, user);
     model.addAttribute("loginUserId", user.getId());
+    model.addAttribute("isAdmin", user.getRoles().contains(Role.ADMIN));
     model.addAttribute("messages", messages);
     model.addAttribute("filter", "");
     return "main";
