@@ -41,6 +41,7 @@ public class MainPageController {
       Model model
   ) {
     List<MessageDTO> messages = messageService.getAllMessages(filter, user);
+    model.addAttribute("loginUserId", user.getId());
     model.addAttribute("messages", messages);
     model.addAttribute("filter", "");
     return "main";

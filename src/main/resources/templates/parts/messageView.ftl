@@ -1,6 +1,6 @@
 <#import "profilePicture.ftl" as p>
 
-<#macro mess>
+<#macro mess currentUserId>
     <#list messages as message>
       <div class="container">
         <div class="card m-auto" style="width: 600px">
@@ -12,7 +12,9 @@
               </h5>
             </div>
             <div class="col-1" style="width:500px; float:right; text-align:left">
-              <a href="/delete/${message.id}" style="text-decoration: none; font-size: 30px"><i class="fas fa-trash" ></i></a>
+              <#if currentUserId==message.user.id>
+                <a href="/delete/${message.id}" style="text-decoration: none; font-size: 30px"><i class="fas fa-trash"></i></a>
+              </#if>
             </div>
           </div>
           <div class="row mr-4 ml-5 mt-1 md-4"><p class="card-text"><span>${message.text}</span></p></div>
