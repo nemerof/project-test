@@ -4,6 +4,7 @@ import com.example.communication.model.Message;
 import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
+import com.example.communication.repository.MessageRepository;
 import com.example.communication.service.MessageService;
 import java.io.IOException;
 import java.util.List;
@@ -26,8 +27,11 @@ public class MainPageController {
 
   private final MessageService messageService;
 
-  public MainPageController(MessageService messageService) {
+  private final MessageRepository messageRepository;
+
+  public MainPageController(MessageService messageService, MessageRepository messageRepository) {
     this.messageService = messageService;
+    this.messageRepository = messageRepository;
   }
 
   @GetMapping("/users")
@@ -65,8 +69,11 @@ public class MainPageController {
 
   @GetMapping("/delete/{id}")
   public String delete(
+      @AuthenticationPrincipal User user,
       @PathVariable(value="id") Long id
   ) {
+    if (!user.getRoles().contains(Role.ADMIN) && !user.getId().equals(messageRepository.getOne(id).getUser().getId()))
+      return "redirect:/";
     ControllerUtils.deleteMessage(id);
     return "redirect:/";
   }

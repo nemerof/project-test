@@ -2,7 +2,6 @@
 <#include "parts/security.ftl">
 <#import "parts/profilePicture.ftl" as p>
 <#import "parts/messageView.ftl" as m>
-<#assign name = profileName>
 
 <@c.page>
   <div class="row">
@@ -10,7 +9,7 @@
         <@p.profilePicture curProfPic 200 200/>
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
-      <h5 class="card-title">${profileName}
+      <h5 class="card-title mx-3 my-2">${profileName}
           <#if userId == profileId>
             <a href="/edit">Edit</a>
           </#if>
