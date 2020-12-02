@@ -4,6 +4,7 @@ import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.repository.UserRepository;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +37,8 @@ public class RegistrationController {
   @PostMapping("/registration")
   public String addUser(
       @Valid User user,
-      @RequestParam("profilePicture") MultipartFile file,
-      BindingResult bindingResult, Model model) throws IOException {
+      BindingResult bindingResult,
+      @RequestParam("profilePicture") MultipartFile file, Model model) throws IOException {
 
     model.addAttribute("user", user);
     if (bindingResult.hasErrors()) {

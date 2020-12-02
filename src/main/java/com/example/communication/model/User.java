@@ -1,9 +1,7 @@
 package com.example.communication.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -54,6 +52,12 @@ public class User implements UserDetails {
   private boolean active;
 
   private String profilePic;
+
+  @Column(name = "real_name")
+  private String realName;
+
+  @Column(name = "date_of_birth")
+  private String dateOfBirth;
 
   @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
   @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))

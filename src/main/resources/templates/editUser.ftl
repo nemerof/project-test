@@ -14,6 +14,18 @@
         </label>
       </div>
       <div class="form-group">
+        <label>
+          Real name:
+          <input type="text" name="realName" value="${realName}">
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          Date of birth:
+          <input type="date" name="dateOfBirth" value="${birthDate}">
+        </label>
+      </div>
+      <div class="form-group">
         <div class="custom-file">
           <input type="file" name="profilePic" id="customFile"
             <#if profilePic??>${profilePic}</#if>

@@ -65,7 +65,6 @@ public class ControllerUtils {
     public static void savePhoto(MultipartFile file, User user) throws IOException {
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             File uploadDir = new File(uploadPathStatic);
-
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
