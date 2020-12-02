@@ -22,6 +22,8 @@ create table usr (
                      password varchar(255) not null,
                      username varchar(255) not null,
                      profile_pic varchar(255),
+                     real_name varchar(255),
+                     date_of_birth varchar(255),
                      primary key (id)
 );
 

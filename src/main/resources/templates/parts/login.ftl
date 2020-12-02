@@ -30,12 +30,6 @@
       </div>
     </div>
     <#if isRegisterForm>
-      <div class="form-group ">
-        <div class="custom-file">
-          <input type="file" name="profilePicture" id="customFile">
-          <label class="custom-file-label" for="customFile">Choose file</label>
-        </div>
-      </div>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">E-Mail:</label>
         <div class="col-sm-6">
@@ -51,6 +45,29 @@
           <#if usernameExists??>
             <p>${usernameExists}</p>
           </#if>
+        </div>
+      </div>
+      <div class="form-group mx-0 md-4 mt-2">
+        <label>Profile photo:</label>
+        <div class="custom-file" style="width: 400px">
+          <input type="file" name="profilePicture" id="customFile" style="outline: none; box-shadow: none">
+          <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Real name:</label>
+        <div class="col-sm-6">
+          <label>
+            <input type="text" name="realName" class="form-control" placeholder="Real Name" />
+          </label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Date of birth:</label>
+        <div class="col-sm-6">
+          <label>
+            <input type="date" name="dateOfBirth" class="form-control" placeholder="Date of birth" />
+          </label>
         </div>
       </div>
     </#if>

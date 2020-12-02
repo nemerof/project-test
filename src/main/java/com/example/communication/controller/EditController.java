@@ -28,8 +28,11 @@ public class EditController {
 
   @GetMapping
   public String edit(
-      @AuthenticationPrincipal User user, Model model)
+      @AuthenticationPrincipal User user1, Model model)
   {
+    User user = userRepository.findById(user1.getId()).get();
+    model.addAttribute("birthDate", user.getDateOfBirth());
+    model.addAttribute("realName", user.getRealName());
     model.addAttribute("username", user.getUsername());
     model.addAttribute("userId", user.getId());
     model.addAttribute("profilePic", user.getProfilePic());
@@ -40,16 +43,22 @@ public class EditController {
   public String edit(
       @AuthenticationPrincipal User user1,
       @RequestParam String username,
+      @RequestParam String realName,
+      @RequestParam String dateOfBirth,
       @RequestParam("profilePic") MultipartFile file
   ) throws IOException {
     User user = userRepository.findById(user1.getId()).get();
     user.setUsername(username);
+    user.setRealName(realName);
+    user.setDateOfBirth(dateOfBirth);
     String profPic = user.getProfilePic();
-    if (profPic != null && !profPic.equals("") && !profPic.equals("default-profile-icon.png")) {
+    if (!file.getOriginalFilename().equals("") && profPic != null && !profPic.equals("") && !profPic.equals("default-profile-icon.png")) {
       File file1 = new File(uploadPath + "/" + user.getProfilePic());
       file1.delete();
     }
-    ControllerUtils.savePhoto(file, user);
+    if (!file.getOriginalFilename().equals("")) {
+      ControllerUtils.savePhoto(file, user);
+    }
     return "redirect:/profile/"+user.getId();
   }
 }
