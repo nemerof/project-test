@@ -1,7 +1,9 @@
 package com.example.communication.model;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -48,6 +50,8 @@ public class User implements UserDetails {
   @Column(unique = true)
   @NotEmpty(message = "Email cannot be empty")
   private String email;
+
+  private String activationCode;
 
   private boolean active;
 
