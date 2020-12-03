@@ -38,16 +38,7 @@
   </div>
 
   <#if userId == profileId>
-  <div class="row">
-
-    <form class="ml-5" style="width: 202px; ">
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="customFile">
-        <label class="custom-file-label mt-3" for="customFile">Change picture</label>
-      </div>
-    </form>
-
-    <div class="card border-0 my-3" style="height: 242px; width: 600px; margin-left: 21px;">
+    <div class="card border-0 mt-3 mx-auto" style="height: 242px; width: 600px; margin-left: 21px;">
         <#--<div class="card w-50 mb-3 mx-auto border-0">-->
       <div class="form-group mt-3">
         <form enctype="multipart/form-data" method="post" action="/profile/${userId}">
@@ -68,7 +59,6 @@
         </form>
       </div>
     </div>
-  </div>
   </#if>
   <script type="text/javascript">
       $(document).on('change', '.custom-file-input', function (event) {

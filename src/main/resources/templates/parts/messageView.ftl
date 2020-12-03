@@ -2,7 +2,7 @@
 
 <#macro mess currentUserId isAdmin>
     <#list messages as message>
-      <div class="container">
+      <div class="container mt-3">
         <div class="card m-auto" style="width: 600px">
           <div class="row mx-4 my-3">
             <div class="col-11">
