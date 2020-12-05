@@ -61,6 +61,9 @@ public class MainPageController {
       @RequestParam("file") MultipartFile file
   ) throws IOException {
     Message message = new Message(text, user);
+//
+//    message.setPostTime(LocalDateTime.now());
+
     ControllerUtils.savePhoto(file, message);
     model.addAttribute("messages", messageService.getAllMessages(filter, user));
     model.addAttribute("filter", "");
