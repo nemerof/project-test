@@ -31,7 +31,29 @@
                   </#if>
                   ${message.likes}
             </a>
+            <i class="fas fa-comments"></i>
           </div>
+        </div>
+        <div>
+          <#list message.comments as comment>
+              ${comment}
+          </#list>
+          <form enctype="multipart/form-data" method="post" action="/comment/${message.id}">
+            <div class="form-group">
+              <label for="comment">Comment:</label>
+              <textarea class="form-control" rows="3" id="comment" name="text"></textarea>
+            </div>
+            <div class="form-group">
+              <div class="custom-file">
+                <input class="custom-file-input" type="file" name="file" id="customFile">
+                <label class="custom-file-label" for="customFile">Choose file</label>
+              </div>
+            </div>
+            <input type="hidden" name="_csrf" value="${_csrf.token}" />
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Save message</button>
+            </div>
+          </form>
         </div>
       </div>
     </#list>
