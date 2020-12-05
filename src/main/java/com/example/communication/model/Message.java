@@ -14,7 +14,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@ToString
 @Entity
 public class Message extends AbstractMessageEntity {
 
@@ -57,7 +56,12 @@ public class Message extends AbstractMessageEntity {
     super(text, user);
   }
 
-//  @Override
+  @Override
+  public String toString() {
+    return String.valueOf(super.getId());
+  }
+
+  //  @Override
 //  public boolean equals(Object o) {
 //    if (this == o) return true;
 //    if (o == null || getClass() != o.getClass()) return false;
