@@ -64,7 +64,7 @@ public class MainPageController {
 //
 //    message.setPostTime(LocalDateTime.now());
 
-    ControllerUtils.savePhoto(file, message);
+    ControllerUtils.saveMessage(file, message);
     model.addAttribute("messages", messageService.getAllMessages(filter, user));
     model.addAttribute("filter", "");
     return "main";

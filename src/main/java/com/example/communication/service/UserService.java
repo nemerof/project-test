@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
     user.setRoles(Collections.singleton(Role.USER));
     user.setPassword(encoder.encode(user.getPassword()));
     user.setActivationCode(UUID.randomUUID().toString());
-    ControllerUtils.savePhoto(file, user);
+    ControllerUtils.saveMessage(file, user);
 
     if (!StringUtils.isEmpty(user.getEmail())) {
       String message = String.format(

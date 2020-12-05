@@ -36,6 +36,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
           "   sum(case when ml = :user then 1 else 0 end) > 0" +
           ") " +
           "from Message m left join m.likes ml " +
-          "group by m")
+          "group by m order by m.postTime")
   List<MessageDTO> findAll(@Param("user") User user);
 }

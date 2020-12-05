@@ -2,6 +2,7 @@ package com.example.communication.model.dto;
 
 import com.example.communication.model.Message;
 import com.example.communication.model.User;
+import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
@@ -10,6 +11,7 @@ public class MessageDTO {
     private String text;
     private User user;
     private String filename;
+    private LocalDateTime postTime;
     private Long likes;
     private Boolean meLiked;
 
@@ -18,6 +20,7 @@ public class MessageDTO {
         this.text = message.getText();
         this.user = message.getUser();
         this.filename = message.getFilename();
+        this.postTime = message.getPostTime();
         this.likes = likes;
         this.meLiked = meLiked;
     }

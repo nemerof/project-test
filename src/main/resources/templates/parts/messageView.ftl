@@ -9,6 +9,7 @@
               <h5 class="card-title">
                   <@p.profilePicture message.user.profilePic 50 50/>
                 <a href="/profile/${message.user.id}">${message.user.username}</a>
+                ${message.postTime}
               </h5>
             </div>
             <div class="col-1" style="width:500px; float:right; text-align:left">

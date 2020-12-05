@@ -13,17 +13,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CommunicationApplication {
 
   public static void main(String[] args) throws IOException {
-//    try (
-//        InputStream from = new FileInputStream(
-//            new File("/home/friday58/IdeaProjects/communication/src/main/resources/static/images/default-profile-icon.png"));
-//        OutputStream to = new FileOutputStream(new File("/home/friday58/Documents/upload_dir/default-profile-icon.png")))
-//    {
-//      byte[] buffer = new byte[1024];
-//      int length;
-//      while ((length = from.read(buffer)) > 0) {
-//        to.write(buffer, 0, length);
-//      }
-//    }
+    try (
+        InputStream from = new FileInputStream(
+            new File("/home/friday58/IdeaProjects/communication/src/main/resources/static/images/default-profile-icon.png"));
+        OutputStream to = new FileOutputStream(new File("/home/friday58/Documents/upload_dir/default-profile-icon.png")))
+    {
+      byte[] buffer = new byte[1024];
+      int length;
+      while ((length = from.read(buffer)) > 0) {
+        to.write(buffer, 0, length);
+      }
+    }
     SpringApplication.run(CommunicationApplication.class, args);
   }
 

@@ -61,7 +61,7 @@ public class ProfileController {
           @RequestParam String text, Model model
   ) throws IOException {
     Message message = new Message(text, user);
-    ControllerUtils.savePhoto(file, message);
+    ControllerUtils.saveMessage(file, message);
     model.addAttribute("filter", "");
     return "redirect:/profile/"+id;
   }

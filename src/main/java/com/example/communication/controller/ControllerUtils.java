@@ -7,6 +7,8 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +52,12 @@ public class ControllerUtils {
         return false;
     }
 
-    public static void savePhoto(MultipartFile file, Message message) throws IOException {
+    public static void saveMessage(MultipartFile file, Message message) throws IOException {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+        message.setPostTime(LocalDateTime.parse(formattedDateTime, formatter));
+
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             File uploadDir = new File(uploadPathStatic);
 
@@ -70,7 +77,7 @@ public class ControllerUtils {
     }
 
     //Do something
-    public static void savePhoto(MultipartFile file, User user) throws IOException {
+    public static void saveMessage(MultipartFile file, User user) throws IOException {
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             File uploadDir = new File(uploadPathStatic);
             if (!uploadDir.exists()) {

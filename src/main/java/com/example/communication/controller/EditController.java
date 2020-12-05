@@ -2,7 +2,6 @@ package com.example.communication.controller;
 
 import com.example.communication.model.User;
 import com.example.communication.repository.UserRepository;
-
 import java.io.File;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,7 @@ public class EditController {
       file1.delete();
     }
     if (!file.getOriginalFilename().equals("")) {
-      ControllerUtils.savePhoto(file, user);
+      ControllerUtils.saveMessage(file, user);
     }
     return "redirect:/profile/"+user.getId();
   }

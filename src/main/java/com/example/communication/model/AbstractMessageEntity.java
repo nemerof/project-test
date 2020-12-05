@@ -1,5 +1,6 @@
 package com.example.communication.model;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -32,6 +33,8 @@ public abstract class AbstractMessageEntity {
   private String text;
 
   private String filename;
+
+  private LocalDateTime postTime;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
