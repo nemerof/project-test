@@ -1,6 +1,7 @@
 package com.example.communication.controller;
 
 import com.example.communication.model.Message;
+import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
@@ -36,10 +37,14 @@ public class ControllerUtils {
         userRepository = userRepo;
     }
 
-    public static void deleteMessage(Long id) {
+    public static boolean deleteMessage(Long id, User user) {
         Message message = messageRepository.getOne(id);
+        if (!user.getRoles().contains(Role.ADMIN) || message.getUser().getId().equals(user.getId())) {
+            return false;
+        }
         messageRepository.deleteById(id);
         new File(uploadPathStatic + "/" + message.getFilename()).delete();
+        return true;
     }
 
     public static void savePhoto(MultipartFile file, Message message) throws IOException {

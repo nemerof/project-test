@@ -70,11 +70,22 @@ public class MainPageController {
   @GetMapping("/delete/{id}")
   public String delete(
       @AuthenticationPrincipal User user,
-      @PathVariable(value="id") Long id
+      @PathVariable(value="id") Long id,
+      RedirectAttributes redirectAttributes,
+      @RequestHeader(required = false) String referer
   ) {
-    if (!user.getRoles().contains(Role.ADMIN) && !user.getId().equals(messageRepository.getOne(id).getUser().getId()))
-      return "redirect:/";
-    ControllerUtils.deleteMessage(id);
+    UriComponents components = null;
+    boolean del = ControllerUtils.deleteMessage(id, user);
+    try {
+      components = UriComponentsBuilder.fromHttpUrl(referer).build();
+
+      components.getQueryParams()
+              .forEach(redirectAttributes::addAttribute);
+      if (del) {
+        return "redirect:" + components.getPath();
+      }
+    } catch (Exception skipped) { }
+
     return "redirect:/";
   }
 

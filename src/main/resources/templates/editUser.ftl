@@ -7,7 +7,7 @@
         <@p.profilePicture profilePic 200 200/>
     </div>
     <form method="post" enctype="multipart/form-data" action="/edit">
-      <div class="form-group">
+      <div class="form-group mt-3">
         <label>
           Username:
           <input type="text" name="username" value="${username}">
