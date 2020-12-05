@@ -97,12 +97,4 @@ public class ProfileController {
     userService.unsubscribe(currentUser, user);
     return "redirect:/profile/"+id;
   }
-
-  @GetMapping("/profile/delete/{id}")
-  public String deleteMessage(@PathVariable(value = "id") Long id,
-                              @AuthenticationPrincipal User user) {
-    ControllerUtils.deleteMessage(id);
-
-    return "redirect:/profile/"+user.getId();
-  }
 }
