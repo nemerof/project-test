@@ -38,13 +38,16 @@ public class ControllerUtils {
     }
 
     public static boolean deleteMessage(Long id, User user) {
-        Message message = messageRepository.getOne(id);
-        if (!user.getRoles().contains(Role.ADMIN) || message.getUser().getId().equals(user.getId())) {
-            return false;
+        Message message = messageRepository.findById(id).get();
+        boolean b1 = user.getRoles().contains(Role.ADMIN);
+        boolean b2 = message.getUser().getId().equals(user.getId());
+        if (b1 || b2) {
+            messageRepository.deleteById(id);
+            new File(uploadPathStatic + "/" + message.getFilename()).delete();
+            return true;
         }
-        messageRepository.deleteById(id);
-        new File(uploadPathStatic + "/" + message.getFilename()).delete();
-        return true;
+
+        return false;
     }
 
     public static void savePhoto(MultipartFile file, Message message) throws IOException {
