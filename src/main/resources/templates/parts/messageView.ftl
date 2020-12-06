@@ -36,6 +36,7 @@
                   </#if>
                   ${message.likes}
             </a>
+
             <button class="btn btn-secondary" onclick="showHide()" type="button"><i class="fas fa-comments"></i></button>
             <script>
                 function showHide() {

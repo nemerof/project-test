@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
 
 @Controller
@@ -31,6 +32,7 @@ public class CommentController {
         Message message = messageRepository.findById(messageId).get();
         Comment comment = new Comment(text, user, message);
         ControllerUtils.saveComment(file, comment);
+
 
         return "redirect:/profile/"+user.getId();
     }
