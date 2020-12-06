@@ -14,24 +14,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.IOException;
+
 @Controller
 public class CommentController {
 
     @Autowired
     private MessageRepository messageRepository;
 
-    @Autowired
-    private CommentRepository commentRepository;
-
     @PostMapping("/comment/{messageId}")
     public String comment(@RequestParam String text,
                           @RequestParam MultipartFile file,
                           Model model,
                           @AuthenticationPrincipal User user,
-                          @PathVariable Long messageId) {
+                          @PathVariable Long messageId) throws IOException {
         Message message = messageRepository.findById(messageId).get();
         Comment comment = new Comment(text, user, message);
-        commentRepository.save(comment);
+        ControllerUtils.saveComment(file, comment);
+
 
         return "redirect:/profile/"+user.getId();
     }
