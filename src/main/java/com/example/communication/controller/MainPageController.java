@@ -49,6 +49,7 @@ public class MainPageController {
     model.addAttribute("loginUserId", user.getId());
     model.addAttribute("isAdmin", user.getRoles().contains(Role.ADMIN));
     model.addAttribute("messages", messages);
+    model.addAttribute("formatDateTime", new FormatDateTimeMethodModel());
     model.addAttribute("filter", "");
     return "main";
   }

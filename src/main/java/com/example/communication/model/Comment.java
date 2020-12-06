@@ -29,6 +29,7 @@ public class Comment extends AbstractMessageEntity{
   public String toString() {
     return "Comment{" +
             "text=" + super.getText() +
+            " " + super.getUser().getUsername() +
             "}\n";
   }
 }

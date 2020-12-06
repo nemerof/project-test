@@ -1,6 +1,11 @@
 <#import "profilePicture.ftl" as p>
 
 <#macro mess currentUserId isAdmin>
+    <style>
+        .hidden{
+            display : none;
+        }
+    </style>
     <#list messages as message>
       <div class="container mt-3">
         <div class="card m-auto" style="width: 600px">
@@ -9,7 +14,7 @@
               <h5 class="card-title">
                   <@p.profilePicture message.user.profilePic 50 50/>
                 <a href="/profile/${message.user.id}">${message.user.username}</a>
-                ${message.postTime}
+                  ${formatDateTime(message.postTime, 'MMM-dd-YYYY HH:mm')}
               </h5>
             </div>
             <div class="col-1" style="width:500px; float:right; text-align:left">
@@ -31,30 +36,55 @@
                   </#if>
                   ${message.likes}
             </a>
-            <i class="fas fa-comments"></i>
+            <button class="btn btn-secondary" onclick="showHide()" type="button"><i class="fas fa-comments"></i></button>
+            <script>
+                function showHide() {
+                    var div = document.getElementById("addInfo");
+                    div.classList.toggle('hidden');
+                }
+            </script>
           </div>
         </div>
         <div>
-          <#list message.comments as comment>
-              ${comment}
-          </#list>
-          <form enctype="multipart/form-data" method="post" action="/comment/${message.id}">
-            <div class="form-group">
-              <label for="comment">Comment:</label>
-              <textarea class="form-control" rows="3" id="comment" name="text"></textarea>
-            </div>
-            <div class="form-group">
-              <div class="custom-file">
-                <input class="custom-file-input" type="file" name="file" id="customFile">
-                <label class="custom-file-label" for="customFile">Choose file</label>
+          <div class="hidden" id="addInfo"><#list message.comments as comment>
+              <div class="card m-auto" style="width: 500px">
+                <div class="row ml-2 mt-1">
+                  <a href="/profile/${comment.user.id}"><@p.profilePicture comment.user.profilePic 30 30/></a>
+                  <a class="ml-1" href="/profile/${comment.user.id}">${comment.user.username}</a>
+                </div>
+                <div class="row ml-4">
+                  <a>${comment.text}</a>
+                </div>
+                <div class="row ml-4">
+                    <#if comment.filename??><@p.profilePicture comment.filename 270 130/></#if>
+                </div>
               </div>
-            </div>
-            <input type="hidden" name="_csrf" value="${_csrf.token}" />
-            <div class="form-group">
-              <button type="submit" class="btn btn-primary">Save message</button>
-            </div>
-          </form>
+              </#list>
+            <form enctype="multipart/form-data" method="post" action="/comment/${message.id}" class="m-auto"
+                  style="width: 500px">
+              <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" rows="3" id="comment" name="text"></textarea>
+              </div>
+              <div class="form-group">
+                <div class="custom-file">
+                  <input class="custom-file-input" type="file" name="file" id="customFile">
+                  <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+              </div>
+              <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Save message</button>
+              </div>
+            </form>
+          </div>
+          </div>
         </div>
-      </div>
     </#list>
+  <script>
+      function showHide() {
+          var div = document.getElementById("addInfo");
+          div.classList.toggle('hidden');
+      }
+  </script>
 </#macro>

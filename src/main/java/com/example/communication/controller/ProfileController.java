@@ -8,6 +8,14 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.UserService;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.util.List;
+
+import freemarker.ext.beans.StringModel;
+import freemarker.template.SimpleScalar;
+import freemarker.template.TemplateMethodModelEx;
+import freemarker.template.TemplateModelException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,6 +58,7 @@ public class ProfileController {
     model.addAttribute("isSubscriber", user.getSubscribers().contains(currentUser));
     model.addAttribute("isCurrentUser", currentUser.equals(user));
     model.addAttribute("isAdmin", user.getRoles().contains(Role.ADMIN));
+    model.addAttribute("formatDateTime", new FormatDateTimeMethodModel());
     return "profile";
   }
 
