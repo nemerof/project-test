@@ -62,11 +62,9 @@ public class MainPageController {
       @RequestParam("file") MultipartFile file
   ) throws IOException {
     Message message = new Message(text, user);
-//
-//    message.setPostTime(LocalDateTime.now());
-
     ControllerUtils.saveMessage(file, message);
     model.addAttribute("messages", messageService.getAllMessages(filter, user));
+    model.addAttribute("formatDateTime", new FormatDateTimeMethodModel());
     model.addAttribute("filter", "");
     return "main";
   }

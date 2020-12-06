@@ -27,7 +27,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
           ") " +
           "from Message m left join m.likes ml " +
           "where m.user = :author " +
-          "group by m")
+          "group by m order by m.postTime")
   Iterable<MessageDTO> findByUserId(@Param("user") User user, @Param("author") User author);
 
   @Query("select new com.example.communication.model.dto.MessageDTO(" +
