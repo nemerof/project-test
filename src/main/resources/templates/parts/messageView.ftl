@@ -36,7 +36,7 @@
                   </#if>
                   ${message.likes}
             </a>
-            <button class="btn btn-secondary" onclick="showHide(${message.id})" type="button"><i class="fas fa-comments"></i></button>
+            <button class="btn btn-secondary" onclick="showHide(${message.id})" type="button"><i class="fas fa-comments"></i> ${message.comments?size}</button>
             <script>
                 function showHide(messNumber) {
                     var tx = "addInfo"+messNumber;
@@ -75,7 +75,7 @@
               </div>
               <input type="hidden" name="_csrf" value="${_csrf.token}"/>
               <div class="form-group">
-                <button type="submit" class="btn btn-primary">Save message</button>
+                <button type="submit" class="btn btn-primary">Save comment</button>
               </div>
             </form>
           </div>
