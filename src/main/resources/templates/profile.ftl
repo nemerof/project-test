@@ -74,6 +74,22 @@
           </#if>
       </#if>
   </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+
+      if (localStorage.getItem("main.ftl") != null) {
+        $(window).scrollTop(localStorage.getItem("main.ftl"));
+      }
+
+      $(window).on("scroll", function() {
+        localStorage.setItem("main.ftl", $(window).scrollTop());
+      });
+
+    });
+  </script>
 <#--  <div class="card mx-auto mt-3"  style="width: 202px;">-->
     <@m.mess userId isAdmin/>
 </@c.page>

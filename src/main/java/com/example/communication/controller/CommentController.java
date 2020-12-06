@@ -3,8 +3,8 @@ package com.example.communication.controller;
 import com.example.communication.model.Comment;
 import com.example.communication.model.Message;
 import com.example.communication.model.User;
-import com.example.communication.repository.CommentRepository;
 import com.example.communication.repository.MessageRepository;
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,9 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
-
-import java.io.IOException;
 
 @Controller
 public class CommentController {
@@ -35,6 +32,7 @@ public class CommentController {
                           @PathVariable Long messageId,
                           RedirectAttributes redirectAttributes,
                           @RequestHeader(required = false) String referer) throws IOException {
+
         Message message = messageRepository.findById(messageId).get();
         Comment comment = new Comment(text, user, message);
         ControllerUtils.saveComment(file, comment);

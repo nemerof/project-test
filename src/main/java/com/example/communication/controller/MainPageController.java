@@ -110,7 +110,6 @@ public class MainPageController {
 
     components.getQueryParams()
         .forEach(redirectAttributes::addAttribute);
-
     return "redirect:" + components.getPath();
   }
 
