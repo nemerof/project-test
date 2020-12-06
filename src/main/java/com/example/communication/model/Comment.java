@@ -1,11 +1,15 @@
 package com.example.communication.model;
 
-import javax.persistence.*;
-
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -14,6 +18,7 @@ import lombok.ToString;
 public class Comment extends AbstractMessageEntity{
 
   @ManyToOne(fetch = FetchType.EAGER)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinTable(
           name = "message_comments",
           joinColumns = { @JoinColumn(name = "comments_id") }
