@@ -47,6 +47,8 @@ public class ControllerUtils {
 
     public static boolean deleteMessage(Long id, User user) {
         Message message = messageRepository.findById(id).get();
+        for (Comment comment : message.getComments())
+            commentRepository.delete(comment);
         boolean b1 = user.getRoles().contains(Role.ADMIN);
         boolean b2 = message.getUser().getId().equals(user.getId());
         if (b1 || b2) {
