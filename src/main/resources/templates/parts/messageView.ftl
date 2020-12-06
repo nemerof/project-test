@@ -36,18 +36,18 @@
                   </#if>
                   ${message.likes}
             </a>
-
-            <button class="btn btn-secondary" onclick="showHide()" type="button"><i class="fas fa-comments"></i></button>
+            <button class="btn btn-secondary" onclick="showHide(${message.id})" type="button"><i class="fas fa-comments"></i></button>
             <script>
-                function showHide() {
-                    var div = document.getElementById("addInfo");
+                function showHide(messNumber) {
+                    var tx = "addInfo"+messNumber;
+                    var div = document.getElementById(tx);
                     div.classList.toggle('hidden');
                 }
             </script>
           </div>
         </div>
         <div>
-          <div class="hidden" id="addInfo"><#list message.comments as comment>
+          <div class="hidden" id="addInfo${message.id}"><#list message.comments as comment>
               <div class="card m-auto" style="width: 500px">
                 <div class="row ml-2 mt-1">
                   <a href="/profile/${comment.user.id}"><@p.profilePicture comment.user.profilePic 30 30/></a>
@@ -82,10 +82,4 @@
           </div>
         </div>
     </#list>
-  <script>
-      function showHide() {
-          var div = document.getElementById("addInfo");
-          div.classList.toggle('hidden');
-      }
-  </script>
 </#macro>
