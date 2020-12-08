@@ -63,6 +63,9 @@ public class User implements UserDetails {
   @Column(name = "date_of_birth")
   private String dateOfBirth;
 
+  @Column(name = "city")
+  private String city;
+
   @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
   @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
   @Enumerated(EnumType.STRING)

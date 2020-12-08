@@ -44,12 +44,14 @@ public class EditController {
       @RequestParam String username,
       @RequestParam String realName,
       @RequestParam String dateOfBirth,
+      @RequestParam String city,
       @RequestParam("profilePic") MultipartFile file
   ) throws IOException {
     User user = userRepository.findById(user1.getId()).get();
     user.setUsername(username);
     user.setRealName(realName);
     user.setDateOfBirth(dateOfBirth);
+    user.setCity(city);
     String profPic = user.getProfilePic();
     if (!file.getOriginalFilename().equals("") && profPic != null && !profPic.equals("") && !profPic.equals("default-profile-icon.png")) {
       File file1 = new File(uploadPath + "/" + user.getProfilePic());
