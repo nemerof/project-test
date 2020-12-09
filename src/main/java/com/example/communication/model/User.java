@@ -1,9 +1,6 @@
 package com.example.communication.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -83,6 +80,14 @@ public class User implements UserDetails {
           inverseJoinColumns = { @JoinColumn(name = "channel_id") }
   )
   private Set<User> subscriptions = new HashSet<>();
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+          name = "reposts",
+          joinColumns = { @JoinColumn(name = "user_id") },
+          inverseJoinColumns = { @JoinColumn(name = "message_id") }
+  )
+  private Set<Message> reposts = new HashSet<>();
 
   public User(String username, String password, String email, boolean active) {
     this.username = username;
