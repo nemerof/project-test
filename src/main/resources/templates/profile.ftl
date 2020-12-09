@@ -7,27 +7,38 @@
     <div class="card ml-5" style="width: 202px;">
         <@p.profilePicture curProfPic 200 200/>
     </div>
-    <div class="card" style="height: 200px; width: 600px; margin-left: 21px;">
-      <h5 class="card-title mx-3 my-2">${profileName}
-          <#if userId == profileId>
-            <a href="/edit">Edit</a>
+    <div class="card" style="height: 200px; width: 600px; margin-left: 21px">
+      <h5 class="card-title mx-3 my-2">${profileName}</h5>
+      <hr class="my-1">
+      <p class="ml-2 my-1">Real name:
+          <#if user.realName??>
+            ${user.realName}
           </#if>
-      </h5>
+      </p>
+      <p class="ml-2 my-1">Birthday:
+          <#if user.dateOfBirth??>
+              ${user.dateOfBirth}
+          </#if>
+      </p>
+      <p class="ml-2 my-1">City:
+          <#if user.city??>
+              ${user.city}
+          </#if>
+      </p>
+      <hr class="my-1">
       <div class="container">
         <div class="row">
           <div class="col">
-            <div class="card">
-              <div class="card-body" style="background-color: lightblue">
-                <div class="card-title">Subscribers</div>
-                <h4 class="card-text"><a href="/profile/subscribers/${profileId}">${subscribers}</a></h4>
+            <div class="card border-0">
+              <div class="card-body" style="height: 25px; padding-top: 5px">
+                <h4 class="card-text">Subscribers: <a href="/profile/subscribers/${profileId}">${subscribers}</a></h4>
               </div>
             </div>
           </div>
           <div class="col">
-            <div class="card">
-              <div class="card-body" style="background-color: lightblue">
-                <div class="card-title">Subscriptions</div>
-                <h4 class="card-text"><a href="/profile/subscriptions/${profileId}">${subscriptions}</a></h4>
+            <div class="card border-0">
+              <div class="card-body" style="height: 25px; padding-top: 5px">
+                <h4 class="card-text">Subscriptions: <a href="/profile/subscriptions/${profileId}">${subscriptions}</a></h4>
               </div>
             </div>
           </div>

@@ -75,6 +75,14 @@
             </label>
           </div>
         </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">City:</label>
+          <div class="col-sm-6">
+            <label>
+              <input type="text" name="city" class="form-control" placeholder="City"/>
+            </label>
+          </div>
+        </div>
       </div>
         <script>
             function showHide() {
