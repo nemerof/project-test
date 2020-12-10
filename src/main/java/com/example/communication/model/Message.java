@@ -1,5 +1,6 @@
 package com.example.communication.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @Entity
-public class Message extends AbstractMessageEntity {
+public class Message extends AbstractMessageEntity implements Serializable {
 
   @OneToMany
   @JoinTable(

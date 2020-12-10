@@ -11,11 +11,11 @@ import java.io.IOException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
 public class ProfileController {
@@ -39,11 +39,10 @@ public class ProfileController {
           @PathVariable(value="id") Long id,
           Model model){
     User user = userRepository.findById(id).get();
-    Iterable<MessageDTO> userMessages =
+    List<MessageDTO> userMessages =
             messageRepository.findByUserId(currentUser, user);
-
-    model.addAttribute("user", user);
-
+    for (Message repost : user.getReposts())
+      userMessages.add(new MessageDTO(repost, (long) repost.getLikes().size(), true));
     model.addAttribute("profileName", user.getUsername());
     model.addAttribute("messages", userMessages);
     model.addAttribute("subscribers", user.getSubscribers().size());
@@ -100,5 +99,26 @@ public class ProfileController {
     User user = userRepository.findById(id).get();
     userService.unsubscribe(currentUser, user);
     return "redirect:/profile/"+id;
+  }
+
+  @GetMapping("/repost/{messageId}")
+  public String repost(@PathVariable Long messageId,
+                       @AuthenticationPrincipal User currentUser,
+                       RedirectAttributes redirectAttributes,
+                       @RequestHeader(required = false) String referer) {
+    currentUser.getReposts().add(messageRepository.findById(messageId).get());
+
+    try {
+      userRepository.save(currentUser);
+    } catch (Exception e) {
+      System.err.println("U can repost only one time");
+      UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
+
+      components.getQueryParams()
+              .forEach(redirectAttributes::addAttribute);
+      return "redirect:" + components.getPath();
+    }
+
+    return "redirect:/messages/"+messageId+"/like";
   }
 }
