@@ -6,6 +6,7 @@ import com.example.communication.model.User;
 import com.example.communication.repository.UserRepository;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,6 +26,18 @@ public class UserService implements UserDetailsService {
   public UserService(UserRepository repository, MailSender mailSender) {
     this.repository = repository;
     this.mailSender = mailSender;
+  }
+
+  public List<User> getAllUsers(String filter) {
+    List<User> users;
+    if (filter != null && !filter.isEmpty()) {
+      users = repository.findAllByUsername(filter);
+    } else {
+      users = repository.findAll();
+    }
+    Collections.reverse(users);
+
+    return users;
   }
 
   @Override

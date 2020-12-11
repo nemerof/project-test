@@ -3,11 +3,12 @@ package com.example.communication.controller;
 import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.repository.UserRepository;
+import com.example.communication.service.UserService;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,26 +19,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/user")
-@PreAuthorize("hasAuthority('ADMIN')")
+//@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
   private final UserRepository repository;
 
-  public UserController(UserRepository repository) {
+  private final UserService service;
+
+  public UserController(UserRepository repository,
+      UserService service) {
     this.repository = repository;
+    this.service = service;
   }
 
   @GetMapping
-  public String userList(Model model) {
-    model.addAttribute("users", repository.findAll());
+  public String userList(
+      @RequestParam(required = false, defaultValue = "") String userFilter,
+      Model model
+  ) {
+    List<User> users = service.getAllUsers(userFilter);
+    model.addAttribute("users", users);
     return "userList";
   }
 
   @GetMapping("{user}")
-  public String userEditForm(@PathVariable User user, Model model) {
-    model.addAttribute("user", user);
-    model.addAttribute("roles", Role.values());
-    return "userEdit";
+  public String userDelete(@PathVariable User user) {
+    repository.delete(user);
+    return "redirect:/user";
   }
 
   @PostMapping

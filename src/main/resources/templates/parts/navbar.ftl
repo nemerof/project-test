@@ -13,11 +13,9 @@
       <li class="nav-item">
         <a class="nav-link" href="/">Messages</a>
       </li>
-        <#if isAdmin>
-          <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link" href="/user">User list</a>
-          </li>
-        </#if>
+        </li>
         <#if isAuthorized>
             <li class="nav-item ml-5">
               <form method="get" action="/" class="form-inline">
