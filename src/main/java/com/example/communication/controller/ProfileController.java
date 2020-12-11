@@ -8,14 +8,9 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.UserService;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
+import java.sql.*;
 import java.util.List;
 
-import freemarker.ext.beans.StringModel;
-import freemarker.template.SimpleScalar;
-import freemarker.template.TemplateMethodModelEx;
-import freemarker.template.TemplateModelException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,23 +29,41 @@ public class ProfileController {
 
   private final UserService userService;
 
+  private final Connection conn;
+
   public ProfileController(MessageRepository messageRepository,
-      UserRepository userRepository, UserService userService) {
+                           UserRepository userRepository,
+                           UserService userService,
+                           Connection connection) {
     this.messageRepository = messageRepository;
     this.userRepository = userRepository;
     this.userService = userService;
+    this.conn = connection;
   }
 
   @GetMapping("/profile/{id}")
   public String profile(
           @AuthenticationPrincipal User currentUser,
           @PathVariable(value="id") Long id,
-          Model model){
+          Model model) throws SQLException {
     User user = userRepository.findById(id).get();
     List<MessageDTO> userMessages =
             messageRepository.findByUserId(currentUser, user);
-    for (Message repost : user.getReposts())
-      userMessages.add(new MessageDTO(repost, (long) repost.getLikes().size(), true));
+
+    for (Message repost : user.getReposts()) {
+      boolean isLiked = false;
+
+      Statement st = conn.createStatement();
+      ResultSet resultSet = st.executeQuery("select * from message_likes");
+
+      while (resultSet.next()) {
+        int messageId = resultSet.getInt("message_id");
+        int userId = resultSet.getInt("user_id");
+        if (messageId == repost.getId() && userId == user.getId())
+          isLiked = true;
+      }
+      userMessages.add(new MessageDTO(repost, (long) repost.getLikes().size(), isLiked));
+    }
     model.addAttribute("profileName", user.getUsername());
     model.addAttribute("messages", userMessages);
     model.addAttribute("subscribers", user.getSubscribers().size());
@@ -113,18 +126,30 @@ public class ProfileController {
   public String repost(@PathVariable Long messageId,
                        @AuthenticationPrincipal User currentUser,
                        RedirectAttributes redirectAttributes,
-                       @RequestHeader(required = false) String referer) {
+                       @RequestHeader(required = false) String referer) throws SQLException {
     currentUser.getReposts().add(messageRepository.findById(messageId).get());
+
+    UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
+
+    components.getQueryParams()
+            .forEach(redirectAttributes::addAttribute);
 
     try {
       userRepository.save(currentUser);
     } catch (Exception e) {
       System.err.println("U can repost only one time");
-      UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
 
-      components.getQueryParams()
-              .forEach(redirectAttributes::addAttribute);
       return "redirect:" + components.getPath();
+    }
+
+    Statement st = conn.createStatement();
+    ResultSet resultSet = st.executeQuery("select * from message_likes");
+
+    while (resultSet.next()) {
+      int messageTableId = resultSet.getInt("message_id");
+      int userTableId = resultSet.getInt("user_id");
+      if (messageId == messageTableId && userTableId == currentUser.getId())
+        return "redirect:" + components.getPath();
     }
 
     return "redirect:/messages/"+messageId+"/like";
