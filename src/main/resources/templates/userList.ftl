@@ -22,7 +22,8 @@
           <a href="/profile/${user.id}">${user.username}</a>
         </h5>
         <#if isAdmin && userId != user.id>
-          <a class="pull-right" href="/user/${user.id}">Delete</a>
+          <a href="/user/${user.id}">Edit</a>
+          <a class="ml-1" href="/user/delete/${user.id}">Delete</a>
         </#if>
       </div>
     </div>
