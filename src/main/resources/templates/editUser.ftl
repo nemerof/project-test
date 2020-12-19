@@ -14,16 +14,34 @@
         </label>
       </div>
       <div class="form-group">
-        <label>
-          Real name:
-          <input type="text" name="realName" value="${realName}">
-        </label>
-      </div>
+          <label>
+            Real name:
+            <input type="text" name="realName"
+              <#if realName??>
+                value="${realName}"
+              </#if>
+            >
+          </label>
+        </div>
       <div class="form-group">
         <label>
           Date of birth:
-          <input type="date" name="dateOfBirth" value="${birthDate}">
+          <input type="date" name="dateOfBirth"
+            <#if birthDate??>
+              value="${birthDate}"
+            </#if>
+          >
         </label>
+      </div>
+      <div class="form-group">
+          <label>
+            City:
+            <input type="text" name="city"
+              <#if city??>
+                value="${city}"
+              </#if>
+            >
+          </label>
       </div>
       <div class="form-group">
         <div class="custom-file">

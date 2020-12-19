@@ -35,6 +35,7 @@ public class EditController {
     model.addAttribute("username", user.getUsername());
     model.addAttribute("userId", user.getId());
     model.addAttribute("profilePic", user.getProfilePic());
+    model.addAttribute("city", user.getCity());
     return "editUser";
   }
 

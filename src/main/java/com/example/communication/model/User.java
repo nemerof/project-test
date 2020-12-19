@@ -1,7 +1,24 @@
 package com.example.communication.model;
 
-import java.util.*;
-import javax.persistence.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -94,6 +111,24 @@ public class User implements UserDetails {
     this.password = password;
     this.email = email;
     this.active = active;
+    this.roles = roles;
+  }
+
+  public User(Long id,
+      @NotEmpty(message = "Username cannot be empty") @Size(min = 3, max = 16, message = "Username should be in range from 3 to 16 symbols") String username,
+      @NotEmpty(message = "Password cannot be empty") @Size(min = 6, max = 60, message = "Password must be at least 8 characters") String password,
+      boolean active, @NotEmpty(message = "Email cannot be empty") String email,
+      String profilePic, String realName, String dateOfBirth, String city,
+      Set<Role> roles) {
+    this.id = id;
+    this.username = username;
+    this.password = password;
+    this.email = email;
+    this.active = active;
+    this.profilePic = profilePic;
+    this.realName = realName;
+    this.dateOfBirth = dateOfBirth;
+    this.city = city;
     this.roles = roles;
   }
 
