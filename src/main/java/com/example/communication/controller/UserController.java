@@ -1,15 +1,18 @@
 package com.example.communication.controller;
 
+import com.example.communication.model.Message;
 import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.UserService;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -31,11 +34,15 @@ public class UserController {
 
   private final UserService service;
 
+  private final Connection conn;
+
   public UserController(UserRepository repository,
-      MessageRepository messageRepository, UserService service) {
+      MessageRepository messageRepository, UserService service,
+                        Connection conn) {
     this.userRepository = repository;
     this.messageRepository = messageRepository;
     this.service = service;
+    this.conn = conn;
   }
 
   @GetMapping
@@ -62,10 +69,20 @@ public class UserController {
   public String userDelete(
       @AuthenticationPrincipal User currentUser,
       @PathVariable User user
-  ) {
+  ) throws SQLException {
     for(MessageDTO mes : messageRepository.findByUserId(currentUser, user)){
       ControllerUtils.deleteMessage(mes.getId(), currentUser);
     };
+
+    Statement st = conn.createStatement();
+    try {
+      st.executeQuery("DELETE FROM message_likes WHERE user_id = " + user.getId() + ";");
+    } catch (Exception throwables) {
+      // skipped
+    }
+
+    user.setReposts(new HashSet<>());
+    userRepository.save(user);
     userRepository.delete(user);
     return "redirect:/user";
   }

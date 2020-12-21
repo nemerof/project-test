@@ -45,7 +45,7 @@ public class User implements UserDetails {
   private String username;
 
   @NotEmpty(message = "Password cannot be empty")
-  @Size(min = 6, max = 60, message = "Password must be at least 8 characters")
+  @Size(min = 6, max = 60, message = "Password should be at least 8 characters")
   private String password;
 
   @Column(unique = true)

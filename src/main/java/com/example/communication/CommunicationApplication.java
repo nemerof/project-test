@@ -20,7 +20,7 @@ public class CommunicationApplication {
 
   public static void main(String[] args) throws IOException {
     File defaultPhotoFile = new File(realClassPath);
-    if (!defaultPhotoFile.exists()) {
+    if (!new File(uploadPath + "/default-profile-icon.png").exists()) {
       try (
               InputStream from = new FileInputStream(defaultPhotoFile);
               OutputStream to = new FileOutputStream(new File(uploadPath + "/default-profile-icon.png"))) {
