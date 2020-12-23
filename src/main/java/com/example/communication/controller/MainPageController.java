@@ -84,15 +84,9 @@ public class MainPageController {
   ) {
     User user = userRepository.findById(currentUser.getId()).get();
     UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
-
     components.getQueryParams()
             .forEach(redirectAttributes::addAttribute);
-    Message message = messageRepository.findById(id).get();
-    if (!message.getUser().getId().equals(user.getId())) {
-      user.getReposts().remove(message);
-      userRepository.save(user);
-      return "redirect:/messages/" + message.getId() + "/dislike";
-    }
+
     boolean del = ControllerUtils.deleteMessage(id, user);
     return "redirect:" + components.getPath();
   }
@@ -139,7 +133,7 @@ public class MainPageController {
   @GetMapping("/login")
   public void loginPage(@RequestParam(required = false, name = "error") String error, Model model) {
     if (error != null)
-      model.addAttribute("errorUsernamePassword", "Username or password is incorrect!");
+      model.addAttribute("errorUsernamePassword", "Username or password is incorrect/You need to activate your account");
   }
 
   @PostMapping("/login")
