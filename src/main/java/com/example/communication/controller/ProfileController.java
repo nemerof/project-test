@@ -12,7 +12,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Comparator;
 import java.util.List;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,15 +39,19 @@ public class ProfileController {
 
   private final UserService userService;
 
+  private final JdbcTemplate jdbcTemplate;
+
   private final Connection conn;
 
   public ProfileController(MessageRepository messageRepository,
                            UserRepository userRepository,
                            UserService userService,
+                           JdbcTemplate jdbcTemplate,
                            Connection connection) {
     this.messageRepository = messageRepository;
     this.userRepository = userRepository;
     this.userService = userService;
+    this.jdbcTemplate = jdbcTemplate;
     this.conn = connection;
   }
 
@@ -57,19 +65,26 @@ public class ProfileController {
             messageRepository.findByUserId(currentUser, user);
 
     for (Message repost : user.getReposts()) {
-      boolean isLiked = false;
+      final boolean[] isLiked = {false};
 
-      Statement st = conn.createStatement();
-      ResultSet resultSet = st.executeQuery("select * from message_likes");
-
-      while (resultSet.next()) {
+      //Statement st = conn.createStatement();
+      //ResultSet resultSet = st.executeQuery("select * from message_likes");
+      jdbcTemplate.query("select * from message_likes", (RowMapper<Object>) (resultSet, i) -> {
         int messageId = resultSet.getInt("message_id");
         int userId = resultSet.getInt("user_id");
         if (messageId == repost.getId() && userId == user.getId())
-          isLiked = true;
-      }
-      userMessages.add(new MessageDTO(repost, (long) repost.getLikes().size(), isLiked));
+          isLiked[0] = true;
+        return "skip";
+      });
+
+      userMessages.add(new MessageDTO(repost, (long) repost.getLikes().size(), isLiked[0]));
     }
+    userMessages.sort(new Comparator<MessageDTO>() {
+      @Override
+      public int compare(MessageDTO o1, MessageDTO o2) {
+        return o1.getPostTime().compareTo(o2.getPostTime());
+      }
+    });
     model.addAttribute("profileName", user.getUsername());
     model.addAttribute("messages", userMessages);
     model.addAttribute("subscribers", user.getSubscribers().size());

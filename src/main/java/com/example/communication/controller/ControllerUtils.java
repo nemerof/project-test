@@ -35,11 +35,9 @@ public class ControllerUtils {
     private static UserRepository userRepository;
 
     @Autowired
-    public ControllerUtils(
-        MessageRepository messageRepo,
-        UserRepository userRepo,
-        CommentRepository commentRepo)
-    {
+    public ControllerUtils(MessageRepository messageRepo,
+                           UserRepository userRepo,
+                           CommentRepository commentRepo) {
         messageRepository = messageRepo;
         userRepository = userRepo;
         commentRepository = commentRepo;
@@ -62,7 +60,7 @@ public class ControllerUtils {
 
     public static void saveMessage(MultipartFile file, Message message) throws IOException {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = LocalDateTime.now().format(formatter);
         message.setPostTime(LocalDateTime.parse(formattedDateTime, formatter));
 
@@ -85,7 +83,7 @@ public class ControllerUtils {
     }
 
     public static void saveComment(MultipartFile file, Comment comment) throws IOException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = LocalDateTime.now().format(formatter);
         comment.setPostTime(LocalDateTime.parse(formattedDateTime, formatter));
 

@@ -4,6 +4,8 @@ import com.example.communication.interceptor.CommunicationInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -54,5 +56,10 @@ public class MvcConfig implements WebMvcConfigurer {
   @Bean
   public Connection getConnection() throws SQLException {
     return DriverManager.getConnection(dbUrl, user, password);
+  }
+
+  @Bean
+  public JdbcTemplate getJdbcTemplate() {
+    return new JdbcTemplate(new DriverManagerDataSource(dbUrl, user, password));
   }
 }

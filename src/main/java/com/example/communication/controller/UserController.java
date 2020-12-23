@@ -8,12 +8,10 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.UserService;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,15 +32,16 @@ public class UserController {
 
   private final UserService service;
 
-  private final Connection conn;
+  private final JdbcTemplate jdbcTemplate;
 
   public UserController(UserRepository repository,
-      MessageRepository messageRepository, UserService service,
-                        Connection conn) {
+                        MessageRepository messageRepository,
+                        UserService service,
+                        JdbcTemplate jdbcTemplate) {
     this.userRepository = repository;
     this.messageRepository = messageRepository;
     this.service = service;
-    this.conn = conn;
+    this.jdbcTemplate = jdbcTemplate;
   }
 
   @GetMapping
@@ -69,16 +68,21 @@ public class UserController {
   public String userDelete(
       @AuthenticationPrincipal User currentUser,
       @PathVariable User user
-  ) throws SQLException {
-    for(MessageDTO mes : messageRepository.findByUserId(currentUser, user)){
-      ControllerUtils.deleteMessage(mes.getId(), currentUser);
-    };
+  ) {
+    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user)) {
+      System.out.println("Actual reposts deleted: " + jdbcTemplate.update("DELETE FROM reposts WHERE message_id = ?;", mes.getId()));
+      System.out.println("Actual likes deleted: " + jdbcTemplate.update("DELETE FROM message_likes WHERE message_id = ?;", mes.getId()));
+    }
 
-    Statement st = conn.createStatement();
-    try {
-      st.executeQuery("DELETE FROM message_likes WHERE user_id = " + user.getId() + ";");
-    } catch (Exception throwables) {
-      // skipped
+    String repostDel = "DELETE FROM reposts WHERE user_id = ?;";
+    System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, user.getId()));
+
+    String likesDel = "DELETE FROM message_likes WHERE user_id = ?;";
+    System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, user.getId()));
+
+
+    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user)) {
+      ControllerUtils.deleteMessage(mes.getId(), currentUser);
     }
 
     user.setReposts(new HashSet<>());
