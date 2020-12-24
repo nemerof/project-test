@@ -10,11 +10,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -67,21 +70,24 @@ public class UserController {
       @PathVariable User user,
       @PageableDefault(sort = { "postTime" }, direction = Sort.Direction.ASC, size = 5) Pageable pageable
   ) {
-//    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable)) {
+    List<Long> reposts = jdbcTemplate.query("select * from reposts where user_id = ?",
+            new Object[]{user.getId()}, (resultSet, i) -> (long) resultSet.getInt("message_id"));
+
+//    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable, reposts)) {
 //      System.out.println("Actual reposts deleted: " + jdbcTemplate.update("DELETE FROM reposts WHERE message_id = ?;", mes.getId()));
 //      System.out.println("Actual likes deleted: " + jdbcTemplate.update("DELETE FROM message_likes WHERE message_id = ?;", mes.getId()));
-//    } todo
+//    }
+//
+//    String repostDel = "DELETE FROM reposts WHERE user_id = ?;";
+//    System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, user.getId()));
+//
+//    String likesDel = "DELETE FROM message_likes WHERE user_id = ?;";
+//    System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, user.getId()));
 
-    String repostDel = "DELETE FROM reposts WHERE user_id = ?;";
-    System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, user.getId()));
 
-    String likesDel = "DELETE FROM message_likes WHERE user_id = ?;";
-    System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, user.getId()));
-
-
-//    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable)) {
-//      ControllerUtils.deleteMessage(mes.getId(), currentUser);
-//    } todo
+    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable, reposts)) {
+      ControllerUtils.deleteMessage(mes.getId(), currentUser);
+    }
 
     user.setReposts(new HashSet<>());
     userRepository.save(user);

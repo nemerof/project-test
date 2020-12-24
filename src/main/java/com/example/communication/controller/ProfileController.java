@@ -67,9 +67,7 @@ public class ProfileController {
           Model model,
           @PageableDefault(sort = { "postTime" }, direction = Sort.Direction.ASC, size = 5) Pageable pageable)  {
     User user = userRepository.findById(id).get();
-    List<Long> reposts = new ArrayList<>();
-
-    reposts = jdbcTemplate.query("select * from reposts where user_id = ?", new Object[]{user.getId()}, new RowMapper<Long>() {
+    List<Long> reposts = jdbcTemplate.query("select * from reposts where user_id = ?", new Object[]{user.getId()}, new RowMapper<Long>() {
       @Override
       public Long mapRow(ResultSet resultSet, int i) throws SQLException {
         return (long) resultSet.getInt("message_id");
