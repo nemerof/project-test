@@ -6,6 +6,9 @@ import com.example.communication.repository.MessageRepository;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,14 +24,13 @@ public class MessageService {
         this.em = em;
     }
 
-    public List<MessageDTO> getAllMessages(String filter, User user) {
-        List<MessageDTO> messages;
+    public Page<MessageDTO> getAllMessages(String filter, User user, Pageable pageable) {
+        Page<MessageDTO> messages;
         if (filter != null && !filter.isEmpty()) {
-            messages = (List<MessageDTO>) messageRepository.findByTextContains(filter, user);
+            messages = (Page<MessageDTO>) messageRepository.findByTextContains(filter, user, pageable);
         } else {
-            messages = messageRepository.findAll(user);
+            messages = messageRepository.findAll(user, pageable);
         }
-        Collections.reverse(messages);
 
         return messages;
     }

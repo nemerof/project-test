@@ -9,12 +9,18 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,13 +40,17 @@ public class ControllerUtils {
 
     private static UserRepository userRepository;
 
+    private static JdbcTemplate jdbcTemplate;
+
     @Autowired
     public ControllerUtils(MessageRepository messageRepo,
                            UserRepository userRepo,
-                           CommentRepository commentRepo) {
+                           CommentRepository commentRepo,
+                           JdbcTemplate jdbcTemp) {
         messageRepository = messageRepo;
         userRepository = userRepo;
         commentRepository = commentRepo;
+        jdbcTemplate = jdbcTemp;
     }
 
     public static boolean deleteMessage(Long id, User user) {
@@ -50,6 +60,12 @@ public class ControllerUtils {
         boolean b1 = user.getRoles().contains(Role.ADMIN);
         boolean b2 = message.getUser().getId().equals(user.getId());
         if (b1 || b2) {
+            String repostDel = "DELETE FROM reposts WHERE message_id = ?;";
+            System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, id));
+
+            String likesDel = "DELETE FROM message_likes WHERE message_id = ?;";
+            System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, id));
+
             messageRepository.deleteById(id);
             new File(uploadPathStatic + "/" + message.getFilename()).delete();
             return true;

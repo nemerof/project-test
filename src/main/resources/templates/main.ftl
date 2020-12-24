@@ -2,6 +2,7 @@
 <#import "parts/login.ftl" as l>
 <#include "parts/security.ftl">
 <#import "parts/profilePicture.ftl" as p>
+<#import "parts/pager.ftl" as pgr>
 
 <@c.page>
 <#--  <a class="btn btn-primary mb-3 mx-auto" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
@@ -10,10 +11,10 @@
 <#--  <div class="collapse" id="collapseExample">-->
   <div class="card border-0 my-3 mx-auto" style="height: 242px; width: 600px; margin-left: 21px;">
       <#--<div class="card w-50 mb-3 mx-auto border-0">-->
-    <div class="form-group mt-3">
+    <div class="form-group mt-0">
       <form enctype="multipart/form-data" method="post" action="/">
         <div class="form-group">
-          <label for="comment">Comment:</label>
+          <label for="comment">Post:</label>
           <textarea class="form-control" rows="3" id="comment" name="text"></textarea>
         </div>
         <div class="form-group">
@@ -57,7 +58,8 @@
           display : none;
       }
   </style>
-    <#list messages as message>
+    <@pgr.pager url messages/>
+    <#list messages.content as message>
         <#if !(loginUserId==message.user.id)><a href="/repost/${message.id}">add repost</a></#if>
       <div class="container mt-3">
         <div class="card m-auto" style="width: 600px">
