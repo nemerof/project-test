@@ -8,8 +8,17 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.MessageService;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,11 +41,14 @@ public class MainPageController {
 
   private final UserRepository userRepository;
 
+  private final JdbcTemplate jdbcTemplate;
+
   public MainPageController(MessageService messageService, MessageRepository messageRepository,
-                            UserRepository userRepository) {
+                            UserRepository userRepository, JdbcTemplate jdbcTemplate) {
     this.messageService = messageService;
     this.messageRepository = messageRepository;
     this.userRepository = userRepository;
+    this.jdbcTemplate = jdbcTemplate;
   }
 
   @GetMapping("/users")
@@ -48,14 +60,16 @@ public class MainPageController {
   public String main(
       @AuthenticationPrincipal User user,
       @RequestParam(required = false, defaultValue = "") String filter,
-      Model model
+      Model model,
+      @PageableDefault(sort = { "postTime" }, direction = Sort.Direction.ASC, size = 5) Pageable pageable
   ) {
-    List<MessageDTO> messages = messageService.getAllMessages(filter, user);
+    Page<MessageDTO> messages = messageService.getAllMessages(filter, user, pageable);
+    model.addAttribute("url", "/");
     model.addAttribute("loginUserId", user.getId());
     model.addAttribute("isAdmin", user.getRoles().contains(Role.ADMIN));
     model.addAttribute("messages", messages);
     model.addAttribute("formatDateTime", new FormatDateTimeMethodModel());
-    model.addAttribute("filter", "");
+    model.addAttribute("filter", filter);
     return "main";
   }
 
@@ -64,11 +78,13 @@ public class MainPageController {
       @RequestParam(required = false, defaultValue = "") String filter,
       @AuthenticationPrincipal User user,
       @RequestParam String text, Model model,
-      @RequestParam("file") MultipartFile file
+      @RequestParam("file") MultipartFile file,
+      @PageableDefault(sort = { "postTime" }, direction = Sort.Direction.ASC, size = 5) Pageable pageable
   ) throws IOException {
     Message message = new Message(text, user);
     ControllerUtils.saveMessage(file, message);
-    model.addAttribute("messages", messageService.getAllMessages(filter, user));
+    model.addAttribute("url", "/");
+    model.addAttribute("messages", messageService.getAllMessages(filter, user, pageable));
     model.addAttribute("loginUserId", user.getId());
     model.addAttribute("formatDateTime", new FormatDateTimeMethodModel());
     model.addAttribute("filter", "");
@@ -84,17 +100,32 @@ public class MainPageController {
   ) {
     User user = userRepository.findById(currentUser.getId()).get();
     UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
-
     components.getQueryParams()
             .forEach(redirectAttributes::addAttribute);
+
+    List<Long> reposts = jdbcTemplate.query("select * from reposts where user_id = ?", new Object[]{user.getId()}, new RowMapper<Long>() {
+      @Override
+      public Long mapRow(ResultSet resultSet, int i) throws SQLException {
+        return (long) resultSet.getInt("message_id");
+      }
+    });
+
     Message message = messageRepository.findById(id).get();
-    if (!message.getUser().getId().equals(user.getId())) {
-      user.getReposts().remove(message);
+    boolean isMessageRepost = !currentUser.getId().equals(message.getUser().getId()) && !user.getRoles().contains(Role.ADMIN);
+
+    if (isMessageRepost) {
+      try {
+        user.getReposts().remove(message);
+      } catch (Exception ignored) { }
+
       userRepository.save(user);
-      return "redirect:/messages/" + message.getId() + "/dislike";
+
+      return "redirect:/messages/" + id + "/dislike";
+    } else {
+      ControllerUtils.deleteMessage(id, user);
+      return "redirect:" + components.getPath();
     }
-    boolean del = ControllerUtils.deleteMessage(id, user);
-    return "redirect:" + components.getPath();
+
   }
 
   @GetMapping("/messages/{message}/like")
@@ -139,7 +170,7 @@ public class MainPageController {
   @GetMapping("/login")
   public void loginPage(@RequestParam(required = false, name = "error") String error, Model model) {
     if (error != null)
-      model.addAttribute("errorUsernamePassword", "Username or password is incorrect!");
+      model.addAttribute("errorUsernamePassword", "Username or password is incorrect/You need to activate your account");
   }
 
   @PostMapping("/login")

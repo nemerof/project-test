@@ -70,8 +70,7 @@ public class RegistrationController {
     }
     return "redirect:/login";
   }
-
-  static Map<String, String> getErrors(BindingResult bindingResult) {
+  private static Map<String, String> getErrors(BindingResult bindingResult) {
     Map<String, String> errors = new HashMap<>();
 
     for (FieldError fieldError : bindingResult.getFieldErrors()) {

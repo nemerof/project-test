@@ -6,19 +6,17 @@ import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.UserService;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -31,11 +29,16 @@ public class UserController {
 
   private final UserService service;
 
+  private final JdbcTemplate jdbcTemplate;
+
   public UserController(UserRepository repository,
-      MessageRepository messageRepository, UserService service) {
+                        MessageRepository messageRepository,
+                        UserService service,
+                        JdbcTemplate jdbcTemplate) {
     this.userRepository = repository;
     this.messageRepository = messageRepository;
     this.service = service;
+    this.jdbcTemplate = jdbcTemplate;
   }
 
   @GetMapping
@@ -58,14 +61,30 @@ public class UserController {
     return "userEdit";
   }
 
-  @GetMapping("delete/{user}")
+  @GetMapping("/delete/{user}")
   public String userDelete(
       @AuthenticationPrincipal User currentUser,
-      @PathVariable User user
+      @PathVariable User user,
+      @PageableDefault(sort = { "postTime" }, direction = Sort.Direction.ASC, size = 5) Pageable pageable
   ) {
-    for(MessageDTO mes : messageRepository.findByUserId(currentUser, user)){
-      ControllerUtils.deleteMessage(mes.getId(), currentUser);
-    };
+//    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable)) {
+//      System.out.println("Actual reposts deleted: " + jdbcTemplate.update("DELETE FROM reposts WHERE message_id = ?;", mes.getId()));
+//      System.out.println("Actual likes deleted: " + jdbcTemplate.update("DELETE FROM message_likes WHERE message_id = ?;", mes.getId()));
+//    } todo
+
+    String repostDel = "DELETE FROM reposts WHERE user_id = ?;";
+    System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, user.getId()));
+
+    String likesDel = "DELETE FROM message_likes WHERE user_id = ?;";
+    System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, user.getId()));
+
+
+//    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable)) {
+//      ControllerUtils.deleteMessage(mes.getId(), currentUser);
+//    } todo
+
+    user.setReposts(new HashSet<>());
+    userRepository.save(user);
     userRepository.delete(user);
     return "redirect:/user";
   }

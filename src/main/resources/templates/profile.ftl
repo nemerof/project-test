@@ -1,6 +1,7 @@
 <#import "parts/common.ftl" as c>
 <#include "parts/security.ftl">
 <#import "parts/profilePicture.ftl" as p>
+<#import "parts/pager.ftl" as pgr>
 
 <@c.page>
   <div class="row">
@@ -106,7 +107,8 @@
           display : none;
       }
   </style>
-    <#list messages as message>
+    <@pgr.pager url messages/>
+    <#list messages.content as message>
         <#if !(isCurrentUser)><a href="/repost/${message.id}">add repost</a></#if>
       <div class="container mt-3">
         <div class="card m-auto" style="width: 600px">
