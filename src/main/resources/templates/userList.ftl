@@ -7,7 +7,7 @@
   <div class="card border-0 mx-auto" style="height: 38px; width: 600px; margin-left: 21px;">
     <form method="get" action="/user" class="form-inline">
       <label>
-        <input type="text" name="userFilter" class="form-control" placeholder="Search for user" style="width: 515px;">
+        <input type="text" name="userFilter" class="form-control" placeholder="Search for user" style="width: 515px;"/>
       </label>
       <button type="submit" class="btn btn-primary ml-2">Search</button>
     </form>

@@ -19,11 +19,11 @@
         </div>
         <div class="form-group">
           <div class="custom-file">
-            <input class="custom-file-input" type="file" name="file" id="customFile">
+            <input class="custom-file-input" type="file" name="file" id="customFile"/>
             <label class="custom-file-label" for="customFile">Choose file</label>
           </div>
         </div>
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <div class="form-group">
           <button type="submit" class="btn btn-primary">Save message</button>
         </div>
@@ -61,7 +61,7 @@
     <@pgr.pager url messages/>
     <#list messages.content as message>
         <#if !(loginUserId==message.user.id)><a href="/repost/${message.id}">add repost</a></#if>
-      <div class="container mt-3">
+      <div class="container mt-3" id="messages">
         <div class="card m-auto" style="width: 600px">
           <div class="row mx-4 mt-3 md-1">
             <div class="col-11">
@@ -77,9 +77,13 @@
                 </#if>
             </div>
           </div>
-          <div class="row mr-4 ml-5 mt-0 md-5"><p class="card-text"><span>${message.text}</span></p></div>
+          <div class="row mr-4 ml-5 mt-0 md-5" id="messageText">
+            <p class="card-text">
+              <span>${message.text}</span>
+            </p>
+          </div>
             <#if message.filename??>
-              <img src="/img/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540" height="260">
+              <img src="/img/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540" height="260"/>
             </#if>
 
           <div class="mx-3 my-1" style="font-size: 20px"><a href="/messages/${message.id}/like" style="text-decoration: none;">
@@ -123,7 +127,7 @@
               </div>
               <div class="form-group">
                 <div class="custom-file">
-                  <input class="custom-file-input" type="file" name="file" id="customFile">
+                  <input class="custom-file-input" type="file" name="file" id="customFile"/>
                   <label class="custom-file-label" for="customFile">Choose file</label>
                 </div>
               </div>

@@ -20,7 +20,7 @@
             <li class="nav-item ml-5">
               <form method="get" action="/" class="form-inline">
                 <label>
-                  <input type="text" name="filter" class="form-control" placeholder="Search for message">
+                  <input type="text" name="filter" class="form-control" placeholder="Search for message"/>
                 </label>
                 <button type="submit" class="btn btn-primary ml-2">Search</button>
               </form>
@@ -35,8 +35,10 @@
           <div class="navbar-text">
             <a href="/profile/${userId}" id="navbarUsername">
                 <#if username??>
-                    ${username}
-                    <@p.profilePicture profilePic 30 30/>
+                    <div>
+                      ${username}
+                      <@p.profilePicture profilePic 30 30/>
+                    </div>
                 <#else>missing</#if>
             </a>
           </div>

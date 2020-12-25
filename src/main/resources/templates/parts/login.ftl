@@ -55,7 +55,7 @@
         <div class="form-group mx-0 md-4 mt-2">
           <label>Profile photo:</label>
           <div class="custom-file" style="width: 400px">
-            <input type="file" name="profilePicture" id="customFile" style="outline: none; box-shadow: none">
+            <input type="file" name="profilePicture" id="customFile" style="outline: none; box-shadow: none"/>
             <label class="custom-file-label" for="customFile">Choose file</label>
           </div>
         </div>

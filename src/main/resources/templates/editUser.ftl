@@ -10,7 +10,7 @@
       <div class="form-group mt-3">
         <label>
           Username:
-          <input type="text" name="username" value="${username}">
+          <input type="text" name="username" value="${username}"/>
         </label>
       </div>
       <div class="form-group">
@@ -20,7 +20,7 @@
               <#if realName??>
                 value="${realName}"
               </#if>
-            >
+            />
           </label>
         </div>
       <div class="form-group">
@@ -30,7 +30,7 @@
             <#if birthDate??>
               value="${birthDate}"
             </#if>
-          >
+          />
         </label>
       </div>
       <div class="form-group">
@@ -40,14 +40,14 @@
               <#if city??>
                 value="${city}"
               </#if>
-            >
+            />
           </label>
       </div>
       <div class="form-group">
         <div class="custom-file">
           <input type="file" name="profilePic" id="customFile"
             <#if profilePic??>${profilePic}</#if>
-          >
+          />
           <label class="custom-file-label" for="customFile">Choose file</label>
         </div>
       </div>
