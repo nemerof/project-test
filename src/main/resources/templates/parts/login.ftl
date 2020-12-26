@@ -52,11 +52,15 @@
       </div>
         <p style="color: black" class="ml-2"><button class="btn btn-secondary" onclick="showHide()" type="button">Additional information: </button></p>
       <div id="addInfo" class="hidden">
-        <div class="form-group mx-0 md-4 mt-2">
+        <div class="form-group row mx-0 md-4 mt-2">
           <label>Profile photo:</label>
-          <div class="custom-file" style="width: 400px">
-            <input type="file" name="profilePicture" id="customFile" style="outline: none; box-shadow: none"/>
-            <label class="custom-file-label" for="customFile">Choose file</label>
+          <div class="custom-file col-sm-6" style="width: 400px">
+            <input class="custom-file-input" type="file" name="profilePicture" id="customFile" style="outline: none; box-shadow: none" onchange="changeText(this)"/>
+            <label class="custom-file-label" for="customFile" id="chooseFile">Choose file</label>
+            <br/>
+          </div>
+          <div class="col-sm-6">
+            <img class="img-fluid mt-1" id="blah" src="/static/images/default-profile-icon.png" width="200px" height="200px"/>
           </div>
         </div>
         <div class="form-group row">

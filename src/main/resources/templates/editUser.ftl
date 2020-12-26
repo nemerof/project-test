@@ -45,10 +45,10 @@
       </div>
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" name="profilePic" id="customFile"
+          <input class="custom-file-input" type="file" name="profilePic" id="customFile" onchange="changeText(this)"
             <#if profilePic??>${profilePic}</#if>
           />
-          <label class="custom-file-label" for="customFile">Choose file</label>
+          <label class="custom-file-label" for="customFile" id="chooseFile">Choose file</label>
         </div>
       </div>
       <input type="hidden" name="_csrf" value="${_csrf.token}" />
