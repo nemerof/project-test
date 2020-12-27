@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,14 +31,13 @@ public class UserService implements UserDetailsService {
     this.mailSender = mailSender;
   }
 
-  public List<User> getAllUsers(String filter) {
-    List<User> users;
+  public Page<User> getAllUsers(String user, String filter, Pageable pageable) {
+    Page<User> users;
     if (filter != null && !filter.isEmpty()) {
-      users = repository.findAllByUsername(filter);
+      users = repository.findAllByUsername(filter, user, pageable);
     } else {
-      users = repository.findAll();
+      users = repository.findAll(user, pageable);
     }
-    Collections.reverse(users);
 
     return users;
   }

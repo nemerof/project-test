@@ -8,12 +8,6 @@
     </div>
     <form method="post" enctype="multipart/form-data" action="/edit">
       <div class="form-group mt-3">
-        <label>
-          Username:
-          <input type="text" name="username" value="${username}"/>
-        </label>
-      </div>
-      <div class="form-group">
           <label>
             Real name:
             <input type="text" name="realName"
@@ -44,7 +38,8 @@
           </label>
       </div>
       <div class="form-group">
-        <div class="custom-file">
+        Profile photo:
+        <div class="custom-file mt-2">
           <input class="custom-file-input" type="file" name="profilePic" id="customFile" onchange="changeText(this)"
             <#if profilePic??>${profilePic}</#if>
           />
