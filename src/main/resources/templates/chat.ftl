@@ -34,10 +34,6 @@
       <h5>Chat with: ${chatWuser}</h5>
 
       <!-- Hidden. Needed only for proper chat work -->
-      <input type="hidden" id="from" value="${currentUser.username}"/>
-      <input type="hidden" id="to" value="${chatWuser}"/>
-      <input type="hidden" id="connect" onclick="connect();"/>
-      <input type="hidden" id="disconnect" disabled="disabled" onclick="disconnect();"/>
 
         <#if chatWuser != "none">
           <div id="conversationDiv">
@@ -62,6 +58,8 @@
               Send
             </button>
           </div>
+          <input type="hidden" id="from" value="${currentUser.username}"/>
+          <input type="hidden" id="to" value="${chatWuser}"/>
         </#if>
     </div>
   </div>

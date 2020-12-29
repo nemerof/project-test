@@ -68,6 +68,7 @@ public class ChatController {
                        @Qualifier("msg")
                        @PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
                                    Pageable pageableForMessages) {
+
         User user = userRepository.findById(currentUser.getId()).get();
 
         Page<User> allUsers = userService.getAllUsers(currentUser.getUsername(), userFilter, pageableForUser);
