@@ -8,7 +8,6 @@ import com.example.communication.repository.ChatMessageRepository;
 import com.example.communication.repository.ChatRoomRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -30,7 +28,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class ChatController {
@@ -62,18 +63,26 @@ public class ChatController {
                        @RequestParam(required = false, defaultValue = "none") String username,
                        Model model,
                        @Qualifier("usr")
-                       @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.ASC)
+                       @PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.ASC)
                                    Pageable pageableForUser,
                        @Qualifier("msg")
-                       @PageableDefault(size = 20, sort = {"id"}, direction = Sort.Direction.ASC)
+                       @PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
                                    Pageable pageableForMessages) {
         User user = userRepository.findById(currentUser.getId()).get();
+
         Page<User> allUsers = userService.getAllUsers(currentUser.getUsername(), userFilter, pageableForUser);
-        Page<OutputMessage> chatMessages = chatMessageRepository.findAllByFromUAndToU(currentUser.getUsername(), username, pageableForMessages);
+        Page<OutputMessage> chatPage = chatMessageRepository.findAllByFromUAndToU(currentUser.getUsername(), username, pageableForMessages);
+
+        List<OutputMessage> chatMessages = new ArrayList<>();
+        List<OutputMessage> om = chatPage.getContent();
+
+        for (int i = om.size() - 1; i >= 0; i --)
+            chatMessages.add(om.get(i));
 
         model.addAttribute("users", allUsers);
         model.addAttribute("chatWuser", username);
         model.addAttribute("currentUser", user);
+        model.addAttribute("chatPage", chatPage);
         model.addAttribute("chatMessages", chatMessages);
         return "chat";
     }

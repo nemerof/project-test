@@ -41,13 +41,26 @@
 
         <#if chatWuser != "none">
           <div id="conversationDiv">
-              <#list chatMessages.content as msg>
-                <p>${msg.fromU}: ${msg.text} (${msg.time})</p>
+              <#list chatMessages as msg>
+                  <#if msg.fromU = currentUser.username>
+                    <div class="card" align="right">
+                        ${msg.fromU}: ${msg.text} (${msg.time})
+                    </div>
+                  <#else>
+                    <div class="card" align="left">
+                        ${msg.fromU}: ${msg.text} (${msg.time})
+                    </div>
+                  </#if>
               </#list>
             <p id="response">
             </p>
-            <input type="text" id="text" placeholder="Write a message..."/>
-            <button id="sendMessage" onclick="sendMessage();">Send</button>
+            <label style="width: 75%">
+              <input class="form-control" type="text" id="text" placeholder="Write a message..."
+                     style=""/>
+            </label>
+            <button class="btn btn-primary" id="sendMessage" onclick="sendMessage();" style="vertical-align: 0px;">
+              Send
+            </button>
           </div>
         </#if>
     </div>
