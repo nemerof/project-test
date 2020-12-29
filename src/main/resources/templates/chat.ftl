@@ -2,7 +2,7 @@
 <#import "parts/profilePicture.ftl" as p>
 
 <@c.page>
-  <body onload="connect();">
+  <body onload="connect();" onclose="disconnect();">
   <div class="row border-0">
     <div class="col">
       <h5 class="mt-2 ml-4">Select user to chat with:</h5>
@@ -15,7 +15,7 @@
       </form>
         <#list users.content as user>
           <div class="card my-1" style="height: 70px; width: 200px; margin-left: 21px;">
-            <a class="card-block stretched-link text-decoration-none" href="/chat?username=${user.username}">
+            <a class="card-block stretched-link text-decoration-none" href="/chat?username=${user.username}" onclick="connect();">
               <div class="row my-2">
                 <div class="card ml-4" style="width: 52px;">
                     <@p.profilePicture user.profilePic 50 50/>
@@ -34,6 +34,7 @@
 
       <!-- Hidden. Needed only for proper work of connection/disconnection -->
       <input type="hidden" id="from" value="${currentUser.username}"/>
+      <input type="hidden" id="to" value="${chatWuser}"/>
       <input type="hidden" id="connect" onclick="connect();"/>
       <input type="hidden" id="disconnect" disabled="disabled" onclick="disconnect();"/>
 

@@ -60,13 +60,15 @@
 
           var socket = new SockJS('/chat');
           stompClient = Stomp.over(socket);
-
           stompClient.connect({}, function (frame) {
-
               setConnected(true);
               console.log('Connected: ' + frame);
-              stompClient.subscribe('/topic/messages', function (messageOutput) {
 
+              let from = document.getElementById('from').value;
+              let to = document.getElementById('to').value;
+              let chatRoom = getChatRoom(from, to);
+
+              stompClient.subscribe('/user/queue/messages/' + chatRoom, function (messageOutput) {
                   showMessageOutput(JSON.parse(messageOutput.body));
               });
           });
@@ -86,7 +88,10 @@
 
           var from = document.getElementById('from').value;
           var text = document.getElementById('text').value;
-          stompClient.send("/app/chat", {}, JSON.stringify({'from': from, 'text': text}));
+          var to = document.getElementById('to').value;
+
+          let chatRoom = getChatRoom(from, to);
+          stompClient.send("/app/chat/" + chatRoom, {}, JSON.stringify({'from': from, 'text': text, 'to': to}));
       }
 
       function showMessageOutput(messageOutput) {
@@ -99,7 +104,19 @@
       }
 
   </script>
+  <script>
+      function getChatRoom(senderId, recipientId) {
+          const url="http://localhost:8080" + "/chat/" + senderId + "/" + recipientId;
+          return JSON.parse(Get(url).responseText);
+      }
+      function Get(requestUrl) {
+          let Httpreq = new XMLHttpRequest(); // a new request
+          Httpreq.open("GET", requestUrl, false);
+          Httpreq.send(null);
 
+          return Httpreq;
+      }
+  </script>
   </body>
   </html>
 </#macro>

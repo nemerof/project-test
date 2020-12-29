@@ -1,14 +1,11 @@
 package com.example.communication.model.chat;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
-public class OutputMessage {
+public class ChatMessage {
 
     private String from;
     private String text;
-    private String time;
 
 }

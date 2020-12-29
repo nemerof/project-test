@@ -12,7 +12,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(final MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");
+        config.enableSimpleBroker("/topic/", "/queue/");
         config.setApplicationDestinationPrefixes("/app");
     }
 
@@ -20,8 +20,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(final StompEndpointRegistry registry) {
         registry.addEndpoint("/chat");
         registry.addEndpoint("/chat").withSockJS();
-        registry.addEndpoint("/chatwithbots");
-        registry.addEndpoint("/chatwithbots").withSockJS();
     }
 
 }
