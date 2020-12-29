@@ -4,10 +4,12 @@ import com.example.communication.model.User;
 import com.example.communication.model.chat.ChatMessage;
 import com.example.communication.model.chat.ChatRoom;
 import com.example.communication.model.chat.OutputMessage;
+import com.example.communication.repository.ChatMessageRepository;
 import com.example.communication.repository.ChatRoomRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,29 +34,47 @@ import java.util.Date;
 
 @Controller
 public class ChatController {
-    @Autowired
     private ChatRoomRepository chatRoomRepository;
 
-    @Autowired
+    private ChatMessageRepository chatMessageRepository;
+
     private UserService userService;
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
+    public ChatController(ChatRoomRepository chatRoomRepository,
+                          ChatMessageRepository chatMessageRepository,
+                          UserService userService,
+                          UserRepository userRepository,
+                          SimpMessagingTemplate messagingTemplate) {
+        this.chatRoomRepository = chatRoomRepository;
+        this.chatMessageRepository = chatMessageRepository;
+        this.userService = userService;
+        this.userRepository = userRepository;
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @GetMapping("/chat")
     public String chat(@AuthenticationPrincipal User currentUser,
                        @RequestParam(required = false) String userFilter,
                        @RequestParam(required = false, defaultValue = "none") String username,
                        Model model,
-                       @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable) {
+                       @Qualifier("usr")
+                       @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.ASC)
+                                   Pageable pageableForUser,
+                       @Qualifier("msg")
+                       @PageableDefault(size = 20, sort = {"id"}, direction = Sort.Direction.ASC)
+                                   Pageable pageableForMessages) {
         User user = userRepository.findById(currentUser.getId()).get();
-        Page<User> allUsers = userService.getAllUsers(currentUser.getUsername(), userFilter, pageable);
+        Page<User> allUsers = userService.getAllUsers(currentUser.getUsername(), userFilter, pageableForUser);
+        Page<OutputMessage> chatMessages = chatMessageRepository.findAllByFromUAndToU(currentUser.getUsername(), username, pageableForMessages);
+
         model.addAttribute("users", allUsers);
         model.addAttribute("chatWuser", username);
         model.addAttribute("currentUser", user);
+        model.addAttribute("chatMessages", chatMessages);
         return "chat";
     }
 
@@ -64,10 +84,12 @@ public class ChatController {
                      Principal user,
                      @RequestParam(required = false, defaultValue = "none") String username) throws Exception {
         String time = new SimpleDateFormat("HH:mm").format(new Date());
-        OutputMessage outputMessage = new OutputMessage(message.getFrom(), message.getText(), time);
-
         String to = username.substring(username.lastIndexOf(':')+2, username.length()-2);
 
+        OutputMessage outputMessage = new OutputMessage(message.getFrom(), to, message.getText(), time);
+
+
+        chatMessageRepository.save(outputMessage);
         messagingTemplate.convertAndSendToUser(to, "/queue/messages/" + chatRoom, outputMessage);
         messagingTemplate.convertAndSendToUser(user.getName(), "/queue/messages/" + chatRoom, outputMessage);
     }

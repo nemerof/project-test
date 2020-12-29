@@ -99,7 +99,7 @@
           var response = document.getElementById('response');
           var p = document.createElement('p');
           p.style.wordWrap = 'break-word';
-          p.appendChild(document.createTextNode(messageOutput.from + ": " + messageOutput.text + " (" + messageOutput.time + ")"));
+          p.appendChild(document.createTextNode(messageOutput.fromU + ": " + messageOutput.text + " (" + messageOutput.time + ")"));
           response.appendChild(p);
       }
 
