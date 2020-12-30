@@ -6,6 +6,7 @@ import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -45,11 +46,11 @@ public class UserController {
   }
 
   @GetMapping
-  public String userList(
-      @RequestParam(required = false, defaultValue = "") String userFilter,
-      Model model
-  ) {
-    List<User> users = service.getAllUsers(userFilter);
+  public String userList(@AuthenticationPrincipal User currentUser,
+                         @RequestParam(required = false, defaultValue = "") String userFilter,
+                         @PageableDefault(sort = { "id" }, direction = Sort.Direction.ASC) Pageable pageable,
+                         Model model) {
+    Page<User> users = service.getAllUsers(currentUser.getUsername(), userFilter, pageable);
     model.addAttribute("users", users);
     return "userList";
   }

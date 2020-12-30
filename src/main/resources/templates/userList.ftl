@@ -12,7 +12,7 @@
       <button type="submit" class="btn btn-primary ml-2">Search</button>
     </form>
   </div>
-  <#list users as user>
+  <#list users.content as user>
     <div class="card my-3 mx-auto" style="height: 110px; width: 600px; margin-left: 21px;">
       <div class="row my-2">
         <div class="card ml-4" style="width: 92px;">

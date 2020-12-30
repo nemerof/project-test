@@ -28,6 +28,9 @@
         </#if>
     </ul>
     <#if isAuthorized>
+    <div class="nav-item mr-3" style="font-size: 130%">
+      <a href="/chat" style="text-decoration: none; color: lightslategray">Chat <i class="fas fa-comment-dots"></i></a>
+    </div>
     <div class="dropdown">
       <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #e3f2fd;">
