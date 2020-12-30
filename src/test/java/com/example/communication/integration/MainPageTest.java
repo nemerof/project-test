@@ -1,10 +1,11 @@
-package com.example.communication;
+package com.example.communication.integration;
 
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
+import com.example.communication.AbstractSpringTest;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.jdbc.Sql;
@@ -12,13 +13,11 @@ import org.springframework.test.context.jdbc.Sql;
 @WithUserDetails(value = "admin")
 @Sql(value = {"/messages_before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/messages_after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-public class MainPageTest extends AbstractSpringTest{
-
-  @Test
-  public void messageListTest() throws Exception {
-//    ArrayList<User> actualUsers = messageRepository.find;
-//    assertEquals();
-  }
+@Sql(value = {"/comments_before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/comments_after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(value = {"/message_likes_before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = {"/message_likes_after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+public class MainPageTest extends AbstractSpringTest {
 
   @Test
   public void navbarNameTest() throws Exception {
@@ -29,9 +28,6 @@ public class MainPageTest extends AbstractSpringTest{
             + "                      admin\n"
             + "  \n"
             + "                    "));
-    //*[@id="navbarUsername"]/div
-    //*[@id="navbarUsername"]
-    //*[@id="dropdownMenu2"]/div
   }
 
   @Test
@@ -44,7 +40,5 @@ public class MainPageTest extends AbstractSpringTest{
             + "              Admin message\n"
             + "            \n"
             + "          "));
-    //*[@id="messages"]/div[1]/div[1]/div[1]/h5/a
-    //*[@id='message-list']/div
   }
 }

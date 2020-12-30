@@ -1,5 +1,6 @@
 package com.example.communication.model;
 
+import com.example.communication.model.dto.MessageDTO;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +27,12 @@ public class Message extends AbstractMessageEntity implements Serializable {
 
   public Message(String text, User user) {
     super(text, user);
+  }
+
+  public Message(MessageDTO messageDTO) {
+    super(messageDTO.getId(), messageDTO.getText(), messageDTO.getText(), messageDTO.getPostTime(),
+        messageDTO.getUser());
+    comments = messageDTO.getComments();
   }
 
   @Override

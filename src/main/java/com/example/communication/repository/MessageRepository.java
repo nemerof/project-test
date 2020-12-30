@@ -4,7 +4,6 @@ import com.example.communication.model.Message;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
 import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,4 +46,24 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
   @Modifying
   @Query("delete from Message m where m.id = ?1")
   void deleteById(Long aLong);
+
+  //Tests only
+  @Query("select new com.example.communication.model.dto.MessageDTO(" +
+      "   m, " +
+      "   count(ml), " +
+      "   sum(case when ml = :user then 1 else 0 end) > 0" +
+      ") " +
+      "from Message m left join m.likes ml " +
+      "group by m order by m.id desc ")
+  List<MessageDTO> findAllTest(@Param("user") User user);
+
+  @Query("select new com.example.communication.model.dto.MessageDTO(" +
+      "   m, " +
+      "   count(ml), " +
+      "   sum(case when ml = :user then 1 else 0 end) > 0" +
+      ") " +
+      "from Message m left join m.likes ml " +
+      "where m.text like %:filter% " +
+      "group by m order by m.id")
+  Iterable<MessageDTO> findByTextContainsTest(@Param("filter") String filter, @Param("user") User user);
 }

@@ -1,5 +1,6 @@
 package com.example.communication.model;
 
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -27,6 +28,11 @@ public class Comment extends AbstractMessageEntity{
 
   public Comment(String text, User user, Message message) {
     super(text, user);
+    this.message = message;
+  }
+
+  public Comment(Long id, String text, String filename, LocalDateTime postTime, User user, Message message) {
+    super(id, text, filename, postTime, user);
     this.message = message;
   }
 

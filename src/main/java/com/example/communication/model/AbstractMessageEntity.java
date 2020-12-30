@@ -56,7 +56,17 @@ public abstract class AbstractMessageEntity {
   public AbstractMessageEntity() {
   }
 
-//  @Override
+  //test constructor
+  public AbstractMessageEntity(Long id, String text, String filename,
+      LocalDateTime postTime, User user) {
+    this.id = id;
+    this.text = text;
+    this.filename = filename;
+    this.postTime = postTime;
+    this.user = user;
+  }
+
+  //  @Override
 //  public boolean equals(Object o) {
 //    if (this == o) return true;
 //    if (o == null || getClass() != o.getClass()) return false;

@@ -1,4 +1,4 @@
-package com.example.communication;
+package com.example.communication.integration;
 
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
@@ -8,10 +8,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.communication.AbstractSpringTest;
 import org.junit.Test;
 import org.springframework.test.context.jdbc.Sql;
 
-public class LoginTest extends AbstractSpringTest{
+public class LoginTest extends AbstractSpringTest {
 
   @Test
   public void accessDeniedTest() throws Exception {
