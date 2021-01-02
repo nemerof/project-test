@@ -42,6 +42,18 @@ public class MessageDTO {
         this.comments = comments;
     }
 
+    public MessageDTO(String text, User user, String filename,
+        LocalDateTime postTime, Long likes,
+        Set<Comment> comments) {
+        this.id = id;
+        this.text = text;
+        this.user = user;
+        this.filename = filename;
+        this.postTime = postTime;
+        this.likes = likes;
+        this.comments = comments;
+    }
+
     @Override
     public String toString() {
         return "MessageDTO{" +
@@ -51,7 +63,6 @@ public class MessageDTO {
             ", filename='" + filename + '\'' +
             ", postTime=" + postTime +
             ", likes=" + likes +
-            ", comments=" + comments +
             '}';
     }
 
@@ -67,8 +78,7 @@ public class MessageDTO {
         return getId().equals(that.getId()) && Objects.equals(getText(), that.getText())
             && getUser().equals(that.getUser()) && Objects
             .equals(getFilename(), that.getFilename()) && getPostTime().equals(that.getPostTime())
-            && Objects.equals(getLikes(), that.getLikes()) && Objects
-            .equals(getComments(), that.getComments());
+            && Objects.equals(getLikes(), that.getLikes());
     }
 
     @Override

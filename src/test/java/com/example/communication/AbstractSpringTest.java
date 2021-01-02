@@ -1,5 +1,6 @@
 package com.example.communication;
 
+import com.example.communication.repository.MessageRepository;
 import com.example.communication.service.MessageService;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 //@Sql(value = {"/user_before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 //@Sql(value = {"/user_after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class AbstractSpringTest {
+
+  @Autowired
+  protected MessageRepository messageRepository;
 
   @Autowired
   protected MessageService messageService;

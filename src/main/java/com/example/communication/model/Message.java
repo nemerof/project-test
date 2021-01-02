@@ -2,6 +2,7 @@ package com.example.communication.model;
 
 import com.example.communication.model.dto.MessageDTO;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -33,6 +34,18 @@ public class Message extends AbstractMessageEntity implements Serializable {
     super(messageDTO.getId(), messageDTO.getText(), messageDTO.getText(), messageDTO.getPostTime(),
         messageDTO.getUser());
     comments = messageDTO.getComments();
+  }
+
+  public Message(Long id, String text, String filename, LocalDateTime postTime,
+      User user, Set<Comment> comments) {
+    super(id, text, filename, postTime, user);
+    this.comments = comments;
+  }
+
+  public Message(String text, String filename, LocalDateTime postTime,
+      User user, Set<Comment> comments) {
+    super(text, filename, postTime, user);
+    this.comments = comments;
   }
 
   @Override
