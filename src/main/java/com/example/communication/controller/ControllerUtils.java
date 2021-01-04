@@ -74,71 +74,54 @@ public class ControllerUtils {
         return false;
     }
 
-    public static void saveMessage(MultipartFile file, Message message) throws IOException {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = LocalDateTime.now().format(formatter);
-        message.setPostTime(LocalDateTime.parse(formattedDateTime, formatter));
-
-        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-            File uploadDir = new File(uploadPathStatic);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPathStatic + "/" + resultFilename));
-
-            message.setFilename(resultFilename);
-        }
-
-        messageRepository.save(message);
-    }
-
     public static void saveComment(MultipartFile file, Comment comment) throws IOException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDateTime = LocalDateTime.now().format(formatter);
         comment.setPostTime(LocalDateTime.parse(formattedDateTime, formatter));
 
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-            File uploadDir = new File(uploadPathStatic);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPathStatic + "/" + resultFilename));
-
+            String resultFilename = fileSave(file);
             comment.setFilename(resultFilename);
         }
 
         commentRepository.save(comment);
     }
 
-    //Do something
+    public static void saveMessage(MultipartFile file, Message message) throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+        message.setPostTime(LocalDateTime.parse(formattedDateTime, formatter));
+
+        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
+            String resultFilename = fileSave(file);
+            message.setFilename(resultFilename);
+        }
+
+        messageRepository.save(message);
+    }
+
     public static void saveMessage(MultipartFile file, User user) throws IOException {
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-            File uploadDir = new File(uploadPathStatic);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPathStatic + "/" + resultFilename));
-
+            String resultFilename = fileSave(file);
             user.setProfilePic(resultFilename);
         } else {
             user.setProfilePic("default-profile-icon.png");
         }
 
         userRepository.save(user);
+    }
+
+    private static String fileSave(MultipartFile file) throws IOException {
+        File uploadDir = new File(uploadPathStatic);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
+
+        String uuidFile = UUID.randomUUID().toString();
+        String resultFilename = uuidFile + "." + file.getOriginalFilename();
+
+        file.transferTo(new File(uploadPathStatic + "/" + resultFilename));
+
+        return resultFilename;
     }
 }
