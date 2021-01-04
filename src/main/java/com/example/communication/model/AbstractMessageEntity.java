@@ -56,7 +56,7 @@ public abstract class AbstractMessageEntity {
   public AbstractMessageEntity() {
   }
 
-  //test constructor
+  //test constructors
   public AbstractMessageEntity(Long id, String text, String filename,
       LocalDateTime postTime, User user) {
     this.id = id;
@@ -66,6 +66,13 @@ public abstract class AbstractMessageEntity {
     this.user = user;
   }
 
+  public AbstractMessageEntity(String text, String filename,
+      LocalDateTime postTime, User user) {
+    this.text = text;
+    this.filename = filename;
+    this.postTime = postTime;
+    this.user = user;
+  }
   //  @Override
 //  public boolean equals(Object o) {
 //    if (this == o) return true;

@@ -36,6 +36,11 @@ public class Comment extends AbstractMessageEntity{
     this.message = message;
   }
 
+  public Comment(String text, String filename, LocalDateTime postTime, User user, Message message) {
+    super(text, filename, postTime, user);
+    this.message = message;
+  }
+
   @Override
   public String toString() {
     return "Comment{" +
