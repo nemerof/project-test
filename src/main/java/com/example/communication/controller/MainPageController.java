@@ -63,7 +63,9 @@ public class MainPageController {
       Model model,
       @PageableDefault(sort = { "postTime" }, direction = Sort.Direction.ASC, size = 5) Pageable pageable
   ) {
-    Page<MessageDTO> messages = messageService.getAllMessages(filter, user, pageable);
+    Set<User> users = user.getSubscriptions();
+    Page<MessageDTO> messages = messageService.getMainPageMessages(filter, user, users, pageable);
+
     model.addAttribute("url", "/");
     model.addAttribute("loginUserId", user.getId());
     model.addAttribute("isAdmin", user.getRoles().contains(Role.ADMIN));
@@ -78,17 +80,12 @@ public class MainPageController {
       @RequestParam(required = false, defaultValue = "") String filter,
       @AuthenticationPrincipal User user,
       @RequestParam String text, Model model,
-      @RequestParam("file") MultipartFile file,
-      @PageableDefault(sort = { "postTime" }, direction = Sort.Direction.ASC, size = 5) Pageable pageable
+      @RequestParam("file") MultipartFile file
   ) throws IOException {
     Message message = new Message(text, user);
     ControllerUtils.saveMessage(file, message);
-    model.addAttribute("url", "/");
-    model.addAttribute("messages", messageService.getAllMessages(filter, user, pageable));
-    model.addAttribute("loginUserId", user.getId());
-    model.addAttribute("formatDateTime", new FormatDateTimeMethodModel());
-    model.addAttribute("filter", "");
-    return "main";
+    model.addAttribute("filter", filter);
+    return "redirect:/";
   }
 
   @GetMapping("/delete/{id}")
@@ -102,13 +99,6 @@ public class MainPageController {
     UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
     components.getQueryParams()
             .forEach(redirectAttributes::addAttribute);
-
-    List<Long> reposts = jdbcTemplate.query("select * from reposts where user_id = ?", new Object[]{user.getId()}, new RowMapper<Long>() {
-      @Override
-      public Long mapRow(ResultSet resultSet, int i) throws SQLException {
-        return (long) resultSet.getInt("message_id");
-      }
-    });
 
     Message message = messageRepository.findById(id).get();
     boolean isMessageRepost = !currentUser.getId().equals(message.getUser().getId()) && !user.getRoles().contains(Role.ADMIN);

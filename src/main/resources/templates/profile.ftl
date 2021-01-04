@@ -109,20 +109,28 @@
   </style>
     <@pgr.pager url messages/>
     <#list messages.content as message>
-        <#if !(isCurrentUser)><a href="/repost/${message.id}">add repost</a></#if>
       <div class="container mt-3">
         <div class="card m-auto" style="width: 600px">
           <div class="row mx-4 mt-3 md-1">
-            <div class="col-11">
+            <div class="col-10">
               <h5 class="card-title">
                   <@p.profilePicture message.user.profilePic 50 50/>
                 <a href="/profile/${message.user.id}">${message.user.username}</a>
                   ${formatDateTime(message.postTime, 'MMM-dd-YYYY HH:mm')}
               </h5>
             </div>
+            <div class="col-1">
+                <#if !(isCurrentUser)>
+                  <a href="/repost/${message.id}" style="text-decoration: none; font-size: 30px">
+                    <i class="fas fa-share"></i>
+                  </a>
+                </#if>
+            </div>
             <div class="col-1" style="width:500px; float:right; text-align:left">
                 <#if isAdmin || isCurrentUser>
-                  <a href="/delete/${message.id}" style="text-decoration: none; font-size: 30px"><i class="fas fa-trash"></i></a>
+                  <a href="/delete/${message.id}" style="text-decoration: none; font-size: 30px">
+                    <i class="fas fa-trash"></i>
+                  </a>
                 </#if>
             </div>
           </div>

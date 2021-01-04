@@ -5,6 +5,7 @@ import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.repository.MessageRepository;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,12 +24,13 @@ public class MessageService {
         this.em = em;
     }
 
-    public Page<MessageDTO> getAllMessages(String filter, User user, Pageable pageable) {
+    public Page<MessageDTO> getMainPageMessages(String filter, User user, Set<User> users, Pageable pageable) {
+        users.add(user);
         Page<MessageDTO> messages;
         if (filter != null && !filter.isEmpty()) {
-            messages = (Page<MessageDTO>) messageRepository.findByTextContains(filter, user, pageable);
+            messages = messageRepository.findByTextContains(filter, user, users, pageable);
         } else {
-            messages = messageRepository.findAll(user, pageable);
+            messages = messageRepository.findAll(user, users, pageable);
         }
 
         return messages;

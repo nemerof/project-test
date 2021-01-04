@@ -26,7 +26,13 @@
   <script>
     function changeText(myFile) {
         var file = myFile.files[0];
-        document.getElementById("chooseFile").innerHTML = file.name;
+        console.log(file.name)
+        if (file.name.endsWith(".png") || file.name.endsWith(".jpg") || file.name.endsWith(".jpeg")) {
+            document.getElementById("chooseFile").innerHTML = file.name;
+            return;
+        }
+        alert("You can upload only image file");
+        document.getElementById("customFile").value = "";
     }
 
     function readURL(input) {

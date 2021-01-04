@@ -57,18 +57,10 @@ public class MessageDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof MessageDTO)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         MessageDTO that = (MessageDTO) o;
-        return getId().equals(that.getId()) && Objects.equals(getText(), that.getText())
-            && getUser().equals(that.getUser()) && Objects
-            .equals(getFilename(), that.getFilename()) && getPostTime().equals(that.getPostTime())
-            && Objects.equals(getLikes(), that.getLikes()) && Objects
-            .equals(getComments(), that.getComments());
+        return id.equals(that.id);
     }
 
     @Override

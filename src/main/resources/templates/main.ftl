@@ -40,40 +40,48 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
   <script type="text/javascript">
-    $(document).ready(function () {
+      $(document).ready(function () {
 
-      if (localStorage.getItem("main.ftl") != null) {
-        $(window).scrollTop(localStorage.getItem("main.ftl"));
-      }
+          if (localStorage.getItem("main.ftl") != null) {
+              $(window).scrollTop(localStorage.getItem("main.ftl"));
+          }
 
-      $(window).on("scroll", function() {
-        localStorage.setItem("main.ftl", $(window).scrollTop());
+          $(window).on("scroll", function () {
+              localStorage.setItem("main.ftl", $(window).scrollTop());
+          });
+
       });
-
-    });
   </script>
 
   <style>
-      .hidden{
-          display : none;
+      .hidden {
+          display: none;
       }
   </style>
     <@pgr.pager url messages/>
     <#list messages.content as message>
-        <#if !(loginUserId==message.user.id)><a href="/repost/${message.id}">add repost</a></#if>
       <div class="container mt-3" id="messages">
         <div class="card m-auto" style="width: 600px">
           <div class="row mx-4 mt-3 md-1">
-            <div class="col-11">
+            <div class="col-10">
               <h5 class="card-title">
                   <@p.profilePicture message.user.profilePic 50 50/>
                 <a href="/profile/${message.user.id}">${message.user.username}</a>
                   ${formatDateTime(message.postTime, 'MMM-dd-YYYY HH:mm')}
               </h5>
             </div>
+            <div class="col-1">
+                <#if !(loginUserId==message.user.id)>
+                  <a href="/repost/${message.id}" style="text-decoration: none; font-size: 30px">
+                    <i class="fas fa-share"></i>
+                  </a>
+                </#if>
+            </div>
             <div class="col-1" style="width:500px; float:right; text-align:left">
                 <#if isAdmin || loginUserId==message.user.id>
-                  <a href="/delete/${message.id}" style="text-decoration: none; font-size: 30px"><i class="fas fa-trash"></i></a>
+                  <a href="/delete/${message.id}" style="text-decoration: none; font-size: 30px">
+                    <i class="fas fa-trash"></i>
+                  </a>
                 </#if>
             </div>
           </div>
@@ -83,10 +91,12 @@
             </p>
           </div>
             <#if message.filename??>
-              <img src="/img/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540" height="260"/>
+              <img src="/img/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540"
+                   height="260"/>
             </#if>
 
-          <div class="mx-3 my-1" style="font-size: 20px"><a href="/messages/${message.id}/like" style="text-decoration: none;">
+          <div class="mx-3 my-1" style="font-size: 20px"><a href="/messages/${message.id}/like"
+                                                            style="text-decoration: none;">
                   <#if message.meLiked>
                     <i class="fas fa-heart"></i>
                   <#else>
@@ -94,10 +104,11 @@
                   </#if>
                   ${message.likes}
             </a>
-            <button class="btn btn-secondary" onclick="showHide(${message.id})" type="button"><i class="fas fa-comments"></i> ${message.comments?size}</button>
+            <button class="btn btn-secondary" onclick="showHide(${message.id})" type="button"><i
+                      class="fas fa-comments"></i> ${message.comments?size}</button>
             <script>
                 function showHide(messNumber) {
-                    var tx = "addInfo"+messNumber;
+                    var tx = "addInfo" + messNumber;
                     var div = document.getElementById(tx);
                     div.classList.toggle('hidden');
                 }
