@@ -48,9 +48,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     auth.userDetailsService(service)
             .passwordEncoder(encoder);
   }
-
-  @Bean
-  public PasswordEncoder encoder() {
-    return new BCryptPasswordEncoder(8);
-  }
 }
