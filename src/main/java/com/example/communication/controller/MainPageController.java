@@ -89,12 +89,10 @@ public class MainPageController {
   }
 
   @GetMapping("/delete/{id}")
-  public String delete(
-      @AuthenticationPrincipal User currentUser,
-      @PathVariable(value="id") Long id,
-      RedirectAttributes redirectAttributes,
-      @RequestHeader(required = false) String referer
-  ) {
+  public String delete(@AuthenticationPrincipal User currentUser,
+                       @PathVariable(value="id") Long id,
+                       RedirectAttributes redirectAttributes,
+                       @RequestHeader(required = false) String referer) {
     User user = userRepository.findById(currentUser.getId()).get();
     UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
     components.getQueryParams()
@@ -115,7 +113,6 @@ public class MainPageController {
       ControllerUtils.deleteMessage(id, user);
       return "redirect:" + components.getPath();
     }
-
   }
 
   @GetMapping("/messages/{message}/like")
