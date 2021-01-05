@@ -4,6 +4,9 @@ import com.example.communication.model.User;
 import com.example.communication.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
+
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,8 +25,11 @@ public class EditController {
   @Autowired
   private UserRepository userRepository;
 
-  @Value("${upload.path}")
-  private String uploadPath;
+  @Autowired
+  private Storage storage;
+
+  @Value("${bucket.name}")
+  private String bucketName;
 
   @GetMapping
   public String edit(
@@ -55,8 +61,8 @@ public class EditController {
     user.setCity(city);
     String profPic = user.getProfilePic();
     if (!file.getOriginalFilename().equals("") && profPic != null && !profPic.equals("") && !profPic.equals("default-profile-icon.png")) {
-      File file1 = new File(uploadPath + "/" + user.getProfilePic());
-      file1.delete();
+      BlobId blobId = BlobId.of(bucketName, user.getProfilePic());
+      storage.delete(blobId);
     }
     if (!file.getOriginalFilename().equals("")) {
       ControllerUtils.saveMessage(file, user);

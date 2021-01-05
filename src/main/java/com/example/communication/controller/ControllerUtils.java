@@ -9,6 +9,7 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -17,6 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import com.google.cloud.Identity;
+import com.google.cloud.Policy;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,11 +35,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ControllerUtils {
 
-    private static String uploadPathStatic;
+    private static String bucketName;
 
-    @Value("${upload.path}")
+    @Value("${bucket.name}")
     public void setNameStatic(String name){
-        ControllerUtils.uploadPathStatic = name;
+        ControllerUtils.bucketName = name;
     }
 
     private static MessageRepository messageRepository;
@@ -42,15 +50,19 @@ public class ControllerUtils {
 
     private static JdbcTemplate jdbcTemplate;
 
+    private static Storage storage;
+
     @Autowired
     public ControllerUtils(MessageRepository messageRepo,
                            UserRepository userRepo,
                            CommentRepository commentRepo,
-                           JdbcTemplate jdbcTemp) {
+                           JdbcTemplate jdbcTemp,
+                           Storage stor) {
         messageRepository = messageRepo;
         userRepository = userRepo;
         commentRepository = commentRepo;
         jdbcTemplate = jdbcTemp;
+        storage = stor;
     }
 
     public static boolean deleteMessage(Long id, User user) {
@@ -67,7 +79,9 @@ public class ControllerUtils {
             System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, id));
 
             messageRepository.deleteById(id);
-            new File(uploadPathStatic + "/" + message.getFilename()).delete();
+
+            BlobId blobId = BlobId.of(bucketName, message.getFilename());
+            storage.delete(blobId);
             return true;
         }
 
@@ -112,15 +126,21 @@ public class ControllerUtils {
     }
 
     private static String fileSave(MultipartFile file) throws IOException {
-        File uploadDir = new File(uploadPathStatic);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
-
         String uuidFile = UUID.randomUUID().toString();
         String resultFilename = uuidFile + "." + file.getOriginalFilename();
 
-        file.transferTo(new File(uploadPathStatic + "/" + resultFilename));
+        BlobId blobId = BlobId.of(bucketName, resultFilename);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+        byte[] data = file.getBytes();
+        storage.create(blobInfo, data);
+
+        Policy originalPolicy = storage.getIamPolicy(bucketName);
+        storage.setIamPolicy(
+                bucketName,
+                originalPolicy
+                        .toBuilder()
+                        .addIdentity(StorageRoles.objectViewer(), Identity.allUsers()) // All users can view
+                        .build());
 
         return resultFilename;
     }

@@ -91,7 +91,7 @@
             </p>
           </div>
             <#if message.filename??>
-              <img src="/img/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540"
+              <img src="https://storage.googleapis.com/communication-network/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540"
                    height="260"/>
             </#if>
 

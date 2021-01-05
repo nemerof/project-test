@@ -17,9 +17,6 @@ import java.sql.SQLException;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-  @Value("${upload.path}")
-  private String uploadPath;
-
   @Value("${spring.datasource.url}")
   private String dbUrl;
 
@@ -42,8 +39,6 @@ public class MvcConfig implements WebMvcConfigurer {
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/img/**")
-        .addResourceLocations("file://" + uploadPath + "/");
     registry.addResourceHandler("/static/**")
         .addResourceLocations("classpath:/static/");
   }

@@ -136,7 +136,7 @@
           </div>
           <div class="row mr-4 ml-5 mt-0 md-5"><p class="card-text"><span>${message.text}</span></p></div>
             <#if message.filename??>
-              <img src="/img/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540" height="260"/>
+              <img src="https://storage.googleapis.com/communication-network/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540" height="260"/>
             </#if>
 
           <div class="mx-3 my-1" style="font-size: 20px"><a href="/messages/${message.id}/like" style="text-decoration: none;">
