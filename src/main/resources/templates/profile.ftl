@@ -12,18 +12,18 @@
       <h5 class="card-title mx-3 my-2">${profileName}</h5>
       <hr class="my-1">
       <p class="ml-2 my-1">Real name:
-          <#if user.realName??>
-            ${user.realName}
+          <#if currentUser.realName??>
+            ${currentUser.realName}
           </#if>
       </p>
       <p class="ml-2 my-1">Birthday:
-          <#if user.dateOfBirth??>
-              ${user.dateOfBirth}
+          <#if currentUser.dateOfBirth??>
+              ${currentUser.dateOfBirth}
           </#if>
       </p>
       <p class="ml-2 my-1">City:
-          <#if user.city??>
-              ${user.city}
+          <#if currentUser.city??>
+              ${currentUser.city}
           </#if>
       </p>
       <hr class="my-1">

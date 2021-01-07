@@ -99,7 +99,7 @@ public class ProfileController {
 //      }
 //    });
     model.addAttribute("url", "/profile/" + user.getId());
-    model.addAttribute("user", user);
+    model.addAttribute("currentUser", user);
     model.addAttribute("profileName", user.getUsername());
     model.addAttribute("messages", userMessages);
     model.addAttribute("subscribers", user.getSubscribers().size());

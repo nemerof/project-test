@@ -4,6 +4,7 @@
   <head>
     <meta charset="UTF-8"/>
     <title>Communication</title>
+<#--    <link rel="icon" href="https://support.discord.com/hc/user_images/KCe2bCY5rlyfmeIqqjUG8Q.png"/>-->
     <link rel="stylesheet" href="/static/style.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <script src="https://kit.fontawesome.com/730674f6bd.js" crossorigin="anonymous"></script>
@@ -17,7 +18,7 @@
   <#nested>
   </div>
   <!-- Optional JavaScript -->
-  <!-- SockJS, StompJS, jQuery, then Popper.js, then Bootstrap JS -->
+  <!-- SockJS, StompJS, jQuery, Popper.js, Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
