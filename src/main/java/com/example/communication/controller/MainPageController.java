@@ -59,12 +59,11 @@ public class MainPageController {
 
   @GetMapping("/")
   public String main(
-      @AuthenticationPrincipal User currentUser,
+      @AuthenticationPrincipal User user,
       @RequestParam(required = false, defaultValue = "") String filter,
       Model model,
       @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 5) Pageable pageable
   ) {
-    User user = userRepository.findById(currentUser.getId()).get();
     Set<User> users = user.getSubscriptions();
     Page<MessageDTO> messages = messageService.getMainPageMessages(filter, user, users, pageable);
 
@@ -91,11 +90,10 @@ public class MainPageController {
   }
 
   @GetMapping("/delete/{id}")
-  public String delete(@AuthenticationPrincipal User currentUser,
+  public String delete(@AuthenticationPrincipal User user,
                        @PathVariable(value="id") Long id,
                        RedirectAttributes redirectAttributes,
                        @RequestHeader(required = false) String referer) {
-    User user = userRepository.findById(currentUser.getId()).get();
     UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
     components.getQueryParams()
             .forEach(redirectAttributes::addAttribute);
@@ -107,7 +105,7 @@ public class MainPageController {
     } else {
       return "redirect:" + components.getPath();
     }
-    boolean isMessageRepost = !currentUser.getId().equals(message.getUser().getId()) && !user.getRoles().contains(Role.ADMIN);
+    boolean isMessageRepost = !user.getId().equals(message.getUser().getId()) && !user.getRoles().contains(Role.ADMIN);
 
     if (isMessageRepost) {
       try {

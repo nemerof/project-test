@@ -33,9 +33,8 @@ public class EditController {
 
   @GetMapping
   public String edit(
-      @AuthenticationPrincipal User user1, Model model)
+      @AuthenticationPrincipal User user, Model model)
   {
-    User user = userRepository.findById(user1.getId()).get();
     model.addAttribute("birthDate", user.getDateOfBirth());
     model.addAttribute("realName", user.getRealName());
     model.addAttribute("userId", user.getId());
@@ -45,14 +44,13 @@ public class EditController {
 
   @PostMapping
   public String edit(
-      @AuthenticationPrincipal User user1,
+      @AuthenticationPrincipal User user,
       @RequestParam(required = false) String username,
       @RequestParam(required = false) String realName,
       @RequestParam(required = false) String dateOfBirth,
       @RequestParam(required = false) String city,
       @RequestParam(required = false, name = "profilePic") MultipartFile file
   ) throws IOException {
-    User user = userRepository.findById(user1.getId()).get();
 
     user.setUsername(username == null ? user.getUsername() : username);
     user.setRealName(realName == null ? user.getRealName() : realName);

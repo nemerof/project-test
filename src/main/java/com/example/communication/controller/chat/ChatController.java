@@ -69,8 +69,6 @@ public class ChatController {
                        @PageableDefault(size = 15, sort = {"id"}, direction = Sort.Direction.DESC)
                                    Pageable pageableForMessages) {
 
-        User user = userRepository.findById(currentUser.getId()).get();
-
         Page<User> allUsers = userService.getAllUsers(currentUser.getUsername(), userFilter, pageableForUser);
         Page<OutputMessage> chatPage = chatMessageRepository.findAllByFromUAndToU(currentUser.getUsername(), username, pageableForMessages);
 
@@ -82,7 +80,7 @@ public class ChatController {
 
         model.addAttribute("users", allUsers);
         model.addAttribute("chatWuser", username);
-        model.addAttribute("currentUser", user);
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("chatPage", chatPage);
         model.addAttribute("chatMessages", chatMessages);
         return "chat";

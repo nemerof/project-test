@@ -4,9 +4,6 @@
   User editor
 
   <form action="/user" method="post">
-    <label>
-      <input type="text" name="username" value="${user.username}"/>
-    </label>
       <#list roles as role>
         <div>
           <label><input type="checkbox" name="${role}" ${user.roles?seq_contains(role)?string("checked", "")}/>${role}</label>

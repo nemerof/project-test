@@ -79,11 +79,11 @@ public class UserController {
 //      System.out.println("Actual likes deleted: " + jdbcTemplate.update("DELETE FROM message_likes WHERE message_id = ?;", mes.getId()));
 //    }
 //
-//    String repostDel = "DELETE FROM reposts WHERE user_id = ?;";
-//    System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, user.getId()));
-//
-//    String likesDel = "DELETE FROM message_likes WHERE user_id = ?;";
-//    System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, user.getId()));
+    String repostDel = "DELETE FROM reposts WHERE user_id = ?;";
+    System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, user.getId()));
+
+    String likesDel = "DELETE FROM message_likes WHERE user_id = ?;";
+    System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, user.getId()));
 
 
     for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable, reposts)) {
@@ -98,11 +98,9 @@ public class UserController {
 
   @PostMapping
   public String userSave(
-      @RequestParam String username,
       @RequestParam Map<String, String> form,
       @RequestParam("userId") User user
   ) {
-    user.setUsername(username);
 
     Set<String> roles = Arrays.stream(Role.values())
         .map(Role::name)
