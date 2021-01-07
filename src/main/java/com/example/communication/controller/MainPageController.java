@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
@@ -58,11 +59,12 @@ public class MainPageController {
 
   @GetMapping("/")
   public String main(
-      @AuthenticationPrincipal User user,
+      @AuthenticationPrincipal User currentUser,
       @RequestParam(required = false, defaultValue = "") String filter,
       Model model,
-      @PageableDefault(sort = { "postTime" }, direction = Sort.Direction.ASC, size = 5) Pageable pageable
+      @PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC, size = 5) Pageable pageable
   ) {
+    User user = userRepository.findById(currentUser.getId()).get();
     Set<User> users = user.getSubscriptions();
     Page<MessageDTO> messages = messageService.getMainPageMessages(filter, user, users, pageable);
 
@@ -98,7 +100,13 @@ public class MainPageController {
     components.getQueryParams()
             .forEach(redirectAttributes::addAttribute);
 
-    Message message = messageRepository.findById(id).get();
+    Optional<Message> option = messageRepository.findById(id);
+    Message message;
+    if (option.isPresent()) {
+      message = option.get();
+    } else {
+      return "redirect:" + components.getPath();
+    }
     boolean isMessageRepost = !currentUser.getId().equals(message.getUser().getId()) && !user.getRoles().contains(Role.ADMIN);
 
     if (isMessageRepost) {

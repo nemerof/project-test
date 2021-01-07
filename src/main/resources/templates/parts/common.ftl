@@ -112,7 +112,7 @@
   </script>
   <script>
       function getChatRoom(senderId, recipientId) {
-          const url="http://localhost:8080" + "/chat/" + senderId + "/" + recipientId;
+          const url="https://communication-network.herokuapp.com" + "/chat/" + senderId + "/" + recipientId;
           return JSON.parse(Get(url).responseText);
       }
       function Get(requestUrl) {

@@ -38,9 +38,7 @@ public class EditController {
     User user = userRepository.findById(user1.getId()).get();
     model.addAttribute("birthDate", user.getDateOfBirth());
     model.addAttribute("realName", user.getRealName());
-    model.addAttribute("username", user.getUsername());
     model.addAttribute("userId", user.getId());
-    model.addAttribute("profilePic", user.getProfilePic());
     model.addAttribute("city", user.getCity());
     return "editUser";
   }
@@ -48,17 +46,19 @@ public class EditController {
   @PostMapping
   public String edit(
       @AuthenticationPrincipal User user1,
-      @RequestParam String username,
-      @RequestParam String realName,
-      @RequestParam String dateOfBirth,
-      @RequestParam String city,
-      @RequestParam("profilePic") MultipartFile file
+      @RequestParam(required = false) String username,
+      @RequestParam(required = false) String realName,
+      @RequestParam(required = false) String dateOfBirth,
+      @RequestParam(required = false) String city,
+      @RequestParam(required = false, name = "profilePic") MultipartFile file
   ) throws IOException {
     User user = userRepository.findById(user1.getId()).get();
-    user.setUsername(username);
-    user.setRealName(realName);
-    user.setDateOfBirth(dateOfBirth);
-    user.setCity(city);
+
+    user.setUsername(username == null ? user.getUsername() : username);
+    user.setRealName(realName == null ? user.getRealName() : realName);
+    user.setDateOfBirth(dateOfBirth == null ? user.getDateOfBirth() : dateOfBirth);
+    user.setCity(city == null ? user.getCity() : city);
+
     String profPic = user.getProfilePic();
     if (!file.getOriginalFilename().equals("") && profPic != null && !profPic.equals("") && !profPic.equals("default-profile-icon.png")) {
       BlobId blobId = BlobId.of(bucketName, user.getProfilePic());
