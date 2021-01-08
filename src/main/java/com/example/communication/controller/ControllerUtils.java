@@ -7,18 +7,6 @@ import com.example.communication.model.User;
 import com.example.communication.repository.CommentRepository;
 import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
 import com.google.cloud.Identity;
 import com.google.cloud.Policy;
 import com.google.cloud.storage.BlobId;
@@ -28,9 +16,14 @@ import com.google.cloud.storage.StorageRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 public class ControllerUtils {
@@ -80,8 +73,10 @@ public class ControllerUtils {
 
             messageRepository.deleteById(id);
 
-            BlobId blobId = BlobId.of(bucketName, message.getFilename());
-            storage.delete(blobId);
+            if (message.getFilename() != null) {
+                BlobId blobId = BlobId.of(bucketName, message.getFilename());
+                storage.delete(blobId);
+            }
             return true;
         }
 
