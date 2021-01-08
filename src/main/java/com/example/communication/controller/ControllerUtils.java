@@ -13,17 +13,16 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageRoles;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ControllerUtils {
@@ -97,13 +96,16 @@ public class ControllerUtils {
     }
 
     public static void saveMessage(MultipartFile file, Message message) throws IOException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDateTime = LocalDateTime.now().format(formatter);
-        message.setPostTime(LocalDateTime.parse(formattedDateTime, formatter));
 
-        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-            String resultFilename = fileSave(file);
-            message.setFilename(resultFilename);
+        if(message.getId() == null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDateTime = LocalDateTime.now().format(formatter);
+            message.setPostTime(LocalDateTime.parse(formattedDateTime, formatter));
+
+            if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
+                String resultFilename = fileSave(file);
+                message.setFilename(resultFilename);
+            }
         }
 
         messageRepository.save(message);

@@ -8,18 +8,13 @@ import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.MessageService;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -81,7 +76,7 @@ public class MainPageController {
       @RequestParam(required = false, defaultValue = "") String filter,
       @AuthenticationPrincipal User user,
       @RequestParam String text, Model model,
-      @RequestParam("file") MultipartFile file
+      @RequestParam(required = false) MultipartFile file
   ) throws IOException {
     Message message = new Message(text, user);
     ControllerUtils.saveMessage(file, message);

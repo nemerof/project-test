@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,14 @@ public class Message extends AbstractMessageEntity implements Serializable {
           joinColumns = { @JoinColumn(name = "message_id") }
   )
   private Set<Comment> comments = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+      name = "message_likes",
+      joinColumns = { @JoinColumn(name = "message_id") },
+      inverseJoinColumns = { @JoinColumn(name = "user_id") }
+  )
+  private Set<User> likes = new HashSet<>();
 
   public Message(String text, User user) {
     super(text, user);

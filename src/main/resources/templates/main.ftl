@@ -122,7 +122,7 @@
                   <a href="/profile/${comment.user.id}"><@p.profilePicture comment.user.profilePic 30 30/></a>
                   <a class="ml-1" href="/profile/${comment.user.id}">${comment.user.username}</a>
                 </div>
-                <div class="row ml-4">
+                <div class="row ml-4" id="messageComment">
                   <a>${comment.text}</a>
                 </div>
                 <div class="row ml-4">
