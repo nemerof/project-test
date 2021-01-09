@@ -1,6 +1,6 @@
 delete from message_likes;
 
 insert into message_likes (user_id, message_id)
-values (1, 100001),
-       (1, 100002),
-       (2, 100002);
+values (1001, 1004),
+       (1002, 1003),
+       (1002, 1004);
