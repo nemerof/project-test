@@ -50,7 +50,7 @@ public class MainPageTest extends AbstractSpringTest {
 
   @Test
   public void messageAddTest() throws IOException {
-    ControllerUtils.saveMessage(null, MessageTestData.getNew());
+    ControllerUtils.saveMessageEntity(null, MessageTestData.getNew());
     List<MessageDTO> actualMessages= messageService.getAllMessagesTest("", ADMIN);
     assertEquals(actualMessages.size(), 3);
   }

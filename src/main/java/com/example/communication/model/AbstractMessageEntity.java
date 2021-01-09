@@ -1,19 +1,14 @@
 package com.example.communication.model;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
@@ -22,46 +17,54 @@ import lombok.ToString;
 @ToString
 public abstract class AbstractMessageEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-  private String text;
+    private String text;
 
-  private String filename;
+    private String filename;
 
-  private LocalDateTime postTime;
+    private LocalDateTime postTime;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "user_id")
-  private User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-  public AbstractMessageEntity(String text, User user) {
-    this.text = text;
-    this.user = user;
-  }
+    @ManyToMany
+    @JoinTable(
+            name = "message_likes",
+            joinColumns = {@JoinColumn(name = "message_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
+    )
+    private Set<User> likes = new HashSet<>();
 
-  public AbstractMessageEntity() {
-  }
+    public AbstractMessageEntity(String text, User user) {
+        this.text = text;
+        this.user = user;
+    }
 
-  //test constructors
-  public AbstractMessageEntity(Long id, String text, String filename,
-      LocalDateTime postTime, User user) {
-    this.id = id;
-    this.text = text;
-    this.filename = filename;
-    this.postTime = postTime;
-    this.user = user;
-  }
+    public AbstractMessageEntity() {
+    }
 
-  public AbstractMessageEntity(String text, String filename,
-      LocalDateTime postTime, User user) {
-    this.text = text;
-    this.filename = filename;
-    this.postTime = postTime;
-    this.user = user;
-  }
-  //  @Override
+    //test constructors
+    public AbstractMessageEntity(Long id, String text, String filename,
+                                 LocalDateTime postTime, User user) {
+        this.id = id;
+        this.text = text;
+        this.filename = filename;
+        this.postTime = postTime;
+        this.user = user;
+    }
+
+    public AbstractMessageEntity(String text, String filename,
+                                 LocalDateTime postTime, User user) {
+        this.text = text;
+        this.filename = filename;
+        this.postTime = postTime;
+        this.user = user;
+    }
+    //  @Override
 //  public boolean equals(Object o) {
 //    if (this == o) return true;
 //    if (o == null || getClass() != o.getClass()) return false;
@@ -69,16 +72,16 @@ public abstract class AbstractMessageEntity {
 //    return Objects.equals(id, message.id);
 //  }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    AbstractMessageEntity message = (Message) o;
-    return Objects.equals(id, message.id);
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractMessageEntity message = (Message) o;
+        return Objects.equals(id, message.id);
+    }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

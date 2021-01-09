@@ -17,44 +17,43 @@ import java.sql.SQLException;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-  @Value("${spring.datasource.url}")
-  private String dbUrl;
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
 
-  @Value("${spring.datasource.username}")
-  private String user;
+    @Value("${spring.datasource.username}")
+    private String user;
 
-  @Value("${spring.datasource.password}")
-  private String password;
+    @Value("${spring.datasource.password}")
+    private String password;
 
-  private final CommunicationInterceptor interceptor;
+    private final CommunicationInterceptor interceptor;
 
-  public MvcConfig(
-      CommunicationInterceptor interceptor) {
-    this.interceptor = interceptor;
-  }
+    public MvcConfig(CommunicationInterceptor interceptor) {
+        this.interceptor = interceptor;
+    }
 
-  public void addViewControllers(ViewControllerRegistry registry) {
-    registry.addViewController("/login").setViewName("login");
-  }
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("login");
+    }
 
-  @Override
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/static/**")
-        .addResourceLocations("classpath:/static/");
-  }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
+    }
 
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(interceptor);
-  }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(interceptor);
+    }
 
-  @Bean
-  public Connection getConnection() throws SQLException {
-    return DriverManager.getConnection(dbUrl, user, password);
-  }
+    @Bean
+    public Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(dbUrl, user, password);
+    }
 
-  @Bean
-  public JdbcTemplate getJdbcTemplate() {
-    return new JdbcTemplate(new DriverManagerDataSource(dbUrl, user, password));
-  }
+    @Bean
+    public JdbcTemplate getJdbcTemplate() {
+        return new JdbcTemplate(new DriverManagerDataSource(dbUrl, user, password));
+    }
 }

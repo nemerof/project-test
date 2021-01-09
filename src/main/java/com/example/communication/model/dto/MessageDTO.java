@@ -3,21 +3,22 @@ package com.example.communication.model.dto;
 import com.example.communication.model.Comment;
 import com.example.communication.model.Message;
 import com.example.communication.model.User;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
-import lombok.Getter;
 
 @Getter
 public class MessageDTO {
-    private Long id;
-    private String text;
-    private User user;
-    private String filename;
-    private LocalDateTime postTime;
-    private Long likes;
+    private final Long id;
+    private final String text;
+    private final User user;
+    private final String filename;
+    private final LocalDateTime postTime;
+    private final Long likes;
     private Boolean meLiked;
-    private Set<Comment> comments;
+    private final Set<Comment> comments;
 
     public MessageDTO(Message message, Long likes, Boolean meLiked) {
         this.id = message.getId();

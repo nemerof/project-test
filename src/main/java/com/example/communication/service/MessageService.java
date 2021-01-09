@@ -3,25 +3,21 @@ package com.example.communication.service;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.repository.MessageRepository;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class MessageService {
 
     private final MessageRepository messageRepository;
 
-    private final EntityManager em;
-
-    public MessageService(MessageRepository messageRepository,
-        EntityManager em) {
+    public MessageService(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
-        this.em = em;
     }
 
     public Page<MessageDTO> getMainPageMessages(String filter, User user, Set<User> users, Pageable pageable) {
