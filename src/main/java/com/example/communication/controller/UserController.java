@@ -11,14 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,94 +24,92 @@ import java.util.stream.Collectors;
 //@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  private final MessageRepository messageRepository;
+    private final MessageRepository messageRepository;
 
-  private final UserService service;
+    private final UserService service;
 
-  private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-  public UserController(UserRepository repository,
-                        MessageRepository messageRepository,
-                        UserService service,
-                        JdbcTemplate jdbcTemplate) {
-    this.userRepository = repository;
-    this.messageRepository = messageRepository;
-    this.service = service;
-    this.jdbcTemplate = jdbcTemplate;
-  }
+    public UserController(UserRepository repository,
+                          MessageRepository messageRepository,
+                          UserService service,
+                          JdbcTemplate jdbcTemplate) {
+        this.userRepository = repository;
+        this.messageRepository = messageRepository;
+        this.service = service;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-  @GetMapping
-  public String userList(@AuthenticationPrincipal User currentUser,
-                         @RequestParam(required = false, defaultValue = "") String userFilter,
-                         @PageableDefault(sort = { "id" }, direction = Sort.Direction.ASC) Pageable pageable,
-                         Model model) {
-    Page<User> users = service.getAllUsers(currentUser.getUsername(), userFilter, pageable);
-    model.addAttribute("users", users);
-    return "userList";
-  }
+    @GetMapping
+    public String userList(@AuthenticationPrincipal User currentUser,
+                           @RequestParam(required = false, defaultValue = "") String userFilter,
+                           @PageableDefault(sort = {"id"}, direction = Sort.Direction.ASC) Pageable pageable,
+                           Model model) {
+        Page<User> users = service.getAllUsers(currentUser.getUsername(), userFilter, pageable);
+        model.addAttribute("users", users);
+        return "userList";
+    }
 
-  @GetMapping("{user}")
-  public String userEdit(
-      @PathVariable User user,
-      Model model
-  ) {
-    model.addAttribute("user", user);
-    model.addAttribute("roles", Role.values());
-    return "userEdit";
-  }
+    @GetMapping("{user}")
+    public String userEdit(@PathVariable User user,
+                           Model model) {
+        model.addAttribute("user", user);
+        model.addAttribute("roles", Role.values());
+        return "userEdit";
+    }
 
-  @GetMapping("/delete/{user}")
-  public String userDelete(
-      @AuthenticationPrincipal User currentUser,
-      @PathVariable User user,
-      @PageableDefault(sort = { "postTime" }, direction = Sort.Direction.ASC, size = 5) Pageable pageable
-  ) {
-    List<Long> reposts = jdbcTemplate.query("select * from reposts where user_id = ?",
-            new Object[]{user.getId()}, (resultSet, i) -> (long) resultSet.getInt("message_id"));
+    @GetMapping("/delete/{user}")
+    public String userDelete(@AuthenticationPrincipal User currentUser,
+                             @PathVariable User user,
+                             @PageableDefault(sort = {"postTime"}, direction = Sort.Direction.ASC, size = 5) Pageable pageable) {
+        List<Long> reposts = jdbcTemplate.query("select * from reposts where user_id = ?",
+                new Object[]{user.getId()}, (resultSet, i) -> (long) resultSet.getInt("message_id"));
 
 //    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable, reposts)) {
 //      System.out.println("Actual reposts deleted: " + jdbcTemplate.update("DELETE FROM reposts WHERE message_id = ?;", mes.getId()));
 //      System.out.println("Actual likes deleted: " + jdbcTemplate.update("DELETE FROM message_likes WHERE message_id = ?;", mes.getId()));
 //    }
 //
-    String repostDel = "DELETE FROM reposts WHERE user_id = ?;";
-    System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, user.getId()));
+        String repostDel = "DELETE FROM reposts WHERE user_id = ?;";
+        System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, user.getId()));
 
-    String likesDel = "DELETE FROM message_likes WHERE user_id = ?;";
-    System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, user.getId()));
+        String likesDel = "DELETE FROM message_likes WHERE user_id = ?;";
+        System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, user.getId()));
 
 
-    for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable, reposts)) {
-      ControllerUtils.deleteMessage(mes.getId(), currentUser);
+        for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable, reposts)) {
+            if (ControllerUtils.deleteMessage(mes.getId(), currentUser)) {
+                System.out.println("Successfully deleted");
+            } else {
+                System.out.println("Problem during deleting");
+            }
+        }
+
+        user.setReposts(new HashSet<>());
+        userRepository.save(user);
+        userRepository.delete(user);
+        return "redirect:/user";
     }
 
-    user.setReposts(new HashSet<>());
-    userRepository.save(user);
-    userRepository.delete(user);
-    return "redirect:/user";
-  }
+    @PostMapping
+    public String userSave(@RequestParam Map<String, String> form,
+                           @RequestParam("userId") User user) {
 
-  @PostMapping
-  public String userSave(
-      @RequestParam Map<String, String> form,
-      @RequestParam("userId") User user
-  ) {
+        Set<String> roles = Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
 
-    Set<String> roles = Arrays.stream(Role.values())
-        .map(Role::name)
-        .collect(Collectors.toSet());
+        user.getRoles().clear();
 
-    user.getRoles().clear();
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
+                user.getRoles().add(Role.valueOf(key));
+            }
+        }
 
-    for (String key : form.keySet()) {
-      if (roles.contains(key)) {
-        user.getRoles().add(Role.valueOf(key));
-      }
+        userRepository.save(user);
+        return "redirect:/user";
     }
-
-    userRepository.save(user);
-    return "redirect:/user";
-  }
 }

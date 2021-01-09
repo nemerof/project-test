@@ -31,11 +31,11 @@
     </div>
 
     <div class="col">
-      <h5>Chat with: ${chatWuser}</h5>
+      <h5>Chat with: ${chatWithUser}</h5>
 
       <!-- Hidden. Needed only for proper chat work -->
 
-        <#if chatWuser != "none">
+        <#if chatWithUser != "none">
           <div id="conversationDiv">
               <#list chatMessages as msg>
                   <#if msg.fromU = currentUser.username>
@@ -59,7 +59,7 @@
             </button>
           </div>
           <input type="hidden" id="from" value="${currentUser.username}"/>
-          <input type="hidden" id="to" value="${chatWuser}"/>
+          <input type="hidden" id="to" value="${chatWithUser}"/>
         </#if>
     </div>
   </div>
