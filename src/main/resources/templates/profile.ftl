@@ -58,8 +58,8 @@
       <div class="form-group mt-3">
         <form enctype="multipart/form-data" method="post" action="/profile/${userId}">
           <div class="form-group">
-            <label for="comment">Comment:</label>
-            <textarea class="form-control" rows="3" id="comment" name="text"></textarea>
+            <label for="post" id="postForm">Post:</label>
+            <textarea class="form-control" rows="3" id="post" name="text"></textarea>
           </div>
           <div class="form-group">
             <div class="custom-file">
@@ -119,7 +119,7 @@
             <div class="col-10">
               <h5 class="card-title">
                   <@p.profilePicture message.user.profilePic 50 50/>
-                <a href="/profile/${message.user.id}">${message.user.username}</a>
+                <a href="/profile/${message.user.id}" id="messageUsername">${message.user.username}</a>
                   ${formatDateTime(message.postTime, 'MMM-dd-YYYY HH:mm')}
               </h5>
             </div>

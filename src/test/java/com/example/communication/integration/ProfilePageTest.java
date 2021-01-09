@@ -33,6 +33,22 @@ public class ProfilePageTest extends AbstractSpringTest {
   }
 
   @Test
+  public void messageNameTest() throws Exception {
+    this.mockMvc.perform(get("/profile/1001"))
+        .andDo(print())
+        .andExpect(authenticated())
+        .andExpect(xpath("//*[@id='messageUsername']").string("admin"));
+  }
+
+  @Test
+  public void postFormTest() throws Exception {
+    this.mockMvc.perform(get("/profile/1001"))
+        .andDo(print())
+        .andExpect(authenticated())
+        .andExpect(xpath("//*[@id='postForm']").exists());
+  }
+
+  @Test
   public void messageTextTest() throws Exception {
     this.mockMvc.perform(get("/profile/1001"))
         .andDo(print())

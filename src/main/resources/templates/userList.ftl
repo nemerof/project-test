@@ -12,6 +12,8 @@
       <button type="submit" class="btn btn-primary ml-2">Search</button>
     </form>
   </div>
+
+  <div id="userList">
   <#list users.content as user>
     <div class="card my-3 mx-auto" style="height: 110px; width: 600px; margin-left: 21px;">
       <div class="row my-2">
@@ -28,4 +30,5 @@
       </div>
     </div>
   </#list>
+  </div>
 </@c.page>

@@ -34,6 +34,22 @@ public class MainPageTest extends AbstractSpringTest {
   }
 
   @Test
+  public void messageNameTest() throws Exception {
+    this.mockMvc.perform(get("/"))
+        .andDo(print())
+        .andExpect(authenticated())
+        .andExpect(xpath("//*[@id='messageUsername']").string("admin"));
+  }
+
+//  @Test
+//  public void messageListTest() throws Exception {
+//    this.mockMvc.perform(get("/"))
+//        .andDo(print())
+//        .andExpect(authenticated())
+//        .andExpect(xpath("//*[@id='messageList']").string(""));
+//  }
+
+  @Test
   public void messageTextTest() throws Exception {
     this.mockMvc.perform(get("/"))
         .andDo(print())

@@ -13,6 +13,7 @@
         </label>
         <button type="submit" class="btn btn-primary ml-2">Search</button>
       </form>
+        <div id="chatUserlist">
         <#list users.content as user>
           <div class="card my-1" style="height: 70px; width: 200px; margin-left: 21px;">
             <a class="card-block stretched-link text-decoration-none" href="/chat?username=${user.username}"
@@ -28,6 +29,7 @@
             </a>
           </div>
         </#list>
+        </div>
     </div>
 
     <div class="col">
