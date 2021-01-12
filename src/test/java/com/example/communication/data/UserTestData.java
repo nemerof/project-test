@@ -19,7 +19,7 @@ public class UserTestData {
       (1000L, "usr", "user123", true, "usr123@gmail.com", "default-profile-icon.png",
           "Great Name", "1993-11-01", "Moscow", EnumSet.of(Role.USER));
 
-  public static final List<User> USERS = Arrays.asList(USR, USER, ADMIN);
+  public static final List<User> USERS = Arrays.asList(USR, ADMIN, USER);
   public static final User[] USERS_ARRAY = {USR, USER, ADMIN};
 
   public static User getNew() {

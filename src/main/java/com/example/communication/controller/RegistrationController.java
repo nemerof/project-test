@@ -2,14 +2,12 @@ package com.example.communication.controller;
 
 import com.example.communication.model.User;
 import com.example.communication.repository.UserRepository;
-import com.example.communication.service.UserService;
-
+import com.example.communication.service.RegistrationService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,12 +26,12 @@ public class RegistrationController {
 
     private final UserRepository repository;
 
-    private final UserService userService;
+    private final RegistrationService registrationService;
 
-    public RegistrationController(PasswordEncoder encoder, UserRepository repository, UserService userService) {
+    public RegistrationController(PasswordEncoder encoder, UserRepository repository, RegistrationService registrationService) {
         this.encoder = encoder;
         this.repository = repository;
-        this.userService = userService;
+        this.registrationService = registrationService;
     }
 
     @GetMapping("/registration")
@@ -67,7 +65,7 @@ public class RegistrationController {
             return "registration";
         }
 
-        if (!userService.addUser(user, file, encoder)) {
+        if (!registrationService.addUser(user, file, encoder)) {
             model.addAttribute("usernameExists", "User exists!");
             return "registration";
         }
@@ -92,7 +90,7 @@ public class RegistrationController {
 
     @GetMapping("/activate/{code}")
     public String activate(Model model, @PathVariable String code) {
-        boolean isActivated = userService.activateUser(code);
+        boolean isActivated = registrationService.activateUser(code);
 
         if (isActivated) {
             model.addAttribute("message", "User successfully activated");

@@ -3,103 +3,102 @@ package com.example.communication.service;
 import com.example.communication.controller.ControllerUtils;
 import com.example.communication.model.Role;
 import com.example.communication.model.User;
+import com.example.communication.model.dto.MessageDTO;
+import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    private final MailSender mailSender;
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
-    public UserService(UserRepository repository, MailSender mailSender) {
-        this.repository = repository;
-        this.mailSender = mailSender;
+    private final MessageRepository messageRepository;
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public UserService(UserRepository repository,
+        MessageRepository messageRepository,
+        JdbcTemplate jdbcTemplate) {
+        this.userRepository = repository;
+        this.messageRepository = messageRepository;
+        this.jdbcTemplate = jdbcTemplate;
     }
+
 
     public Page<User> getAllUsers(String user, String filter, Pageable pageable) {
         Page<User> users;
         if (filter != null && !filter.isEmpty()) {
-            users = repository.findAllByUsername(filter, user, pageable);
+            users = userRepository.findAllByUsername(filter, user, pageable);
         } else {
-            users = repository.findAll(user, pageable);
+            users = userRepository.findAll(user, pageable);
         }
 
         return users;
     }
 
+    public List<User> getAllUsersTest() {
+        return userRepository.findAllTest();
+    }
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        UserDetails details = repository.findByUsername(s);
+        UserDetails details = userRepository.findByUsername(s);
         if (details == null)
             details = new User();
         return details;
     }
 
-    public void subscribe(User currentUser, User user) {
-        user.getSubscribers().add(currentUser);
+    public void editUserInUserList(User user, Map<String, String> form) {
+        Set<String> roles = Arrays.stream(Role.values())
+            .map(Role::name)
+            .collect(Collectors.toSet());
 
-        repository.save(user);
-    }
+        user.getRoles().clear();
 
-    public void unsubscribe(User currentUser, User user) {
-        user.getSubscribers().remove(currentUser);
-
-        repository.save(user);
-    }
-
-    public boolean addUser(User user, MultipartFile file, PasswordEncoder encoder) throws IOException {
-        User userFromDb = repository.findByUsername(user.getUsername());
-
-        if (userFromDb != null) {
-            return false;
+        for (String key : form.keySet()) {
+            if (roles.contains(key)) {
+                user.getRoles().add(Role.valueOf(key));
+            }
         }
 
-        user.setActive(false);
-        user.setRoles(Collections.singleton(Role.USER));
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setActivationCode(UUID.randomUUID().toString());
-        ControllerUtils.saveMessage(file, user);
-
-        if (!StringUtils.isEmpty(user.getEmail())) {
-            String message = String.format(
-                    "Hello, %s! \n" +
-                            "Welcome to Sweater. Please, visit next link: https://communication-network.herokuapp.com/activate/%s",
-                    user.getUsername(),
-                    user.getActivationCode()
-            );
-
-            mailSender.send(user.getEmail(), "Activation code", message);
-        }
-
-        return true;
+        userRepository.save(user);
     }
 
-    public boolean activateUser(String code) {
-        User user = repository.findByActivationCode(code);
+    public void deleteUserInUserList(User user, User currentUser, Pageable pageable) {
+        List<Long> reposts = jdbcTemplate.query("select * from reposts where user_id = ?",
+            new Object[]{user.getId()}, (resultSet, i) -> (long) resultSet.getInt("message_id"));
 
-        if (user == null) {
-            return false;
+        String repostDel = "DELETE FROM reposts WHERE user_id = ?;";
+        System.out.println("Reposts dependencies deleted: " + jdbcTemplate.update(repostDel, user.getId()));
+
+        String likesDel = "DELETE FROM message_likes WHERE user_id = ?;";
+        System.out.println("Likes dependencies deleted: " + jdbcTemplate.update(likesDel, user.getId()));
+
+
+        for (MessageDTO mes : messageRepository.findByUserId(currentUser, user, pageable, reposts)) {
+            if (ControllerUtils.deleteMessage(mes.getId(), currentUser)) {
+                System.out.println("Successfully deleted");
+            } else {
+                System.out.println("Problem during deleting");
+            }
         }
 
-        user.setActivationCode(null);
-        user.setActive(true);
-
-        repository.save(user);
-
-        return true;
+        user.setReposts(new HashSet<>());
+        userRepository.save(user);
+        userRepository.delete(user);
     }
 }
