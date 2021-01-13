@@ -6,9 +6,7 @@ import com.example.communication.model.dto.MessageDTO;
 import com.example.communication.repository.MessageRepository;
 import com.example.communication.repository.UserRepository;
 import com.example.communication.service.ProfileService;
-import com.example.communication.service.UserService;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller
 public class ProfileController {
@@ -37,25 +33,16 @@ public class ProfileController {
 
     private final UserRepository userRepository;
 
-    private final UserService userService;
-
     private final ProfileService profileService;
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final Connection conn;
-
     public ProfileController(MessageRepository messageRepository,
-        UserRepository userRepository,
-        UserService userService,
-        ProfileService profileService, JdbcTemplate jdbcTemplate,
-        Connection connection) {
+        UserRepository userRepository, ProfileService profileService, JdbcTemplate jdbcTemplate) {
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
-        this.userService = userService;
         this.profileService = profileService;
         this.jdbcTemplate = jdbcTemplate;
-        this.conn = connection;
     }
 
     @GetMapping("/profile/{id}")
@@ -144,11 +131,6 @@ public class ProfileController {
                          @AuthenticationPrincipal User currentUser,
                          RedirectAttributes redirectAttributes,
                          @RequestHeader(required = false) String referer) throws SQLException {
-        UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
-        components.getQueryParams()
-            .forEach(redirectAttributes::addAttribute);
-
-        if(!profileService.repost(messageId, currentUser)) return "redirect:" + components.getPath();
-        return "redirect:/messages/" + messageId + "/like";
+        return profileService.repost(messageId, currentUser, redirectAttributes, referer);
     }
 }

@@ -13,6 +13,9 @@ import java.sql.Statement;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class ProfileService {
@@ -60,14 +63,19 @@ public class ProfileService {
     return true;
   }
 
-  public boolean repost(Long messageId, User currentUser) throws SQLException {
+  public String repost(Long messageId, User currentUser, RedirectAttributes redirectAttributes,
+      String referer) throws SQLException {
+
+    UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
+    components.getQueryParams()
+        .forEach(redirectAttributes::addAttribute);
 
     Optional<Message> optionalMessage = messageRepository.findById(messageId);
     Message message;
     if (optionalMessage.isPresent()) {
       message = optionalMessage.get();
     } else {
-      return false;
+      return "redirect:" + components.getPath();
     }
     currentUser.getReposts().add(message);
 
@@ -75,7 +83,7 @@ public class ProfileService {
       userRepository.save(currentUser);
     } catch (Exception e) {
       System.err.println("U can repost only one time");
-      return false;
+      return "redirect:" + components.getPath();
     }
 
     Statement st = conn.createStatement();
@@ -85,9 +93,9 @@ public class ProfileService {
       int messageTableId = resultSet.getInt("message_id");
       int userTableId = resultSet.getInt("user_id");
       if (messageId == messageTableId && userTableId == currentUser.getId())
-        return false;
+        return "redirect:" + components.getPath();
     }
 
-    return true;
+    return "redirect:/messages/" + messageId + "/like";
   }
 }
