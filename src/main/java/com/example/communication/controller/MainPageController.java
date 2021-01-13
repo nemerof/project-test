@@ -4,8 +4,6 @@ import com.example.communication.model.Message;
 import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
-import com.example.communication.repository.MessageRepository;
-import com.example.communication.repository.UserRepository;
 import com.example.communication.service.MainService;
 import com.example.communication.service.MessageService;
 import java.io.IOException;
@@ -32,18 +30,10 @@ public class MainPageController {
 
     private final MainService mainService;
 
-    private final MessageRepository messageRepository;
-
-    private final UserRepository userRepository;
-
     public MainPageController(MessageService messageService,
-        MainService mainService,
-        MessageRepository messageRepository,
-        UserRepository userRepository) {
+        MainService mainService) {
         this.messageService = messageService;
         this.mainService = mainService;
-        this.messageRepository = messageRepository;
-        this.userRepository = userRepository;
     }
 
     @GetMapping("/users")
