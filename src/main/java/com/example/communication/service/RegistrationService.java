@@ -43,22 +43,22 @@ public class RegistrationService implements UserDetailsService {
       return false;
     }
 
-    user.setActive(false);
+    user.setActive(true);
     user.setRoles(Collections.singleton(Role.USER));
     user.setPassword(encoder.encode(user.getPassword()));
     user.setActivationCode(UUID.randomUUID().toString());
     ControllerUtils.saveMessage(file, user);
 
-    if (!StringUtils.isEmpty(user.getEmail())) {
-      String message = String.format(
-          "Hello, %s! \n" +
-              "Welcome to Sweater. Please, visit next link: https://communication-network.herokuapp.com/activate/%s",
-          user.getUsername(),
-          user.getActivationCode()
-      );
-
-      mailSender.send(user.getEmail(), "Activation code", message);
-    }
+//    if (!StringUtils.isEmpty(user.getEmail())) {
+//      String message = String.format(
+//          "Hello, %s! \n" +
+//              "Welcome to Sweater. Please, visit next link: https://communication-network.herokuapp.com/activate/%s",
+//          user.getUsername(),
+//          user.getActivationCode()
+//      );
+//
+//      mailSender.send(user.getEmail(), "Activation code", message);
+//    }
 
     return true;
   }
