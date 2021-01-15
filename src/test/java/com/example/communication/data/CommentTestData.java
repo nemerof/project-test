@@ -15,11 +15,11 @@ import java.util.List;
 public class CommentTestData {
 
   public static final Comment ADMIN_COMMENT = new Comment
-      (100003L, "Admin comment", "admin_test_message.png",
+      (1005L, "Admin comment", "admin_test_message.png",
           LocalDateTime.of(2020, Month.of(12), 12, 15, 45), ADMIN, new Message(ADMIN_MESSAGE));
 
   public static final Comment USER_COMMENT = new Comment
-      (100004L, "User comment", "user_test_message.png",
+      (1006L, "User comment", "user_test_message.png",
           LocalDateTime.of(2020, Month.of(12), 12, 16, 12), USER, new Message(USER_MESSAGE));
 
   public static final List<Comment> COMMENTS = Arrays.asList(ADMIN_COMMENT, USER_COMMENT);

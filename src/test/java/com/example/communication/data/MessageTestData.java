@@ -19,13 +19,13 @@ public class MessageTestData {
   private final static Set<Comment> ADM_MESS_COMMENTS = new HashSet<>();
 
   public static final MessageDTO ADMIN_MESSAGE = new MessageDTO
-      (100001L, "Admin message", ADMIN, "admin_test_message.png",
+      (1003L, "Admin message", ADMIN, "admin_test_message.png",
           LocalDateTime.of(2020, Month.of(12), 12, 14, 1), 1L, ADM_MESS_COMMENTS);
 
   private final static Set<Comment> USR_MESS_COMMENTS = new HashSet<>();
 
   public static final MessageDTO USER_MESSAGE = new MessageDTO
-      (100002L, "User message", USER, "user_test_message.png",
+      (1004L, "User message", USER, "user_test_message.png",
           LocalDateTime.of(2020, Month.of(12), 12, 14, 3), 2L, USR_MESS_COMMENTS);
 
   static {

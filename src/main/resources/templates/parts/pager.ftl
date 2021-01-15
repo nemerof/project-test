@@ -48,7 +48,7 @@
               </li>
             <#else>
               <li class="page-item">
-                <a class="page-link" href="${url}?page=${page.getNumber()}&size=${c}" tabindex="-1">${c}</a>
+<#--                <a class="page-link" href="${url}?page=${page.getNumber()}&size=${c}" tabindex="-1">${c}</a>-->
               </li>
             </#if>
         </#list>

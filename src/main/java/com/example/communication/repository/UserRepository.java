@@ -1,6 +1,7 @@
 package com.example.communication.repository;
 
 import com.example.communication.model.User;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select distinct u from User u where u.username <> :currentUser")
     Page<User> findAll(@Param("currentUser") String currentUser, Pageable pageable);
+
+    //Test method
+    @Query("select u from User u")
+    List<User> findAllTest();
 }

@@ -4,9 +4,10 @@ import com.example.communication.model.Message;
 import com.example.communication.model.Role;
 import com.example.communication.model.User;
 import com.example.communication.model.dto.MessageDTO;
-import com.example.communication.repository.MessageRepository;
-import com.example.communication.repository.UserRepository;
+import com.example.communication.service.MainService;
 import com.example.communication.service.MessageService;
+import java.io.IOException;
+import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,31 +15,25 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.io.IOException;
-import java.util.Optional;
-import java.util.Set;
 
 @Controller
 public class MainPageController {
 
     private final MessageService messageService;
 
-    private final MessageRepository messageRepository;
-
-    private final UserRepository userRepository;
+    private final MainService mainService;
 
     public MainPageController(MessageService messageService,
-                              MessageRepository messageRepository,
-                              UserRepository userRepository) {
+        MainService mainService) {
         this.messageService = messageService;
-        this.messageRepository = messageRepository;
-        this.userRepository = userRepository;
+        this.mainService = mainService;
     }
 
     @GetMapping("/users")
@@ -68,8 +63,7 @@ public class MainPageController {
                       @AuthenticationPrincipal User user,
                       @RequestParam String text, Model model,
                       @RequestParam("file") MultipartFile file) throws IOException {
-        Message message = new Message(text, user);
-        ControllerUtils.saveMessageEntity(file, message);
+        mainService.addMessage(user, text, file);
         model.addAttribute("filter", filter);
         return "redirect:/";
     }
@@ -79,36 +73,8 @@ public class MainPageController {
                          @PathVariable(value = "id") Long id,
                          RedirectAttributes redirectAttributes,
                          @RequestHeader(required = false) String referer) {
-        UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
-        components.getQueryParams()
-                .forEach(redirectAttributes::addAttribute);
 
-        Optional<Message> option = messageRepository.findById(id);
-        Message message;
-        if (option.isPresent()) {
-            message = option.get();
-        } else {
-            return "redirect:" + components.getPath();
-        }
-        boolean isMessageRepost = !user.getId().equals(message.getUser().getId()) && !user.getRoles().contains(Role.ADMIN);
-
-        if (isMessageRepost) {
-            try {
-                user.getReposts().remove(message);
-            } catch (Exception ignored) {
-            }
-
-            userRepository.save(user);
-
-            return "redirect:/messages/" + id + "/dislike";
-        } else {
-            if (ControllerUtils.deleteMessage(id, user)) {
-                System.out.println("Successfully deleted");
-            } else {
-                System.out.println("Problem during deleting");
-            }
-            return "redirect:" + components.getPath();
-        }
+        return mainService.delete(user, id, redirectAttributes, referer);
     }
 
     @GetMapping("/messages/{message}/like")
@@ -116,21 +82,9 @@ public class MainPageController {
             @AuthenticationPrincipal User currentUser,
             @PathVariable Message message,
             RedirectAttributes redirectAttributes,
-            @RequestHeader(required = false) String referer
-    ) {
-        Set<User> likes = message.getLikes();
+            @RequestHeader(required = false) String referer) {
 
-        if (likes.contains(currentUser)) {
-            likes.remove(currentUser);
-        } else {
-            likes.add(currentUser);
-        }
-
-        UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
-
-        components.getQueryParams()
-                .forEach(redirectAttributes::addAttribute);
-        return "redirect:" + components.getPath();
+        return mainService.like(currentUser, message, redirectAttributes, referer);
     }
 
     @GetMapping("/messages/{message}/dislike")
@@ -138,14 +92,9 @@ public class MainPageController {
                           @PathVariable Message message,
                           RedirectAttributes redirectAttributes,
                           @RequestHeader(required = false) String referer) {
-        Set<User> likes = message.getLikes();
-        likes.remove(currentUser);
 
-        UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
 
-        components.getQueryParams()
-                .forEach(redirectAttributes::addAttribute);
-        return "redirect:" + components.getPath();
+        return mainService.dislike(currentUser, message ,redirectAttributes, referer);
     }
 
     @GetMapping("/login")

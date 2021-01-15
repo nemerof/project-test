@@ -9,9 +9,9 @@
         <@p.profilePicture curProfPic 200 200/>
     </div>
     <div class="card" style="height: 200px; width: 600px; margin-left: 21px">
-      <h5 class="card-title mx-3 my-2">${profileName}</h5>
-      <hr class="my-1">
-      <p class="ml-2 my-1">Real name:
+      <h5 class="card-title mx-3 my-2" id="userName">${profileName}</h5>
+      <hr class="my-1"/>
+      <p class="ml-2 my-1" id="realName">Real name:
           <#if currentUser.realName??>
             ${currentUser.realName}
           </#if>
@@ -26,20 +26,24 @@
               ${currentUser.city}
           </#if>
       </p>
-      <hr class="my-1">
+      <hr class="my-1"/>
       <div class="container">
         <div class="row">
           <div class="col">
             <div class="card border-0">
               <div class="card-body" style="height: 25px; padding-top: 5px">
-                <h4 class="card-text">Subscribers: <a href="/profile/subscribers/${profileId}">${subscribers}</a></h4>
+                <h4 class="card-text">Subscribers:
+                  <a href="/profile/subscribers/${profileId}" id="subscribersCount">${subscribers}</a>
+                </h4>
               </div>
             </div>
           </div>
           <div class="col">
             <div class="card border-0">
               <div class="card-body" style="height: 25px; padding-top: 5px">
-                <h4 class="card-text">Subscriptions: <a href="/profile/subscriptions/${profileId}">${subscriptions}</a></h4>
+                <h4 class="card-text">Subscriptions:
+                  <a href="/profile/subscriptions/${profileId}" id="subscriptionsCount">${subscriptions}</a>
+                </h4>
               </div>
             </div>
           </div>
@@ -54,8 +58,8 @@
       <div class="form-group mt-3">
         <form enctype="multipart/form-data" method="post" action="/profile/${userId}">
           <div class="form-group">
-            <label for="comment">Comment:</label>
-            <textarea class="form-control" rows="3" id="comment" name="text"></textarea>
+            <label for="post" id="postForm">Post:</label>
+            <textarea class="form-control" rows="3" id="post" name="text"></textarea>
           </div>
           <div class="form-group">
             <div class="custom-file">
@@ -115,7 +119,7 @@
             <div class="col-10">
               <h5 class="card-title">
                   <@p.profilePicture message.user.profilePic 50 50/>
-                <a href="/profile/${message.user.id}">${message.user.username}</a>
+                <a href="/profile/${message.user.id}" id="messageUsername">${message.user.username}</a>
                   ${formatDateTime(message.postTime, 'MMM-dd-YYYY HH:mm')}
               </h5>
             </div>
@@ -134,7 +138,7 @@
                 </#if>
             </div>
           </div>
-          <div class="row mr-4 ml-5 mt-0 md-5"><p class="card-text"><span>${message.text}</span></p></div>
+          <div class="row mr-4 ml-5 mt-0 md-5"><p class="card-text" id="messageText"><span>${message.text}</span></p></div>
             <#if message.filename??>
               <img src="https://storage.googleapis.com/communication-network/${message.filename}" class="rounded mx-auto mt-4 md-1" alt="No pic :(" width="540" height="260"/>
             </#if>
@@ -147,7 +151,9 @@
                   </#if>
                   ${message.likes}
             </a>
-            <button class="btn btn-secondary" onclick="showHide(${message.id})" type="button"><i class="fas fa-comments"></i> ${message.comments?size}</button>
+            <button class="btn btn-secondary" onclick="showHide(${message.id})" type="button"><i class="fas fa-comments"></i>
+                ${message.comments?size}
+            </button>
             <script>
                 function showHide(messNumber) {
                     var tx = "addInfo"+messNumber;
@@ -164,7 +170,7 @@
                   <a href="/profile/${comment.user.id}"><@p.profilePicture comment.user.profilePic 30 30/></a>
                   <a class="ml-1" href="/profile/${comment.user.id}">${comment.user.username}</a>
                 </div>
-                <div class="row ml-4">
+                <div class="row ml-4" id="messageComment">
                   <a>${comment.text}</a>
                 </div>
                 <div class="row ml-4">

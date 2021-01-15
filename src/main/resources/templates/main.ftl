@@ -59,6 +59,7 @@
       }
   </style>
     <@pgr.pager url messages/>
+    <div id="messageList">
     <#list messages.content as message>
       <div class="container mt-3" id="messages">
         <div class="card m-auto" style="width: 600px">
@@ -66,7 +67,7 @@
             <div class="col-10">
               <h5 class="card-title">
                   <@p.profilePicture message.user.profilePic 50 50/>
-                <a href="/profile/${message.user.id}">${message.user.username}</a>
+                <a href="/profile/${message.user.id}" id="messageUsername">${message.user.username}</a>
                   ${formatDateTime(message.postTime, 'MMM-dd-YYYY HH:mm')}
               </h5>
             </div>
@@ -122,7 +123,7 @@
                   <a href="/profile/${comment.user.id}"><@p.profilePicture comment.user.profilePic 30 30/></a>
                   <a class="ml-1" href="/profile/${comment.user.id}">${comment.user.username}</a>
                 </div>
-                <div class="row ml-4">
+                <div class="row ml-4" id="messageComment">
                   <a>${comment.text}</a>
                 </div>
                 <div class="row ml-4">
@@ -151,4 +152,5 @@
         </div>
       </div>
     </#list>
+    </div>
 </@c.page>

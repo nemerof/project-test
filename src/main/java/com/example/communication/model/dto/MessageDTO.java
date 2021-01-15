@@ -52,7 +52,6 @@ public class MessageDTO {
             ", filename='" + filename + '\'' +
             ", postTime=" + postTime +
             ", likes=" + likes +
-            ", comments=" + comments +
             '}';
     }
 
