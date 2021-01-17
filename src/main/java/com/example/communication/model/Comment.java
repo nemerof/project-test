@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @RequiredArgsConstructor
 @Entity
-public class Comment extends AbstractMessageEntity {
+public class Comment extends AbstractMessageEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
